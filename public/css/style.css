@@ -1,0 +1,25 @@
+.tabs-one-whole{
+    width: 70%;
+    margin: 50px auto;
+}
+.tabs-one{
+    width: 20%;
+}
+.tab-content-one {
+    width: 70%;
+}
+.f-one{
+    width: 30%!important;
+    display: inline!important;
+    margin: 10px 20px;
+}
+/* .dropdown-dept button{
+    background-color: rgb(132, 132, 132);
+} */
+@media only screen and (max-width: 768px) {
+    .f-one{
+        width: 100%!important;
+        display: block!important;
+        margin: 0px;
+    }
+  }

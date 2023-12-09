@@ -1,0 +1,1 @@
+hello gc_collect_cycles

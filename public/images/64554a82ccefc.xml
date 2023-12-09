@@ -1,0 +1,457 @@
+<ORU_R01>
+  <MSH>
+    <MSH.1>|</MSH.1>
+    <MSH.2>^~\&amp;</MSH.2>
+    <MSH.3>
+      <HD.1>NetAcquire.Healthlink.10</HD.1>
+    </MSH.3>
+    <MSH.4>
+      <HD.1>Cavan</HD.1>
+      <HD.2>402</HD.2>
+      <HD.3>HIPEHOS</HD.3>
+    </MSH.4>
+    <MSH.6>
+      <HD.1>Dr Mary ODuffy</HD.1>
+      <HD.2>013136.1858</HD.2>
+      <HD.3>MCN.HLPracticeID</HD.3>
+    </MSH.6>
+    <MSH.7>
+      <TS.1>202305051910</TS.1> 
+    </MSH.7>
+    <MSH.9>
+      <MSG.1>ORU</MSG.1>
+      <MSG.2>R01</MSG.2>
+    </MSH.9>
+    <MSH.10>5555162B2A4E4904BCC264BFC26DA1E6</MSH.10>
+    <MSH.11>
+      <PT.1>P</PT.1>
+    </MSH.11>
+    <MSH.12>
+      <VID.1>2.4</VID.1>
+    </MSH.12>
+  </MSH>   
+<ORU_R01.PATIENT_RESULT>
+<ORU_R01.PATIENT>
+  <PID>
+    <PID.3>
+      <CX.1>BIO37424880505231910125</CX.1>
+      <CX.4>
+        <HD.1>Cavan</HD.1>
+      </CX.4>
+      <CX.5>OTH</CX.5>
+    </PID.3>
+    <PID.5>
+      <XPN.1>
+        <FN.1>HOEY</FN.1>
+      </XPN.1>
+      <XPN.2>JAMIE</XPN.2>
+    </PID.5>
+    <PID.7>
+      <TS.1>20040616</TS.1>
+    </PID.7>
+    <PID.8>M</PID.8>
+    <PID.11>
+      <XAD.1>
+        <SAD.1>23 Crann Nua,</SAD.1>
+      </XAD.1>
+      <XAD.2>Carrickmacross,</XAD.2>
+    </PID.11>
+  </PID><ORU_R01.PATIENT_VISIT>
+  <PV1>
+    <PV1.2>O</PV1.2>
+  </PV1>
+</ORU_R01.PATIENT_VISIT>
+</ORU_R01.PATIENT>
+<ORU_R01.ORDER_OBSERVATION>
+<OBR><OBR.1>1</OBR.1>
+<OBR.3><EI.1>3742488</EI.1></OBR.3>
+<OBR.4><CE.1>BIO</CE.1><CE.2>Biochemistry Tests</CE.2><CE.3>L</CE.3></OBR.4>
+<OBR.7><TS.1>202305051200</TS.1></OBR.7>
+<OBR.14><TS.1>202305051402</TS.1></OBR.14>
+<OBR.15><SPS.1><CE.1>Bio 1 Serum,Bio 2 Serum,Bio Whole Blood</CE.1><CE.2>Bio 1 Serum,Bio 2 Serum,Bio Whole Blood</CE.2><CE.3>L</CE.3></SPS.1></OBR.15>
+<OBR.16><XCN.1>013136</XCN.1><XCN.2><FN.1>Mary</FN.1></XCN.2><XCN.3>ODuffy</XCN.3><XCN.6>Dr</XCN.6></OBR.16>
+<OBR.24>CH</OBR.24>
+<OBR.25>F</OBR.25>
+</OBR>
+<NTE>
+  <NTE.1>1</NTE.1>
+  <NTE.3>An INAB accredited medical testing laboratory, registration number 231MT
+NOTE: Biochemistry testing is not currently accredited with the exception of HbA1c
+This does not affect the quality of results
+       >=90 Nomal or increased GFR
+   <escape V=".br"/></NTE.3>
+</NTE>
+<ORU_R01.OBSERVATION>
+<OBX>
+<OBX.1>1</OBX.1>
+<OBX.2>NM</OBX.2>
+<OBX.3><CE.1>NA-C</CE.1><CE.2>Sodium</CE.2><CE.3>L</CE.3></OBX.3>
+<OBX.5>142</OBX.5>
+<OBX.6><CE.1>mmol/L</CE.1><CE.2>mmol/L</CE.2></OBX.6>
+<OBX.7>133 - 146</OBX.7>
+<OBX.8>N</OBX.8>
+<OBX.11>F</OBX.11>
+</OBX>
+</ORU_R01.OBSERVATION>
+<ORU_R01.OBSERVATION>
+<OBX>
+<OBX.1>2</OBX.1>
+<OBX.2>NM</OBX.2>
+<OBX.3><CE.1>K-C</CE.1><CE.2>Potassium</CE.2><CE.3>L</CE.3></OBX.3>
+<OBX.5>5.0</OBX.5>
+<OBX.6><CE.1>mmol/L</CE.1><CE.2>mmol/L</CE.2></OBX.6>
+<OBX.7>3.5 - 5.3</OBX.7>
+<OBX.8>N</OBX.8>
+<OBX.11>F</OBX.11>
+</OBX>
+</ORU_R01.OBSERVATION>
+<ORU_R01.OBSERVATION>
+<OBX>
+<OBX.1>3</OBX.1>
+<OBX.2>NM</OBX.2>
+<OBX.3><CE.1>CL-C</CE.1><CE.2>Chloride</CE.2><CE.3>L</CE.3></OBX.3>
+<OBX.5>105</OBX.5>
+<OBX.6><CE.1>mmol/L</CE.1><CE.2>mmol/L</CE.2></OBX.6>
+<OBX.7>98 - 107</OBX.7>
+<OBX.8>N</OBX.8>
+<OBX.11>F</OBX.11>
+</OBX>
+</ORU_R01.OBSERVATION>
+<ORU_R01.OBSERVATION>
+<OBX>
+<OBX.1>4</OBX.1>
+<OBX.2>NM</OBX.2>
+<OBX.3><CE.1>UREA</CE.1><CE.2>Urea</CE.2><CE.3>L</CE.3></OBX.3>
+<OBX.5>4.0</OBX.5>
+<OBX.6><CE.1>mmol/L</CE.1><CE.2>mmol/L</CE.2></OBX.6>
+<OBX.7>2.5 - 7.8</OBX.7>
+<OBX.8>N</OBX.8>
+<OBX.11>F</OBX.11>
+</OBX>
+</ORU_R01.OBSERVATION>
+<ORU_R01.OBSERVATION>
+<OBX>
+<OBX.1>5</OBX.1>
+<OBX.2>NM</OBX.2>
+<OBX.3><CE.1>Creatinine.</CE.1><CE.2>Creatinine.</CE.2><CE.3>L</CE.3></OBX.3>
+<OBX.5>94</OBX.5>
+<OBX.6><CE.1>umol/L</CE.1><CE.2>umol/L</CE.2></OBX.6>
+<OBX.7>64 - 104</OBX.7>
+<OBX.8>N</OBX.8>
+<OBX.11>F</OBX.11>
+</OBX>
+</ORU_R01.OBSERVATION>
+<ORU_R01.OBSERVATION>
+<OBX>
+<OBX.1>6</OBX.1>
+<OBX.2>NM</OBX.2>
+<OBX.3><CE.1>ASTL</CE.1><CE.2>AST</CE.2><CE.3>L</CE.3></OBX.3>
+<OBX.5>22</OBX.5>
+<OBX.6><CE.1>U/L</CE.1><CE.2>U/L</CE.2></OBX.6>
+<OBX.7>5 - 34</OBX.7>
+<OBX.8>N</OBX.8>
+<OBX.11>F</OBX.11>
+</OBX>
+</ORU_R01.OBSERVATION>
+<ORU_R01.OBSERVATION>
+<OBX>
+<OBX.1>7</OBX.1>
+<OBX.2>NM</OBX.2>
+<OBX.3><CE.1>TP</CE.1><CE.2>Total Protein</CE.2><CE.3>L</CE.3></OBX.3>
+<OBX.5>73</OBX.5>
+<OBX.6><CE.1>g/L</CE.1><CE.2>g/L</CE.2></OBX.6>
+<OBX.7>60 - 80</OBX.7>
+<OBX.8>N</OBX.8>
+<OBX.11>F</OBX.11>
+</OBX>
+</ORU_R01.OBSERVATION>
+<ORU_R01.OBSERVATION>
+<OBX>
+<OBX.1>8</OBX.1>
+<OBX.2>NM</OBX.2>
+<OBX.3><CE.1>ALP</CE.1><CE.2>Alk.Phosphatase</CE.2><CE.3>L</CE.3></OBX.3>
+<OBX.5>160</OBX.5>
+<OBX.6><CE.1>U/L</CE.1><CE.2>U/L</CE.2></OBX.6>
+<OBX.7>30 - 130</OBX.7>
+<OBX.8>H</OBX.8>
+<OBX.11>F</OBX.11>
+</OBX>
+</ORU_R01.OBSERVATION>
+<ORU_R01.OBSERVATION>
+<OBX>
+<OBX.1>9</OBX.1>
+<OBX.2>NM</OBX.2>
+<OBX.3><CE.1>ALB</CE.1><CE.2>Albumin</CE.2><CE.3>L</CE.3></OBX.3>
+<OBX.5>49</OBX.5>
+<OBX.6><CE.1>g/L</CE.1><CE.2>g/L</CE.2></OBX.6>
+<OBX.7>35 - 50</OBX.7>
+<OBX.8>N</OBX.8>
+<OBX.11>F</OBX.11>
+</OBX>
+</ORU_R01.OBSERVATION>
+<ORU_R01.OBSERVATION>
+<OBX>
+<OBX.1>10</OBX.1>
+<OBX.2>NM</OBX.2>
+<OBX.3><CE.1>ALAT</CE.1><CE.2>ALT</CE.2><CE.3>L</CE.3></OBX.3>
+<OBX.5>17</OBX.5>
+<OBX.6><CE.1>U/L</CE.1><CE.2>U/L</CE.2></OBX.6>
+<OBX.7>0 - 55</OBX.7>
+<OBX.8>N</OBX.8>
+<OBX.11>F</OBX.11>
+</OBX>
+</ORU_R01.OBSERVATION>
+<ORU_R01.OBSERVATION>
+<OBX>
+<OBX.1>11</OBX.1>
+<OBX.2>NM</OBX.2>
+<OBX.3><CE.1>BILT</CE.1><CE.2>Total Bilirubin</CE.2><CE.3>L</CE.3></OBX.3>
+<OBX.5>9</OBX.5>
+<OBX.6><CE.1>umol/L</CE.1><CE.2>umol/L</CE.2></OBX.6>
+<OBX.7>3 - 21</OBX.7>
+<OBX.8>N</OBX.8>
+<OBX.11>F</OBX.11>
+</OBX>
+</ORU_R01.OBSERVATION>
+<ORU_R01.OBSERVATION>
+<OBX>
+<OBX.1>12</OBX.1>
+<OBX.2>NM</OBX.2>
+<OBX.3><CE.1>GGT</CE.1><CE.2>Gamma GT</CE.2><CE.3>L</CE.3></OBX.3>
+<OBX.5>16</OBX.5>
+<OBX.6><CE.1>U/L</CE.1><CE.2>U/L</CE.2></OBX.6>
+<OBX.7>0 - 55</OBX.7>
+<OBX.8>N</OBX.8>
+<OBX.11>F</OBX.11>
+</OBX>
+</ORU_R01.OBSERVATION>
+<ORU_R01.OBSERVATION>
+<OBX>
+<OBX.1>13</OBX.1>
+<OBX.2>NM</OBX.2>
+<OBX.3><CE.1>CaC</CE.1><CE.2>Calcium</CE.2><CE.3>L</CE.3></OBX.3>
+<OBX.5>2.50</OBX.5>
+<OBX.6><CE.1>mmol/L</CE.1><CE.2>mmol/L</CE.2></OBX.6>
+<OBX.7>2.1 - 2.55</OBX.7>
+<OBX.8>N</OBX.8>
+<OBX.11>F</OBX.11>
+</OBX>
+</ORU_R01.OBSERVATION>
+<ORU_R01.OBSERVATION>
+<OBX>
+<OBX.1>14</OBX.1>
+<OBX.2>NM</OBX.2>
+<OBX.3><CE.1>PO4</CE.1><CE.2>Phosphate</CE.2><CE.3>L</CE.3></OBX.3>
+<OBX.5>1.20</OBX.5>
+<OBX.6><CE.1>mmol/L</CE.1><CE.2>mmol/L</CE.2></OBX.6>
+<OBX.7>0.8 - 1.5</OBX.7>
+<OBX.8>N</OBX.8>
+<OBX.11>F</OBX.11>
+</OBX>
+</ORU_R01.OBSERVATION>
+<ORU_R01.OBSERVATION>
+<OBX>
+<OBX.1>15</OBX.1>
+<OBX.2>NM</OBX.2>
+<OBX.3><CE.1>CHOL</CE.1><CE.2>Cholesterol (Fasting)</CE.2><CE.3>L</CE.3></OBX.3>
+<OBX.5>4.2</OBX.5>
+<OBX.6><CE.1>mmol/L</CE.1><CE.2>mmol/L</CE.2></OBX.6>
+<OBX.7>(0 - 5)</OBX.7>
+<OBX.8>N</OBX.8>
+<OBX.11>F</OBX.11>
+</OBX>
+</ORU_R01.OBSERVATION>
+<ORU_R01.OBSERVATION>
+<OBX>
+<OBX.1>16</OBX.1>
+<OBX.2>NM</OBX.2>
+<OBX.3><CE.1>Trigl</CE.1><CE.2>Triglyceride (Fasting)</CE.2><CE.3>L</CE.3></OBX.3>
+<OBX.5>0.5</OBX.5>
+<OBX.6><CE.1>mmol/L</CE.1><CE.2>mmol/L</CE.2></OBX.6>
+<OBX.7>(0 - 1.7)</OBX.7>
+<OBX.8>N</OBX.8>
+<OBX.11>F</OBX.11>
+</OBX>
+</ORU_R01.OBSERVATION>
+<ORU_R01.OBSERVATION>
+<OBX>
+<OBX.1>17</OBX.1>
+<OBX.2>NM</OBX.2>
+<OBX.3><CE.1>HDL-C</CE.1><CE.2>HDL-Cholesterol</CE.2><CE.3>L</CE.3></OBX.3>
+<OBX.5>1.5</OBX.5>
+<OBX.6><CE.1>mmol/L</CE.1><CE.2>mmol/L</CE.2></OBX.6>
+<OBX.7>1 - 9999</OBX.7>
+<OBX.8>N</OBX.8>
+<OBX.11>F</OBX.11>
+</OBX>
+</ORU_R01.OBSERVATION>
+<ORU_R01.OBSERVATION>
+<OBX>
+<OBX.1>18</OBX.1>
+<OBX.2>NM</OBX.2>
+<OBX.3><CE.1>LDL-C</CE.1><CE.2>LDL-CHolesterol</CE.2><CE.3>L</CE.3></OBX.3>
+<OBX.5>2.4</OBX.5>
+<OBX.6><CE.1>mmol/L</CE.1><CE.2>mmol/L</CE.2></OBX.6>
+<OBX.7>0 - 3</OBX.7>
+<OBX.8>N</OBX.8>
+<OBX.11>F</OBX.11>
+</OBX>
+</ORU_R01.OBSERVATION>
+<ORU_R01.OBSERVATION>
+<OBX>
+<OBX.1>19</OBX.1>
+<OBX.2>NM</OBX.2>
+<OBX.3><CE.1>HDL-R</CE.1><CE.2>HDL-Ratio</CE.2><CE.3>L</CE.3></OBX.3>
+<OBX.5>2.80</OBX.5>
+<OBX.6><CE.1></CE.1><CE.2></CE.2></OBX.6>
+<OBX.7>0 - 0</OBX.7>
+<OBX.8>H</OBX.8>
+<OBX.11>F</OBX.11>
+</OBX>
+</ORU_R01.OBSERVATION>
+<ORU_R01.OBSERVATION>
+<OBX>
+<OBX.1>20</OBX.1>
+<OBX.2>NM</OBX.2>
+<OBX.3><CE.1>Fe-Pl</CE.1><CE.2>Iron</CE.2><CE.3>L</CE.3></OBX.3>
+<OBX.5>20.2</OBX.5>
+<OBX.6><CE.1>umol/L</CE.1><CE.2>umol/L</CE.2></OBX.6>
+<OBX.7>11 - 31</OBX.7>
+<OBX.8>N</OBX.8>
+<OBX.11>F</OBX.11>
+</OBX>
+</ORU_R01.OBSERVATION>
+<ORU_R01.OBSERVATION>
+<OBX>
+<OBX.1>21</OBX.1>
+<OBX.2>NM</OBX.2>
+<OBX.3><CE.1>HbA1c IFCC</CE.1><CE.2>HbA1c IFCC</CE.2><CE.3>L</CE.3></OBX.3>
+<OBX.5>35</OBX.5>
+<OBX.6><CE.1>mmol/mol</CE.1><CE.2>mmol/mol</CE.2></OBX.6>
+<OBX.7>0 - 42</OBX.7>
+<OBX.8>N</OBX.8>
+<OBX.11>F</OBX.11>
+</OBX>
+</ORU_R01.OBSERVATION>
+<ORU_R01.OBSERVATION>
+<OBX>
+<OBX.1>22</OBX.1>
+<OBX.2>NM</OBX.2>
+<OBX.3><CE.1>TSH</CE.1><CE.2>TSH</CE.2><CE.3>L</CE.3></OBX.3>
+<OBX.5>1.74</OBX.5>
+<OBX.6><CE.1>mU/L</CE.1><CE.2>mU/L</CE.2></OBX.6>
+<OBX.7>0.35 - 4.94</OBX.7>
+<OBX.8>N</OBX.8>
+<OBX.11>F</OBX.11>
+</OBX>
+</ORU_R01.OBSERVATION>
+<ORU_R01.OBSERVATION>
+<OBX>
+<OBX.1>23</OBX.1>
+<OBX.2>NM</OBX.2>
+<OBX.3><CE.1>FT4</CE.1><CE.2>Free T4</CE.2><CE.3>L</CE.3></OBX.3>
+<OBX.5>13.1</OBX.5>
+<OBX.6><CE.1>pmol/L</CE.1><CE.2>pmol/L</CE.2></OBX.6>
+<OBX.7>9 - 19</OBX.7>
+<OBX.8>N</OBX.8>
+<OBX.11>F</OBX.11>
+</OBX>
+</ORU_R01.OBSERVATION>
+<ORU_R01.OBSERVATION>
+<OBX>
+<OBX.1>24</OBX.1>
+<OBX.2>NM</OBX.2>
+<OBX.3><CE.1>B12II</CE.1><CE.2>Vit.B12</CE.2><CE.3>L</CE.3></OBX.3>
+<OBX.5>446.0</OBX.5>
+<OBX.6><CE.1>pmol/L</CE.1><CE.2>pmol/L</CE.2></OBX.6>
+<OBX.7>139 - 651</OBX.7>
+<OBX.8>N</OBX.8>
+<OBX.11>F</OBX.11>
+</OBX>
+</ORU_R01.OBSERVATION>
+<ORU_R01.OBSERVATION>
+<OBX>
+<OBX.1>25</OBX.1>
+<OBX.2>NM</OBX.2>
+<OBX.3><CE.1>Folate2</CE.1><CE.2>Folic Acid</CE.2><CE.3>L</CE.3></OBX.3>
+<OBX.5>11.7</OBX.5>
+<OBX.6><CE.1>NMOL/l</CE.1><CE.2>NMOL/l</CE.2></OBX.6>
+<OBX.7>7 - 46.4</OBX.7>
+<OBX.8>N</OBX.8>
+<OBX.11>F</OBX.11>
+</OBX>
+</ORU_R01.OBSERVATION>
+<ORU_R01.OBSERVATION>
+<OBX>
+<OBX.1>26</OBX.1>
+<OBX.2>NM</OBX.2>
+<OBX.3><CE.1>CCAL</CE.1><CE.2>Corrected Calcium</CE.2><CE.3>L</CE.3></OBX.3>
+<OBX.5>2.36</OBX.5>
+<OBX.6><CE.1>mmol/L</CE.1><CE.2>mmol/L</CE.2></OBX.6>
+<OBX.7>2.2 - 2.6</OBX.7>
+<OBX.8>N</OBX.8>
+<OBX.11>F</OBX.11>
+</OBX>
+</ORU_R01.OBSERVATION>
+<ORU_R01.OBSERVATION>
+<OBX>
+<OBX.1>27</OBX.1>
+<OBX.2>NM</OBX.2>
+<OBX.3><CE.1>TRF</CE.1><CE.2>Transferrin.</CE.2><CE.3>L</CE.3></OBX.3>
+<OBX.5>2.68</OBX.5>
+<OBX.6><CE.1>g/L</CE.1><CE.2>g/L</CE.2></OBX.6>
+<OBX.7>1.74 - 3.64</OBX.7>
+<OBX.8>N</OBX.8>
+<OBX.11>F</OBX.11>
+</OBX>
+</ORU_R01.OBSERVATION>
+<ORU_R01.OBSERVATION>
+<OBX>
+<OBX.1>28</OBX.1>
+<OBX.2>FT</OBX.2>
+<OBX.3><CE.1>eGFR</CE.1><CE.2>eGFR</CE.2><CE.3>L</CE.3></OBX.3>
+<OBX.5>&gt;90</OBX.5>
+<OBX.6><CE.1></CE.1><CE.2></CE.2></OBX.6>
+<OBX.8>N</OBX.8>
+<OBX.11>F</OBX.11>
+</OBX>
+</ORU_R01.OBSERVATION>
+<ORU_R01.OBSERVATION>
+<OBX>
+<OBX.1>29</OBX.1>
+<OBX.2>NM</OBX.2>
+<OBX.3><CE.1>Fer</CE.1><CE.2>Ferritin</CE.2><CE.3>L</CE.3></OBX.3>
+<OBX.5>180</OBX.5>
+<OBX.6><CE.1>ug/L</CE.1><CE.2>ug/L</CE.2></OBX.6>
+<OBX.7>22 - 275</OBX.7>
+<OBX.8>N</OBX.8>
+<OBX.11>F</OBX.11>
+</OBX>
+</ORU_R01.OBSERVATION>
+<ORU_R01.OBSERVATION>
+<OBX>
+<OBX.1>30</OBX.1>
+<OBX.2>NM</OBX.2>
+<OBX.3><CE.1>TSAT</CE.1><CE.2>TSAT</CE.2><CE.3>L</CE.3></OBX.3>
+<OBX.5>30</OBX.5>
+<OBX.6><CE.1>%</CE.1><CE.2>%</CE.2></OBX.6>
+<OBX.7>19 - 55</OBX.7>
+<OBX.8>N</OBX.8>
+<OBX.11>F</OBX.11>
+</OBX>
+</ORU_R01.OBSERVATION>
+<ORU_R01.OBSERVATION>
+<OBX>
+<OBX.1>31</OBX.1>
+<OBX.2>NM</OBX.2>
+<OBX.3><CE.1>NHDL</CE.1><CE.2>Non HDL Chol</CE.2><CE.3>L</CE.3></OBX.3>
+<OBX.5>2.7</OBX.5>
+<OBX.6><CE.1>mmol/L</CE.1><CE.2>mmol/L</CE.2></OBX.6>
+<OBX.7>0 - 3.4</OBX.7>
+<OBX.8>N</OBX.8>
+<OBX.11>F</OBX.11>
+</OBX>
+</ORU_R01.OBSERVATION>
+</ORU_R01.ORDER_OBSERVATION>
+</ORU_R01.PATIENT_RESULT>
+</ORU_R01>
