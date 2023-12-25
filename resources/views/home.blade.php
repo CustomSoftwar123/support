@@ -32,7 +32,6 @@
                       <div class="card card-widget mb-0  widget-user-2 bg-primary">
                         <!-- Add the bg color to the header using any of the bg-* classes -->
                         <div class="widget-user-header">
-
                           <h2><i class="fas fa-file-medical float-right display-5"></i></h2>
                           <h4 id="thisWeek">{{$data['ticketsThisWeek']}}</h4>
                           <h5>Tickets Opened</h5>
@@ -94,13 +93,42 @@
                     </a>
                     </div>
                     <!-- /.col -->
-                    
+                    <!-- modal.blade.php -->
+
+<div class="modal fade" id="ticketModal" tabindex="-1" role="dialog" aria-labelledby="ticketModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="ticketModalLabel">Ticket Details</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <table class="table">
+                    <thead>
+                       
+                    </thead>
+                    <tbody id="ticketModalBody">
+                        <!-- Ticket data will be inserted here dynamically -->
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 
           <div class="col-lg-12 mt-3">
             <div class="card">
               <div class="card-body">
         
                    <!--  <span class="text-bold text-lg requestsTotal">182</span> -->
+                   
+                   <button class ='btn btn-primary genReport'>Generate Report</button>
                     <h4>
                       Tickets Report
                       <select class="form-control w-25 float-right" id="duration">
@@ -145,6 +173,7 @@
 <script src="{{ asset('plugins/datatables-buttons/js/dataTables.buttons.min.js') }}"></script>
 <script src="{{ asset('plugins/datatables-buttons/js/buttons.bootstrap4.min.js') }}"></script>
 <script src="{{ asset('plugins/jszip/jszip.min.js') }}"></script>
+
 <script src="{{ asset('plugins/pdfmake/pdfmake.min.js') }}"></script>
 <script src="{{ asset('plugins/pdfmake/vfs_fonts.js') }}"></script>
 <script src="{{ asset('plugins/datatables-buttons/js/buttons.html5.min.js') }}"></script>
@@ -284,6 +313,55 @@
                           }) 
 
 
+                          $(document).on('click', '.genReport', function () { 
+                            // var $j = $.noConflict();
+                            $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+                            const duration= $('#duration').val()
+                            alert(duration);
+                            
+                        $.ajax({
+                              type: "post",
+                              url:"{{ route( 'generateReport') }}",
+                              data: {'duration' : duration},
+                              timeout: 600000,
+                              success: function(data) {
+                                console.log(data)
+                                // $('.table').empty();
+                                $('#ticketModalBody').empty();
+
+        // Iterate over the data and append rows to the table
+        var tableHeader = '<tr>';
+        for (var key in data) {
+            if (data.hasOwnProperty(key)) {
+                tableHeader += '<th>' + key + '</th>';
+            }
+        }
+        tableHeader += '</tr>';
+        $('#ticketModal thead').html(tableHeader);
+
+        // Append table data (tbody) with td for each value
+        var tableDataRow = '<tr>';
+        for (var key in data) {
+            if (data.hasOwnProperty(key)) {
+                tableDataRow += '<td>' + data[key] + '</td>';
+            }
+        }
+        tableDataRow += '</tr>';
+        $('#ticketModalBody').append(tableDataRow);
+        $('.table').DataTable({ dom: 'Bfrtip',
+        buttons: [
+            'pdf'
+            // Add more buttons if needed
+        ]});
+                   $("#ticketModal").modal('show');
+                              }
+                            })
+
+                          })
 
 
                           $(document).on('change', '#duration', function () { 
