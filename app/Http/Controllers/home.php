@@ -59,6 +59,47 @@ class home extends Controller
     }
 
 
+    public function getTicketsComparison(Request $request){
+      $duration=$request->duration;
+      if($duration=='This Week'){
+      $ticketsThisWeek = DB::table('tickets')
+ 
+      ->whereBetween('created_at', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])
+      ->count();
+
+      $ticketsLastWeek = DB::table('tickets')
+
+    ->whereBetween('created_at', [Carbon::now()->startOfWeek()->subWeek(), Carbon::now()->startOfWeek()->subSecond()])
+    ->count();
+
+    return  $data = [
+
+      'ticketsThis' => $ticketsThisWeek,
+      'ticketsLast'=>$ticketsLastWeek
+];
+      }
+      else{
+        $firstDayOfMonth = Carbon::now()->startOfMonth();
+     $lastDayOfMonth = Carbon::now()->endOfMonth();
+     
+       $ticketsThisMonth = DB::table('tickets')
+         ->whereBetween('created_at', [$firstDayOfMonth, $lastDayOfMonth])
+         ->count();
+
+         $firstDayOfLastMonth = Carbon::now()->subMonth()->startOfMonth();
+         $lastDayOfLastMonth = Carbon::now()->subMonth()->endOfMonth();
+         
+         $ticketsLastMonth = DB::table('tickets')
+             ->whereBetween('created_at', [$firstDayOfLastMonth, $lastDayOfLastMonth])
+             ->count();
+
+             return $data = [
+    'ticketsThis' => $ticketsThisMonth,
+    'ticketsLast' => $ticketsLastMonth,
+];
+      }
+
+    }
       
 
     public function index()
