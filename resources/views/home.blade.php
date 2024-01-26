@@ -110,8 +110,14 @@
                 <table class="table">
                     <thead>
                         <tr>
-                            <th>Tickets This Week</th>
-                            <th>Tickets Last week</th>
+                            <th>Duration</th>
+                            <th>Total</th>
+                            <th>Opened</th>
+                            <th>Closed</th>
+                            <th>Processing</th>
+                            <th>Completed</th>
+                            
+
                         </tr>
                     </thead>
                     <tbody></tbody>
@@ -328,18 +334,37 @@ $(document).on('click','.reports',function(){
       console.log(data)
       // alert
       const ticketsThis = data.ticketsThis;
+      const ticketsClosedThis = data.ticketsClosedThis;
+      const ticketsOpenedThis = data.ticketsOpenedThis;
+      const ticketsProcessingThis = data.ticketsProcessingThis;
+      const ticketsCompletedThis = data.ticketsCompletedThis;
       const ticketsLast = data.ticketsLast;
-      // console.log(ticketsThisWeek)
+      const ticketsClosedLast = data.ticketsClosedLast;
+      const ticketsOpenedLast = data.ticketsOpenedLast;
+      const ticketsProcessingLast = data.ticketsProcessingLast;
+      const ticketsCompletedLast = data.ticketsCompletedLast;
 
-// Clear existing modal content
+var extractedPart = duration.substring(5);
 $("#ticketsModal .modal-body table tbody").empty();
 $("#ticketsModal .modal-body table tbody").append(
                 '<tr>' +
+                '<td>This '+extractedPart +'</td>'+
                 '<td>' + ticketsThis + '</td>' +
-                '<td>'+ticketsLast+'</td>'+
+                '<td>'+ticketsOpenedThis+'</td>'+
+                '<td>'+ticketsClosedThis+'</td>'+
+               '<td>'+ ticketsProcessingThis+'</td>'+
+               '<td>'+ ticketsCompletedThis+'</td>'+
+                '</tr>'+
+                '<tr>' +
+                '<td>Last '+extractedPart +'</td>'+
+                '<td>' + ticketsLast + '</td>' +
+                '<td>'+ticketsOpenedLast+'</td>'+
+                '<td>'+ticketsClosedLast+'</td>'+
+               '<td>'+ ticketsProcessingLast+'</td>'+
+               '<td>'+ ticketsCompletedLast+'</td>'+
                 '</tr>'
             );
-            $("#ticketsModal .modal-body table thead th:nth-child(1)").text('Tickets HEHE');
+            // $("#ticketsModal .modal-body table thead th:nth-child(1)").text('Tickets HEHE');
             
 
     $("#ticketsModal").modal('show')
