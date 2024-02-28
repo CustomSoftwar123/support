@@ -340,7 +340,7 @@
     </div>
     <!-- /.sidebar -->
   </aside>
-  <script>
+  <!-- <script>
       window.localStorage.setItem('openOnePage', Date.now());
  var onLocalStorageEvent = function(e){
     
@@ -358,7 +358,7 @@
     
     };     
         window.addEventListener('storage', onLocalStorageEvent, false);
-  </script>
+  </script> -->
 
 
 
