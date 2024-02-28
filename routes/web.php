@@ -221,6 +221,21 @@ Route::post('updateList', [lists::class, 'update'])->name('updateList');
 Route::get('ListRowShift', [lists::class, 'ListRowShift'])->name('ListRowShift');
 
 
+Route::get('tasks',[tickets::class,'tasks'])->name('tasks');
+Route::post('tasks',[tickets::class,'tasks'])->name('tasks');
+Route::post('addtask',[tickets::class,'addtask'])->name('addtask');
+Route::post('edittask',[tickets::class,'edittask'])->name('edittask');
+Route::post('updatetask',[tickets::class,'updatetask'])->name('updatetask');
+Route::post('deletetask',[tickets::class,'deletetask'])->name('deletetask');
+
+
+
+
+
+
+
+
+
 Route::post('changeStatus', [files::class, 'changeStatus'])->name('changeStatus');
 });
 
