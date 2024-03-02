@@ -9,6 +9,8 @@ use App\Http\Controllers\business;
 use App\Http\Controllers\home;
 use App\Http\Controllers\tickets;
 use App\Http\Controllers\AppController;
+use App\Http\Controllers\reportsController;
+
 use App\Http\Controllers\versions;
 use App\Http\Controllers\patienthistorybt;
 
@@ -222,6 +224,7 @@ Route::get('ListRowShift', [lists::class, 'ListRowShift'])->name('ListRowShift')
 
 
 Route::post('changeStatus', [files::class, 'changeStatus'])->name('changeStatus');
+Route::post('generateReport', [reportsController::class, 'generateReport'])->name('generateReport');
 });
 
 
