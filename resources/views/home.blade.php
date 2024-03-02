@@ -93,13 +93,14 @@
                     </a>
                     </div>
                     <!-- /.col -->
-                    <!-- modal.blade.php -->
+                    
+<!-- resources/views/tickets/modal.blade.php -->
 
-<div class="modal fade" id="ticketModal" tabindex="-1" role="dialog" aria-labelledby="ticketModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
+<div class="modal fade" id="ticketsModal" tabindex="-1" role="dialog" aria-labelledby="ticketsModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="ticketModalLabel">Ticket Details</h5>
+                <h5 class="modal-title" id="ticketsModalLabel">Tickets</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -107,11 +108,18 @@
             <div class="modal-body">
                 <table class="table">
                     <thead>
-                       
+                        <tr>
+                            <th>Duration</th>
+                            <th>Total</th>
+                            <th>Opened</th>
+                            <th>Closed</th>
+                            <th>Processing</th>
+                            <th>Completed</th>
+                            
+
+                        </tr>
                     </thead>
-                    <tbody id="ticketModalBody">
-                        <!-- Ticket data will be inserted here dynamically -->
-                    </tbody>
+                    <tbody></tbody>
                 </table>
             </div>
             <div class="modal-footer">
@@ -121,14 +129,12 @@
     </div>
 </div>
 
-
           <div class="col-lg-12 mt-3">
             <div class="card">
               <div class="card-body">
         
                    <!--  <span class="text-bold text-lg requestsTotal">182</span> -->
-                   
-                   <button class ='btn btn-primary genReport'>Generate Report</button>
+                   <button class="btn btn-success reports">Reports</button>
                     <h4>
                       Tickets Report
                       <select class="form-control w-25 float-right" id="duration">
@@ -312,56 +318,63 @@
                               
                           }) 
 
-
-                          $(document).on('click', '.genReport', function () { 
-                            // var $j = $.noConflict();
-                            $.ajaxSetup({
+$(document).on('click','.reports',function(){
+  alert()
+  $.ajaxSetup({
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
     });
-                            const duration= $('#duration').val()
-                            alert(duration);
-                            
-                        $.ajax({
-                              type: "post",
-                              url:"{{ route( 'generateReport') }}",
-                              data: {'duration' : duration},
-                              timeout: 600000,
-                              success: function(data) {
-                                console.log(data)
-                                // $('.table').empty();
-                                $('#ticketModalBody').empty();
+  var duration =$("#duration").val();
+  $.ajax({
+    type:"post",
+    url:"{{route('getTicketsComparison')}}",
+    data: {'duration' : duration},
+    success:function(data){
+      console.log(data)
+      // alert
+      const ticketsThis = data.ticketsThis;
+      const ticketsClosedThis = data.ticketsClosedThis;
+      const ticketsOpenedThis = data.ticketsOpenedThis;
+      const ticketsProcessingThis = data.ticketsProcessingThis;
+      const ticketsCompletedThis = data.ticketsCompletedThis;
+      const ticketsLast = data.ticketsLast;
+      const ticketsClosedLast = data.ticketsClosedLast;
+      const ticketsOpenedLast = data.ticketsOpenedLast;
+      const ticketsProcessingLast = data.ticketsProcessingLast;
+      const ticketsCompletedLast = data.ticketsCompletedLast;
 
-        // Iterate over the data and append rows to the table
-        var tableHeader = '<tr>';
-        for (var key in data) {
-            if (data.hasOwnProperty(key)) {
-                tableHeader += '<th>' + key + '</th>';
-            }
-        }
-        tableHeader += '</tr>';
-        $('#ticketModal thead').html(tableHeader);
+var extractedPart = duration.substring(5);
+$("#ticketsModal .modal-body table tbody").empty();
+$("#ticketsModal .modal-body table tbody").append(
+                '<tr>' +
+                '<td>This '+extractedPart +'</td>'+
+                '<td>' + ticketsThis + '</td>' +
+                '<td>'+ticketsOpenedThis+'</td>'+
+                '<td>'+ticketsClosedThis+'</td>'+
+               '<td>'+ ticketsProcessingThis+'</td>'+
+               '<td>'+ ticketsCompletedThis+'</td>'+
+                '</tr>'+
+                '<tr>' +
+                '<td>Last '+extractedPart +'</td>'+
+                '<td>' + ticketsLast + '</td>' +
+                '<td>'+ticketsOpenedLast+'</td>'+
+                '<td>'+ticketsClosedLast+'</td>'+
+               '<td>'+ ticketsProcessingLast+'</td>'+
+               '<td>'+ ticketsCompletedLast+'</td>'+
+                '</tr>'
+            );
+            // $("#ticketsModal .modal-body table thead th:nth-child(1)").text('Tickets HEHE');
+            
 
-        // Append table data (tbody) with td for each value
-        var tableDataRow = '<tr>';
-        for (var key in data) {
-            if (data.hasOwnProperty(key)) {
-                tableDataRow += '<td>' + data[key] + '</td>';
-            }
-        }
-        tableDataRow += '</tr>';
-        $('#ticketModalBody').append(tableDataRow);
-        $('.table').DataTable({ dom: 'Bfrtip',
-        buttons: [
-            'pdf'
-            // Add more buttons if needed
-        ]});
-                   $("#ticketModal").modal('show');
-                              }
-                            })
+    $("#ticketsModal").modal('show')
 
-                          })
+    }
+
+    
+
+  })
+})
 
 
                           $(document).on('change', '#duration', function () { 

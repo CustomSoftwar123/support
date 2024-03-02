@@ -224,7 +224,8 @@ Route::get('ListRowShift', [lists::class, 'ListRowShift'])->name('ListRowShift')
 
 
 Route::post('changeStatus', [files::class, 'changeStatus'])->name('changeStatus');
-Route::post('generateReport', [reportsController::class, 'generateReport'])->name('generateReport');
+
+Route::post('getTicketsComparison', [home::class, 'getTicketsComparison'])->name('getTicketsComparison');
 });
 
 
