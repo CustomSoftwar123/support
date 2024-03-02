@@ -78,7 +78,7 @@ class SendTicketsReport implements ShouldQueue
             ];
             logger('Email should send to .' . $email);
 //todo comment below line
-            $email = 'customsoftware2022@gmail.com';
+            // $email = 'customsoftware2022@gmail.com';
             Mail::to($email)->send(new TicketReportMail($emailData));
 
             logger('Email sent to .' . $email);
