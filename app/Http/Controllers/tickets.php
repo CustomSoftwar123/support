@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\ticket;
+use App\Models\Timeline;
 use App\Models\ticketattachment;
 use App\Models\ticketmessages;
 use DB;
@@ -141,9 +142,9 @@ else{
 //      return redirect('home');
 //   } else {
 // return $request;
-
+$timelineInstance = new Timeline();
 $ticketattachments=DB::table('ticketattachments')->where('mid', null)->where('ticketid',$ticketinfo[0]->ticketid)->get(); 
-
+ $ticketTimeline=$timelineInstance->getTimeline($ticketinfo[0]->ticketid)->get();
 // return $user=auth()->user();
 
 $ticketmessages = DB::table('ticketmessages') 
@@ -165,7 +166,8 @@ $data22= [
 'ticketattachments' => $ticketattachments,
 'ticketmessages' => $ticketmessages,
 'patients' => $patients,
-'internal'=>$internal
+'internal'=>$internal,
+'ticketTimeline'=>$ticketTimeline
 
 
 ];  

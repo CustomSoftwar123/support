@@ -32,7 +32,6 @@
                       <div class="card card-widget mb-0  widget-user-2 bg-primary">
                         <!-- Add the bg color to the header using any of the bg-* classes -->
                         <div class="widget-user-header">
-
                           <h2><i class="fas fa-file-medical float-right display-5"></i></h2>
                           <h4 id="thisWeek">{{$data['ticketsThisWeek']}}</h4>
                           <h5>Tickets Opened</h5>
@@ -180,6 +179,7 @@
 <script src="{{ asset('plugins/datatables-buttons/js/dataTables.buttons.min.js') }}"></script>
 <script src="{{ asset('plugins/datatables-buttons/js/buttons.bootstrap4.min.js') }}"></script>
 <script src="{{ asset('plugins/jszip/jszip.min.js') }}"></script>
+
 <script src="{{ asset('plugins/pdfmake/pdfmake.min.js') }}"></script>
 <script src="{{ asset('plugins/pdfmake/vfs_fonts.js') }}"></script>
 <script src="{{ asset('plugins/datatables-buttons/js/buttons.html5.min.js') }}"></script>

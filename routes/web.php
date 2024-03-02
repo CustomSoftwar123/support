@@ -9,6 +9,8 @@ use App\Http\Controllers\business;
 use App\Http\Controllers\home;
 use App\Http\Controllers\tickets;
 use App\Http\Controllers\AppController;
+use App\Http\Controllers\reportsController;
+
 use App\Http\Controllers\versions;
 use App\Http\Controllers\patienthistorybt;
 
