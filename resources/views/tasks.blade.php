@@ -357,6 +357,35 @@ $("#addtask").click(function(){
 
 
 
+table.on('click', '.viewTickets', function() {
+
+    const id = $(this).attr('id');
+    window.location="http://localhost:8000/Tickets/task/"+id;
+  
+    $.ajax({
+            url:"{{route('Tickets')}}",
+            type:"POST",
+            data:{
+                id:id,
+            }
+        }).done(function(response){
+
+                // if(response){
+                //     $("#subject").val(response.row[0]['subject']);
+                //     $("#department").val(response.row[0]['department']);
+                //     $("#description").val(response.row[0]['description']);
+                //     $("#status").val(response.row[0]['status']);
+                //     $("#id").val(response.row[0]['id']);
+
+
+                //     $("#addtask").addClass('d-none');
+                //     $("#updatetask").removeClass('d-none');
+
+                // }
+
+        })
+
+})
 
 table.on('click', '.edit', function() {
 

@@ -11,6 +11,7 @@ use App\Mail\SignUp;
 use Mail;
 // use Illuminate\Support\Facades\Mail;
 use App;
+use Route;
 use Carbon\Carbon;
 use DataTables;
 use DateTime;
@@ -202,6 +203,7 @@ $priority = $request->priority;
 $message = $request->message;
 $tid = $request->tid;
 $client=$request->client;
+$taskid=$request->taskId;
 
 $id=auth()->user()->role;
 $email=auth()->user()->email;
@@ -220,7 +222,7 @@ $validator=$request->validate([
 // {
 //     return response()->json(['status'=>0,'errors'=>$validator->errors()[0]]);
 // }
-DB::insert('insert into tickets (patientname, username, contact,sampleid,subject,department,priority,message,created_at,created_by,ticketid,status,mailed,created_for) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?)', [$patientname,$email,$contact,$sampleid,$subject,$department,$priority,$message,$date,$id,$tid,'Opened',0,$client]);
+DB::insert('insert into tickets (patientname, username, contact,sampleid,subject,department,priority,message,created_at,created_by,ticketid,status,mailed,created_for,tasks_id) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)', [$patientname,$email,$contact,$sampleid,$subject,$department,$priority,$message,$date,$id,$tid,'Opened',0,$client,$taskid]);
 return response()->json(['status','true',$tid]);
 
 }
@@ -858,15 +860,16 @@ public function tickets(Request $request){
 
 //     $type=$request->type;
 // return $type;
+// return $taskId;
 if ($request->ajax()) {
 $cr=0;
-
+// return $request;
 $user = auth()->user();
 $r=$user->role;
 $cl=$user->client;
 
 
-
+// return type($request->task);
 
 if ($user->role <= 3) {
     $loggedin = auth()->user()->email;
@@ -922,7 +925,7 @@ $data = DB::table('tickets')
 ->leftjoin('users', 'tickets.username' ,"=",'users.email')
 ->where('users.client',$cl)
 ->when(!empty($request->status), function ($query) use ($request) {
-        
+        // return 1;
         return $query->where('tickets.status', $request->status);
 
     })
@@ -954,6 +957,12 @@ return $query->where('tickets.subject', 'like', '%' . $request->subject . '%');
 }
 else{
 
+
+// return	$currentUrl = url(request()->path());
+
+	// return 1;
+	// return 'dsf'.$request->task;
+
 $data = DB::table('tickets')
 ->select(
 'tickets.*',
@@ -962,8 +971,14 @@ $data = DB::table('tickets')
 ->leftjoin('users', 'tickets.username' ,"=",'users.email')
 ->where('users.client',$cl)
 ->when(!empty($request->status), function ($query) use ($request) {
-        
+        // return 1;
         return $query->where('tickets.status', $request->status);
+
+    })
+	->when(!empty($request->task), function ($query) use ($request) {
+        // return $request->task;
+		// return 'asd';
+        return $query->where('tickets.tasks_id', $request->task);
 
     })
 ->when(!empty($request->ticketid), function ($query) use ($request) {
@@ -1272,6 +1287,7 @@ public function tasks(Request $request){
 		<div class="btn-group" role="group" aria-label="Basic example">
 		<button class="btn btn-info edit" id="' . $row->id . '"  >Edit </button>
 		<button class="btn btn-danger delete" id="' . $row->id . '"> Delete </button>
+		<button class="btn btn-success viewTickets" id="' . $row->id . '"> View </button>
 		</div>
 		';
 
@@ -1299,7 +1315,7 @@ public function addtask(Request $request){
 	$department = $request->department;
 	$description = $request->description;
 	$status = $request->status;
-
+	// $id=Str::uuid(); 
 	$test = DB::insert("INSERT INTO tasks (subject, status, department, description) VALUES (?, ?, ?, ?)", [$subject, $status, $department, $description]);
 
 
