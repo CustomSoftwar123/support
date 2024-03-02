@@ -14,8 +14,11 @@ class SendTicketNotifications extends Command
 
     public function handle()
     {
+        $ticketsGrouped = []; 
+
         $tickets = DB::table('tickets')
-            ->where('created_at', '>=', now()->subDays(90))
+            ->where('created_at', '>=', now()->subDays(190))
+            ->whereIn('internal', [1, 2])
             ->whereNotIn('status', ['Completed', 'Closed'])
             ->orderBy('priority', 'asc')
             ->get();
@@ -23,23 +26,30 @@ class SendTicketNotifications extends Command
         logger($tickets);
 
         foreach ($tickets as $ticket) {
-            $this->sendNotification($ticket);
+            if ($this->shouldSendNotification($ticket)) {
+                // Calculate response time and resolution time for each ticket
+                $responseTime = $this->calculateResponseTime($ticket);
+                $resolutionTime = $this->calculateResolutionTime($ticket);
+                
+                // Group tickets by priority and embed response time and resolution time
+                $ticketsGrouped[$ticket->priority][] = [
+                    'ticket' => $ticket,
+                    'responseTime' => $responseTime,
+                    'resolutionTime' => $resolutionTime,
+                ];
+            }
         }
-    }
 
-    private function sendNotification($ticket)
-    {
-        // Implement logic to check ticket priority and response/resolution times
-        // If criteria met, send email notification to admin
-        if ($this->shouldSendNotification($ticket)) {
-            $adminEmail = 'admin@example.com'; // Replace with actual admin email
+        if (!empty($ticketsGrouped)) {
+            $adminEmail = ['customsoftware2022@gmail.com','aqeel@ocmsoftware.ie'];
             $emailData = [
-                'ticket' => $ticket,
+                'ticketsGrouped' => $ticketsGrouped,
             ];
-            // Mail::to($adminEmail)->send(new TicketNotificationMail($emailData));
-            $this->info("Email sent for Ticket ID: {$ticket->ticketid}");
+            // Send a single email including all tickets grouped by priority
+            Mail::to($adminEmail)->send(new TicketNotificationMail($emailData));
+            $this->info("Email sent for ticket notifications");
         }
-    }
+    }     
 
     private function shouldSendNotification($ticket)
     {
@@ -99,5 +109,36 @@ class SendTicketNotifications extends Command
     private function isBeyondResolutionTime($ticket, $resolutionTime)
     {
         return now()->diffInDays($ticket->created_at) > $resolutionTime;
+    }
+    private function calculateResponseTime($ticket)
+    {
+        switch ($ticket->priority) {
+            case 'Critical':
+                return 4; // 4 hours for Critical priority
+            case 'High':
+                return 24; // 24 hours for High priority
+            case 'Medium':
+                return 48; // 48 hours for Medium priority
+            case 'Low':
+                return 72; // 72 hours for Low priority
+            default:
+                return 0;
+        }
+    }
+
+    private function calculateResolutionTime($ticket)
+    {
+        switch ($ticket->priority) {
+            case 'Critical':
+                return 12; // 12 hours for Critical priority
+            case 'High':
+                return 7 * 24; // 7 days for High priority
+            case 'Medium':
+                return 10 * 24; // 10 days for Medium priority
+            case 'Low':
+                return 15 * 24; // 15 days for Low priority
+            default:
+                return 0;
+        }
     }
 }
