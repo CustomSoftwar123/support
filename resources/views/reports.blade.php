@@ -82,10 +82,49 @@
 <div class="form-group col-md-2 mt-4">
 
 <input type="button" id ="submit" value="Submit" class="btn btn-primary">
+<button type="button" class="btn btn-warning" id ="sendEmailModal" data-toggle="modal" data-target="#exampleModal" data-whatever="@mdo">Send Email</button>
+
 </div>
 </div>    
 
- 
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Send Tickets Report To Admins</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group d-flex justify-content-between w-100">
+        <div class="col-md-5">
+      <label for="">From</label>
+    <input class="form-control" type="date" name='todateemail' id="todateEmail">
+</div>
+
+<div class="col-md-5">
+
+<label for="">To</label>
+    <input class="form-control" type="date" name="tilldateemail" id="tilldateEmail" >
+</div>
+          </div>
+          <div class="form-group">
+            <label for="recipient-name" class="col-form-label">Subject:</label>
+            <input type="text" class="form-control" id="email-subject">
+          </div>
+          <div class="form-group">
+            <label for="message-text" class="col-form-label">Message:</label>
+            <textarea class="form-control" id="message-text"></textarea>
+          </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" id='sendEmail'>Send message</button>
+      </div>
+    </div>
+  </div>
+</div>
       <div class="container-fluid">
 
       
@@ -206,12 +245,7 @@ $.ajaxSetup({
           'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
     });
-    
-   
 
-
-// let myform=document.getElementById("form");
-// let data=new FormData(myform);
  function loadtable () {
   var todate = $("#todate").val();
   var  tilldate= $("#tilldate").val();
@@ -285,7 +319,6 @@ columns: [
  }
   
 
-//  loadtable();s
 
 
     $("#submit").click(function(){ 
@@ -293,7 +326,6 @@ columns: [
   var  tilldate= $("#tilldate").val();
       $('#table').DataTable().destroy();
       if(todate!="" && tilldate==""){
-// $('#tilldate').addClass('d-none');
 Lobibox.notify('warning', {
                                 pauseDelayOnHover: true,
                                 continueDelayOnInactiveTab: false,
@@ -319,41 +351,52 @@ else if(todate=="" && tilldate!=""){
 
 
     })
- 
-//     $("#submit").click(function(){
-      
-//       // $('.paused').addClass('d-none');
-      
-//       // $('.paused').removeClass('d-block');
-//       // $('.started').addClass('d-block');
-   
-// let myform=document.getElementById("form");
-// let data=new FormData(myform);
-// $.ajax({
+    $("#sendEmail").click(function(){ 
+      const toDate = $("#todateEmail").val();
+  const  tillDate= $("#tilldateEmail").val();
+  const  emailSubject= $("#email-subject").val();
+  const  messageText= $("#message-text").val();
+console.log(toDate,tillDate,emailSubject,messageText,'Test')
+  $.ajax({
+    method: 'POST',
                 
-//         url: "../reporte",
-//         data: data,    
-//         cache: false,
-//         processData: false,
-//         contentType: false,
-//         type: 'POST',
-//         }).done(function (response) {
-//             console.log("done");
-//                         // if(response > 0) {
+                url: "{{route('SendReportEmail')}}",
+                data: {
+                  toDate,
+                  tillDate,
+                  emailSubject,
+                  messageText
+                },    
+               
+                }).done(function (response) {
+    console.log(response);
 
-//                         //     $("#result").html('Ticket has been completed successfully!')
+    // Display a success message using Lobibox
+  
+}).fail(function (xhr, status, error) {
+    console.error(xhr.responseText);
 
-//                         // //  window.location="../TicketView/"+response;
+    // Display an error message using Lobibox
+    Lobibox.notify('error', {
+                                            pauseDelayOnHover: true,
+                                            continueDelayOnInactiveTab: false,
+                                            position: 'top right',
+                                            msg: response.error,
+                                            icon: 'bx bx-check-circle'
+                                        });
 
-//                         // }
-                   
-                       
-//                 });
-        
+    })
 
-//   });
-
+    Lobibox.notify('success', {
+                                            pauseDelayOnHover: true,
+                                            continueDelayOnInactiveTab: false,
+                                            position: 'top right',
+                                            msg: 'Email will be sent shortly',
+                                            icon: 'bx bx-check-circle'
+                                        });
+$('#exampleModal').modal('hide')
  
+   });
    });
 
 
