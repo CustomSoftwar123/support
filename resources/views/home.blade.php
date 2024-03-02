@@ -32,7 +32,6 @@
                       <div class="card card-widget mb-0  widget-user-2 bg-primary">
                         <!-- Add the bg color to the header using any of the bg-* classes -->
                         <div class="widget-user-header">
-
                           <h2><i class="fas fa-file-medical float-right display-5"></i></h2>
                           <h4 id="thisWeek">{{$data['ticketsThisWeek']}}</h4>
                           <h5>Tickets Opened</h5>
@@ -95,12 +94,47 @@
                     </div>
                     <!-- /.col -->
                     
+<!-- resources/views/tickets/modal.blade.php -->
+
+<div class="modal fade" id="ticketsModal" tabindex="-1" role="dialog" aria-labelledby="ticketsModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="ticketsModalLabel">Tickets</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Duration</th>
+                            <th>Total</th>
+                            <th>Opened</th>
+                            <th>Closed</th>
+                            <th>Processing</th>
+                            <th>Completed</th>
+                            
+
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
 
           <div class="col-lg-12 mt-3">
             <div class="card">
               <div class="card-body">
         
                    <!--  <span class="text-bold text-lg requestsTotal">182</span> -->
+                   <button class="btn btn-success reports">Reports</button>
                     <h4>
                       Tickets Report
                       <select class="form-control w-25 float-right" id="duration">
@@ -145,6 +179,7 @@
 <script src="{{ asset('plugins/datatables-buttons/js/dataTables.buttons.min.js') }}"></script>
 <script src="{{ asset('plugins/datatables-buttons/js/buttons.bootstrap4.min.js') }}"></script>
 <script src="{{ asset('plugins/jszip/jszip.min.js') }}"></script>
+
 <script src="{{ asset('plugins/pdfmake/pdfmake.min.js') }}"></script>
 <script src="{{ asset('plugins/pdfmake/vfs_fonts.js') }}"></script>
 <script src="{{ asset('plugins/datatables-buttons/js/buttons.html5.min.js') }}"></script>
@@ -283,7 +318,63 @@
                               
                           }) 
 
+$(document).on('click','.reports',function(){
+  alert()
+  $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+  var duration =$("#duration").val();
+  $.ajax({
+    type:"post",
+    url:"{{route('getTicketsComparison')}}",
+    data: {'duration' : duration},
+    success:function(data){
+      console.log(data)
+      // alert
+      const ticketsThis = data.ticketsThis;
+      const ticketsClosedThis = data.ticketsClosedThis;
+      const ticketsOpenedThis = data.ticketsOpenedThis;
+      const ticketsProcessingThis = data.ticketsProcessingThis;
+      const ticketsCompletedThis = data.ticketsCompletedThis;
+      const ticketsLast = data.ticketsLast;
+      const ticketsClosedLast = data.ticketsClosedLast;
+      const ticketsOpenedLast = data.ticketsOpenedLast;
+      const ticketsProcessingLast = data.ticketsProcessingLast;
+      const ticketsCompletedLast = data.ticketsCompletedLast;
 
+var extractedPart = duration.substring(5);
+$("#ticketsModal .modal-body table tbody").empty();
+$("#ticketsModal .modal-body table tbody").append(
+                '<tr>' +
+                '<td>This '+extractedPart +'</td>'+
+                '<td>' + ticketsThis + '</td>' +
+                '<td>'+ticketsOpenedThis+'</td>'+
+                '<td>'+ticketsClosedThis+'</td>'+
+               '<td>'+ ticketsProcessingThis+'</td>'+
+               '<td>'+ ticketsCompletedThis+'</td>'+
+                '</tr>'+
+                '<tr>' +
+                '<td>Last '+extractedPart +'</td>'+
+                '<td>' + ticketsLast + '</td>' +
+                '<td>'+ticketsOpenedLast+'</td>'+
+                '<td>'+ticketsClosedLast+'</td>'+
+               '<td>'+ ticketsProcessingLast+'</td>'+
+               '<td>'+ ticketsCompletedLast+'</td>'+
+                '</tr>'
+            );
+            // $("#ticketsModal .modal-body table thead th:nth-child(1)").text('Tickets HEHE');
+            
+
+    $("#ticketsModal").modal('show')
+
+    }
+
+    
+
+  })
+})
 
 
                           $(document).on('change', '#duration', function () { 

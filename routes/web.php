@@ -9,6 +9,8 @@ use App\Http\Controllers\business;
 use App\Http\Controllers\home;
 use App\Http\Controllers\tickets;
 use App\Http\Controllers\AppController;
+use App\Http\Controllers\reportsController;
+
 use App\Http\Controllers\versions;
 use App\Http\Controllers\patienthistorybt;
 
@@ -240,6 +242,11 @@ Route::post('deletetask',[tickets::class,'deletetask'])->name('deletetask');
 
 
 Route::post('changeStatus', [files::class, 'changeStatus'])->name('changeStatus');
+
+Route::post('getTicketsComparison', [home::class, 'getTicketsComparison'])->name('getTicketsComparison');
+
+
+Route::post('send-report-email', [Tickets::class, 'SendReportEmail'])->name('SendReportEmail');
 });
 
 

@@ -145,7 +145,7 @@
                                     elseif($data22['ticketinfo'][0]->status == 'Completed') {
 
                                       ?>
-                                      <button class="btn btn-info float-right mr-1">{{$data22['ticketinfo'][0]->status}}</button>
+                                      <button class="btn btn-info float-right mr-1 " id="completed">{{$data22['ticketinfo'][0]->status}}</button>
                                       <?php
 
                                   } 
@@ -436,8 +436,13 @@ pathinfo($attachment->filename, PATHINFO_EXTENSION) == 'flv'
                   <button type="button" class="btn btn-success float-right ml-1 replyandcomplete" value="Submit">Reply & Complete Ticket</button>
               
 
-                  <button type="button" class="btn btn-primary float-right saveupdatebtn" value="Submit">Generate Ticket</button>
-               
+                  <button type="button" class="btn btn-primary float-right ml-1 saveupdatebtn" value="Submit">Generate Ticket</button>
+                  @if($data22['ticketTimeline'][0]['time2']==0)
+                  <button type="button" class="btn btn-secondary float-right paused ml-1">Pause</button>
+                  @endif
+                  @if($data22['ticketTimeline'][0]['time1'] && $data22['ticketTimeline'][0]['time2'])
+                  <button type="button" class="btn btn-warning float-right started ml-1">Start</button>
+               @endif
                   <div id="result">
                   <img src="/images/Iphone-spinner-2.gif" alt="Loading..." id='loading-image' class='d-none'>
                   </div>
@@ -572,7 +577,13 @@ pathinfo($attachment->filename, PATHINFO_EXTENSION) == 'flv'
 
     $(document).ready(function(){
       
-
+const status=$("#completed").html();
+if(status==='Completed'){
+  $(".replyandcomplete").addClass('d-none')
+  $('.paused').addClass('d-none')
+      $('.started').addClass('d-none')
+      
+}
         var data = @json($data22);
         var d = @json($data22);
         // console.log(data22.internal[0])
@@ -642,10 +653,10 @@ pathinfo($attachment->filename, PATHINFO_EXTENSION) == 'flv'
  
     $(".paused").click(function(){
       
-      // $('.paused').addClass('d-none');
+      $('.paused').addClass('d-none');
       
-      // $('.paused').removeClass('d-block');
-      // $('.started').addClass('d-block');
+      $('.paused').removeClass('d-block');
+      $('.started').addClass('d-block');
    
       let myform=document.getElementById("form");
 let data=new FormData(myform);
@@ -661,7 +672,7 @@ $.ajax({
 
                         if(response > 0) {
 
-                            $("#result").html('Ticket has been completed successfully!')
+                            $("#result").html('Ticket time has been paused!')
 
                          window.location=''
 
@@ -689,9 +700,9 @@ icon: 'bx bx-info-circle'
 
     $(".started").click(function(){
       
-        // $('.started').addClass('d-none');
-        // $('.started').removeClass('d-block');
-        // $('.paused').addClass('d-block');
+        $('.started').addClass('d-none');
+        $('.started').removeClass('d-block');
+        $('.paused').addClass('d-block');
         let myform=document.getElementById("form");
 let data=new FormData(myform);
 $.ajax({
@@ -705,7 +716,7 @@ $.ajax({
         }).done(function (response) {
 console.log(response);
 
-                            $("#result").html('Ticket has been completed successfully!')
+                            $("#result").html('Ticket time has been started')
 
                          window.location="../TicketView/"+response;
 
@@ -750,7 +761,7 @@ $.ajax({
         }).done(function (response) {
 
                         if(response > 0) {
-                                 //  window.location="../TicketView/"+response;
+                                  window.location="../TicketView/"+response;
                                  $.ajax({
                               
                               url: "../sendMail",
