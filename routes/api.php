@@ -44,5 +44,10 @@ Route::post('/uploadimage',[ticketcontroller::class,'uploadimages']);
 Route::post('/upload',[ticketcontroller::class,'upload']);
 
 Route::middleware('auth:api')->post('AddWards', [server::class, 'AddWards']);
+
+
+
+
+
 // Route::middleware('auth:api')->post('AddPatients', [server::class, 'AddPatients']);
 // Route::middleware('auth:api')->post('AddClinics', [server::class, 'AddClinics']);

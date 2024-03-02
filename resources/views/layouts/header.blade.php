@@ -252,6 +252,31 @@
               
     </li>
 
+
+
+
+     <li class="nav-item {{ ( request()->is('Tickets/*') ) ? 'menu-open' : '' }} admin">
+
+             <a href="#" class="nav-link {{ ( request()->is('tasks/*') ) ? 'active' : '' }}">
+              <i class="nav-icon fas fa-envelope-open-text"></i>
+              <p>
+                Tasks
+                <i class="fas fa-angle-left  right"></i>
+              </p>
+            </a>
+
+            <ul class="nav nav-treeview">
+
+            <li class="nav-item">
+                <a href="{{ route('tasks') }}" class="nav-link {{ ( request()->is('tasks') ) ? 'active' : '' }}">
+                  <i class="far fa-circle nav-icon"></i><p class="ml-0">All</p>
+                </a>
+              </li>
+  
+            </ul>
+              
+    </li>
+
           @if(\App\Http\Controllers\users::roleCheck()=='yes')
     <li class="nav-item {{ ( request()->is('Users/*')|| request()->is('User/*') || request()->is('User') ) ? 'menu-open' : '' }} admin">
           <!--     <li class="nav-item">-->

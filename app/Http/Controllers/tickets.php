@@ -11,6 +11,7 @@ use App\Mail\SignUp;
 use Mail;
 // use Illuminate\Support\Facades\Mail;
 use App;
+use Route;
 use Carbon\Carbon;
 use DataTables;
 use DateTime;
@@ -202,6 +203,7 @@ $priority = $request->priority;
 $message = $request->message;
 $tid = $request->tid;
 $client=$request->client;
+$taskid=$request->taskId;
 
 $id=auth()->user()->role;
 $email=auth()->user()->email;
@@ -220,7 +222,7 @@ $validator=$request->validate([
 // {
 //     return response()->json(['status'=>0,'errors'=>$validator->errors()[0]]);
 // }
-DB::insert('insert into tickets (patientname, username, contact,sampleid,subject,department,priority,message,created_at,created_by,ticketid,status,mailed,created_for) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?)', [$patientname,$email,$contact,$sampleid,$subject,$department,$priority,$message,$date,$id,$tid,'Opened',0,$client]);
+DB::insert('insert into tickets (patientname, username, contact,sampleid,subject,department,priority,message,created_at,created_by,ticketid,status,mailed,created_for,tasks_id) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)', [$patientname,$email,$contact,$sampleid,$subject,$department,$priority,$message,$date,$id,$tid,'Opened',0,$client,$taskid]);
 return response()->json(['status','true',$tid]);
 
 }
@@ -586,13 +588,9 @@ $query->where('assignedby', '=', $request->assignedby);
 
 ->when($request->assignedto, function($query) use ($request){
 $query->where('assignedto', '=', $request->assignedto);
-})
+})->get();
 
 
-
-
-
-->get();
 return Datatables::of($project)
 ->addIndexColumn()
 ->rawColumns(['action'])
@@ -862,15 +860,16 @@ public function tickets(Request $request){
 
 //     $type=$request->type;
 // return $type;
+// return $taskId;
 if ($request->ajax()) {
 $cr=0;
-
+// return $request;
 $user = auth()->user();
 $r=$user->role;
 $cl=$user->client;
 
 
-
+// return type($request->task);
 
 if ($user->role <= 3) {
     $loggedin = auth()->user()->email;
@@ -926,7 +925,7 @@ $data = DB::table('tickets')
 ->leftjoin('users', 'tickets.username' ,"=",'users.email')
 ->where('users.client',$cl)
 ->when(!empty($request->status), function ($query) use ($request) {
-        
+        // return 1;
         return $query->where('tickets.status', $request->status);
 
     })
@@ -958,6 +957,12 @@ return $query->where('tickets.subject', 'like', '%' . $request->subject . '%');
 }
 else{
 
+
+// return	$currentUrl = url(request()->path());
+
+	// return 1;
+	// return 'dsf'.$request->task;
+
 $data = DB::table('tickets')
 ->select(
 'tickets.*',
@@ -966,8 +971,14 @@ $data = DB::table('tickets')
 ->leftjoin('users', 'tickets.username' ,"=",'users.email')
 ->where('users.client',$cl)
 ->when(!empty($request->status), function ($query) use ($request) {
-        
+        // return 1;
         return $query->where('tickets.status', $request->status);
+
+    })
+	->when(!empty($request->task), function ($query) use ($request) {
+        // return $request->task;
+		// return 'asd';
+        return $query->where('tickets.tasks_id', $request->task);
 
     })
 ->when(!empty($request->ticketid), function ($query) use ($request) {
@@ -1000,7 +1011,6 @@ return $query->where('tickets.subject', 'like', '%' . $request->subject . '%');
 
 
 return Datatables::of($data)
-
 
 ->addIndexColumn()
 
@@ -1260,6 +1270,113 @@ return DB::update("update tickets  set  rating='".$rating."',time='".$time."',sa
 }
 public function Error(){
 return view('error');
+}
+
+
+
+public function tasks(Request $request){
+
+	// return DB::table('tasks')->get();
+	if($request->ajax()){
+
+		$data = DB::table('tasks');
+		return Datatables::of($data)
+		->addColumn('action', function($row){
+
+		return $btn = '
+		<div class="btn-group" role="group" aria-label="Basic example">
+		<button class="btn btn-info edit" id="' . $row->id . '"  >Edit </button>
+		<button class="btn btn-danger delete" id="' . $row->id . '"> Delete </button>
+		<button class="btn btn-success viewTickets" id="' . $row->id . '"> View </button>
+		</div>
+		';
+
+		})
+		->setRowId('id')
+		->rawColumns(['action'])
+		->make(true);
+
+	}
+    return view('tasks');
+}
+
+
+public function addtask(Request $request){
+
+	
+	$validator=$request->validate([
+	'subject' => 'required',
+	'department' => 'required',
+	'description'=> 'required',
+	'status' => 'required',
+	]);
+
+	$subject = $request->subject;
+	$department = $request->department;
+	$description = $request->description;
+	$status = $request->status;
+	// $id=Str::uuid(); 
+	$test = DB::insert("INSERT INTO tasks (subject, status, department, description) VALUES (?, ?, ?, ?)", [$subject, $status, $department, $description]);
+
+
+	if($test){
+		return response()->json(["success"=>"Task Added Successfully"]);
+	}else{
+		return response()->json(["error"=>"Error Adding Task"]);
+
+	}
+	
+}
+
+
+public function edittask(Request $request){
+		
+		$id = $request->id;
+		$row = DB::table('tasks')->where('id',$id)->get();
+		return response()->json(["row"=>$row]);
+
+}
+
+
+
+public function updatetask(Request $request){
+
+	
+	$validator=$request->validate([
+	'subject' => 'required',
+	'department' => 'required',
+	'description'=> 'required',
+	'status' => 'required',
+	]);
+
+	$id = $request->id;
+	$subject = $request->subject;
+	$department = $request->department;
+	$description = $request->description;
+	$status = $request->status;
+
+	$test = DB::update("UPDATE tasks set subject = ?, status = ?, department = ?, description = ? where id = ?",[$subject, $status, $department, $description, $id]);
+
+	if($test){
+		return response()->json(["success"=>"Task Updated Successfully"]);
+	}else{
+		return response()->json(["error"=>"Error Updating Task"]);
+
+	}
+	
+}
+
+
+public function deletetask(Request $request){
+
+	$id = $request->id;
+
+	$test = DB::table('tasks')->where('id', '=', $id)->delete();
+	if($test){
+		return response()->json(["success"=>"Task Deleted"]);
+	}else{
+		return response()->json(["success"=>"Error Deleting Task"]);
+	}
 }
 
 }
