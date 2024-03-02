@@ -192,6 +192,7 @@
  $('.saveupdatebtn').click(function(){
      let formmy=document.getElementById("form");
      let formd=new FormData(formmy);
+    
      $.ajax({
             
             url: "{{route('updateTicket')}}",
@@ -239,9 +240,16 @@
             let myform=document.getElementById("form");
               let data=new FormData(myform);
               data.append('messages',messages);
+
+              let loc=window.location.href;
+              var parts = loc.split('/'); // Split the URL based on the "/" separator
+
+console.log(parts[5]); 
+data.append('taskId',parts[5]);
+
               $.ajax({
                               
-                      url: "Ticket",
+                      url: "{{route('Ticket')}}",
                       data: data,    
                       cache: false,
                       processData: false,
@@ -253,7 +261,7 @@
                                         $("#result").html('Ticket has been generated successfully!')
         
         //  window.location.reload();
-          window.location="../Tickets/Opened/"+response[2];
+          window.location="http://localhost:8000/Tickets/Opened/"+response[2];
 
                                       
                                       }
@@ -301,7 +309,7 @@ var filename;
 
   $('#files').FancyFileUpload({
 
-url : "../uploadFiles",
+url : "{{route('uploadFiles')}}",
 maxfilesize: 100000000,
 params: {
     tid:$('#tid').val(),

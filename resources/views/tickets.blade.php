@@ -51,9 +51,13 @@
           <div class="col-sm-6">
             <h1 class="m-0">Tickets
                <a class="btn btn-info btn-sm" href="{{(request()->segment(2))}}"><i class="fas fa-sync"></i></a>
+               @if(request()->segment(2)==='task')
                
-               <a class="btn btn-info btn-sm" href="{{route('Ticket')}}"><i class="fas fa-plus"></i> Ticket </a>
-             </h1>
+               <a class="btn btn-info btn-sm" href="{{route('Ticket')}}/task/{{request()->segment(3)}}"><i class="fas fa-plus"></i> Ticket </a>
+             @else
+             <a class="btn btn-info btn-sm" href="{{route('Ticket')}}"><i class="fas fa-plus"></i> Ticket </a>
+@endif
+              </h1>
           </div><!-- /.col -->
           <div class="col-sm-6  d-none d-sm-none d-md-block ">
             <ol class="breadcrumb float-sm-right">
@@ -109,6 +113,11 @@
                                     <div class="col-sm-2 d-none">
                                         <label>Status</label>
                                         <input type="text" readonly class="form-control" id="status" value="{{ request()->segment(2) !== 'ALL' ? request()->segment(2) : '' }}">
+
+                                    </div>
+                                    <div class="col-sm-2 d-none">
+                                        <label>TaskId</label>
+                                        <input type="text" readonly class="form-control" id="task" value="{{ request()->segment(2) =='task'?  request()->segment(3) : '' }} ">
 
                                     </div>
 
@@ -435,6 +444,8 @@ $(document).ready(function () {
 function tickets() {
 
 
+// alert($("#task").val());
+// let task=
 
 var table = $('#table').DataTable({
   "paging": true,
@@ -445,11 +456,12 @@ var table = $('#table').DataTable({
     "type": "POST",
     "data": {
      
-      "status": $("#status").val(),
+      "status": $("#status").val()==='task'?'':$("#status").val(),
       "ticketid": $("#ticketid").val(),
       "subject": $("#subject").val(),
       "priority": $("#priority").val(),
-      "raisedby": $("#raisedby").val()
+      "raisedby": $("#raisedby").val(),
+      "task":Number($("#task").val())?Number($("#task").val()):''
 
     }
   },
