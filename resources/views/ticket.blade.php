@@ -244,8 +244,9 @@
               let loc=window.location.href;
               var parts = loc.split('/'); // Split the URL based on the "/" separator
 
-console.log(parts[5]); 
-data.append('taskId',parts[5]);
+console.log(parts[parts.length-1]); 
+
+data.append('taskId',parts[parts.length-1]);
 
               $.ajax({
                               
@@ -261,7 +262,7 @@ data.append('taskId',parts[5]);
                                         $("#result").html('Ticket has been generated successfully!')
         
         //  window.location.reload();
-          window.location="http://localhost:8000/Tickets/Opened/"+response[2];
+          window.location="{{route('Tickets')}}/Opened/"+response[2];
 
                                       
                                       }

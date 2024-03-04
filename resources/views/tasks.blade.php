@@ -360,7 +360,7 @@ $("#addtask").click(function(){
 table.on('click', '.viewTickets', function() {
 
     const id = $(this).attr('id');
-    window.location="http://localhost:8000/Tickets/task/"+id;
+    window.location="{{route('Tickets')}}/task/"+id;
   
     $.ajax({
             url:"{{route('Tickets')}}",
