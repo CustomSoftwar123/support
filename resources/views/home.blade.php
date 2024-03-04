@@ -1,6 +1,14 @@
 @include('layouts.header')
   
     <!-- Content Wrapper. Contains page content -->
+  <style>
+
+    .counter-cards{
+      box-shadow: 8px 5px 3px 3px rgba(0,0,0,0.45);
+-webkit-box-shadow: 8px 5px 3px 3px rgba(0,0,0,0.45);
+-moz-box-shadow: 8px 5px 3px 3px rgba(0,0,0,0.45);
+    }
+    </style>
   <div class="content-wrapper">
     <div class="content-header">
       <div class="container-fluid">
@@ -29,7 +37,7 @@
                     <div class="col-md-3  mt-1">
                       <!-- Widget: user widget style 2 -->
                         <a id="Requests" href="../Tickets/Opened">
-                      <div class="card card-widget mb-0  widget-user-2 bg-primary">
+                      <div class="card card-widget mb-0  widget-user-2 bg-primary counter-cards">
                         <!-- Add the bg color to the header using any of the bg-* classes -->
                         <div class="widget-user-header">
                           <h2><i class="fas fa-file-medical float-right display-5"></i></h2>
@@ -47,7 +55,7 @@
                     <div class="col-md-3  mt-1">
                       <!-- Widget: user widget style 2 -->
                         <a id="Requests" href="../Tickets/Processing">
-                      <div class="card card-widget mb-0  widget-user-2 bg-warning">
+                      <div class="card card-widget mb-0  widget-user-2 bg-warning counter-cards">
                         <!-- Add the bg color to the header using any of the bg-* classes -->
                         <div class="widget-user-header">
 
@@ -64,7 +72,7 @@
 <div class="col-md-3  mt-1">
                       <!-- Widget: user widget style 2 -->
                         <a id="Requests" href="../Tickets/Completed">
-                      <div class="card card-widget mb-0  widget-user-2 bg-info">
+                      <div class="card card-widget mb-0  widget-user-2 bg-info counter-cards">
                         <!-- Add the bg color to the header using any of the bg-* classes -->
                         <div class="widget-user-header">
 
@@ -80,7 +88,7 @@
                     <div class="col-md-3  mt-1">
                       <!-- Widget: user widget style 2 -->
                         <a id="Requests" href="../Tickets/Closed">
-                      <div class="card card-widget mb-0  widget-user-2 bg-success">
+                      <div class="card card-widget mb-0  widget-user-2 bg-success counter-cards">
                         <!-- Add the bg color to the header using any of the bg-* classes -->
                         <div class="widget-user-header">
 

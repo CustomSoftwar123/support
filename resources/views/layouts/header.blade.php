@@ -79,6 +79,10 @@
         font-weight: var(--main-font_weight) !important;
   
       }
+      .nav-pills .nav-link {
+    color: #FDFEFE;
+}
+
 
 </style>
 <script type="text/javascript">
@@ -95,11 +99,11 @@
   * sidebar-collapse
   * sidebar-mini
 -->
-<body class="sidebar-mini layout-fixed text-sm">
+<body class="sidebar-mini layout-fixed text-sm" >
 
 <div class="wrapper">
   <!-- Navbar -->
-  <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+  <nav class="main-header navbar navbar-expand">
     <!-- Left navbar links -->
     <ul class="navbar-nav">
       <li class="nav-item">
@@ -127,11 +131,11 @@
   </nav>
   <!-- /.navbar -->
   <!-- Main Sidebar Container -->
-  <aside class="main-sidebar sidebar-light-primary elevation-4">
+  <aside class="main-sidebar elevation-4"  style="background-color:#01313F;color:white">
   
 
     <!-- Sidebar -->
-    <div class="sidebar">
+    <div class="sidebar" >
       <!-- Sidebar user panel (optional) -->
       <div class="user-panel mt-3 pb-3 mb-3 d-flex">
         <div class="image">
@@ -172,9 +176,9 @@
 
 
       <!-- Sidebar Menu -->
-      <nav class="mt-2">
+      <nav class="mt-2 ">
         
-        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+        <ul class="nav nav-pills nav-sidebar flex-column " data-widget="treeview" role="menu" data-accordion="false">
           <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
          

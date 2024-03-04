@@ -437,10 +437,11 @@ pathinfo($attachment->filename, PATHINFO_EXTENSION) == 'flv'
               
 
                   <button type="button" class="btn btn-primary float-right ml-1 saveupdatebtn" value="Submit">Generate Ticket</button>
-                  @if($data22['ticketTimeline'][0]['time2']==0)
+                  @if(($data22['ticketTimeline'][0]['time2'] ?? null) == 0)
                   <button type="button" class="btn btn-secondary float-right paused ml-1">Pause</button>
                   @endif
-                  @if($data22['ticketTimeline'][0]['time1'] && $data22['ticketTimeline'][0]['time2'])
+                  @if(($data22['ticketTimeline'][0]['time1'] ?? null) && ($data22['ticketTimeline'][0]['time2'] ?? null))
+
                   <button type="button" class="btn btn-warning float-right started ml-1">Start</button>
                @endif
                   <div id="result">
