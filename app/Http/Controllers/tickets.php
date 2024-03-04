@@ -234,7 +234,12 @@ $taskid=$request->taskId;
 // {
 //     return response()->json(['status'=>0,'errors'=>$validator->errors()[0]]);
 // }
+if($taskid){
 DB::insert('insert into tickets (patientname, username, contact,sampleid,subject,department,priority,message,created_at,created_by,ticketid,status,mailed,created_for,tasks_id) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)', [$patientname,$email,$contact,$sampleid,$subject,$department,$priority,$message,$date,$id,$tid,'Opened',0,$client,$taskid]);
+}else{
+	
+DB::insert('insert into tickets (patientname, username, contact,sampleid,subject,department,priority,message,created_at,created_by,ticketid,status,mailed,created_for) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?)', [$patientname,$email,$contact,$sampleid,$subject,$department,$priority,$message,$date,$id,$tid,'Opened',0,$client]);
+}
 return response()->json(['status','true',$tid]);
 
     }
