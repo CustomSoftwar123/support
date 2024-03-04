@@ -327,7 +327,7 @@
                           }) 
 
 $(document).on('click','.reports',function(){
-  alert()
+  
   $.ajaxSetup({
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
