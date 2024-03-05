@@ -10,6 +10,12 @@
     height: auto;
     width: 3rem;
 }
+
+
+thead th {
+  color: white;
+  background-color : #0a4454;
+}
   </style>
   
   <!-- CSRF Token -->
