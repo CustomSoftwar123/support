@@ -115,31 +115,31 @@ class users extends Controller
         $cl=$user->client;
      if($r==4){
        
-     $data = User::select(
-                            'users.id', 
-                            'users.name', 
-                            'users.email',
-                            'users.zip',
-                            'users.phone', 
-                            'lists.Text as roles', 
-                            'users.country',
-                            'users.status',  
-                            'users.created_at', 
-                            'users.updated_at',
-                            'users.created_by', 
-                            'users.updated_by',
-                            'A.name as created_by',
-                            'B.name as updated_by'
-                            )
-                            ->where('users.client',$cl)
-                            ->leftjoin('lists', 'lists.id', '=', 'users.role')
-                            ->leftjoin('users AS A', 'A.id', '=', 'users.created_by')
-                            ->leftjoin('users AS B', 'B.id', '=', 'users.updated_by');
-                         
+        $data = DB::table('Users')
+        ->select([
+            'users.id',
+            'users.name',
+            'users.email',
+            'users.zip',
+            'users.phone',
+            'lists.Text as roles',
+            'users.country',
+            'users.status',
+            'users.created_at',
+            'users.updated_at',
+            'users.created_by',
+            'users.updated_by',
+            'A.name as created_by_name',
+            'B.name as updated_by_name'
+        ])
+        ->where('users.client', $cl)
+        ->leftJoin('lists', 'lists.id', '=', 'users.role')
+        ->leftJoin('users AS A', 'A.id', '=', 'users.created_by')
+        ->leftJoin('users AS B', 'B.id', '=', 'users.updated_by');
      }
      else{
 
-        $data = User::select(
+        $data = DB::table('Users')->select(
             'users.id', 
             'users.name', 
             'users.email', 
