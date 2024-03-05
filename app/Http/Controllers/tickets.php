@@ -449,9 +449,6 @@ return response()->json(['status','true',$tid]);
     }
     public function PauseTicket(Request $request)
     {
-
-
-
         $time = date('Y-m-d H:i:s');
         $id = DB::table('timeline')->where('ticketid', '=', $request->tid)->max('id');
         DB::update("update  timeline set time2 ='$time' where ticketid = '" . $request->tid . "' AND  id= '$id'");
