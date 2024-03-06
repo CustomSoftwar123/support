@@ -395,8 +395,23 @@ pathinfo($attachment->filename, PATHINFO_EXTENSION) == 'flv'
                     <input type="text" class="form-control f-one" readonly name="sampleid" id="sampleid" placeholder="Sample ID" required>
                 </div>
 
-
-         
+                @if(Auth::user()->email == $data22['ticketinfo'][0]->assignedto && ($data22['ticketinfo'][0]->status == 'Opened' || $data22['ticketinfo'][0]->status == 'Processing' ))
+                <div class="form-group col-md-3">
+                <label for="duration">Duration</label>
+                  <select  class="form-control" name="duration" id="duration" placeholder="Add Duration" required>
+                  <option value="1">1 day</option>
+                  <option value="2">2 days</option>
+                  <option value="3">3 days</option>
+                  <option value="4">4 days</option>
+                  <option value="5">5 days</option>
+                  <option value="6">6 days</option>
+                  <option value="7">7 days</option>
+                  <option value="8">8 days</option>
+                  <option value="9">9 days</option>
+                  <option value="10">10 days</option>
+                  </select>
+               </div>
+              @endif
 
                 <!-- Message Area -->
                 <div class="form-outline my-2 col-md-12">
@@ -753,7 +768,7 @@ var messages= $('#message').val();
     // data.append('me',messages);
 $.ajax({
                 
-        url: "../CompleteTicket",
+        url: "{{route('CompleteTicket')}}",
         data: data,    
         cache: false,
         processData: false,
@@ -762,7 +777,7 @@ $.ajax({
         }).done(function (response) {
 
                         if(response > 0) {
-                                  window.location="../TicketView/"+response;
+                                  window.location="{{route('TicketView')}}/"+response;
                                  $.ajax({
                               
                               url: "../sendMail",

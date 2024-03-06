@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\ticket;
 use App\Models\Timeline;
 use App\Models\ticketattachment;
+use App\Models\tickettimeline;
 use App\Models\ticketmessages;
 use DB;
 use App\Mail\SignUp;
@@ -18,7 +19,7 @@ use Carbon\Carbon;
 use DataTables;
 use DateTime;
 use Artisan;
-
+use Auth;
 class tickets extends Controller
 {
 
@@ -478,7 +479,7 @@ return response()->json(['status','true',$tid]);
 
     public function CompleteTicket(Request $request)
     {
-
+        
 
 
         $patientname = $request->patientname;
@@ -505,6 +506,17 @@ return response()->json(['status','true',$tid]);
 
 
         ]);
+        
+        $useremail = Auth::user()->email;
+        $name = Auth::user()->name;
+
+        $getticketinfo = DB::table('tickets')->where('ticketid',$tid)->first();
+        $assignedto = $getticketinfo->assignedto;
+        $status = $getticketinfo->status;
+        
+
+         self::tickettimeline($tid,"Ticket Completed",$useremail,$assignedto,"",$name,"Completed");
+
         $status = DB::table('tickets')->where('ticketid', $request->tid)->first();
         if ($status->status2 == 'Start') {
 
@@ -1426,6 +1438,21 @@ public function SendReportEmail(Request $request)
                 'error' => 'An error occurred while processing the request.',
             ]);
         }
+    }
+
+
+    public static function tickettimeline($ticketid,$text,$useremail,$assignedto,$openedby,$completedby,$status){
+
+        $ticketTimeline = tickettimeline::create([
+            'ticketid' => $ticketid,
+            'text' => $text,
+            'useremail' => $useremail,
+            'assignedto' => $assignedto,
+            'openedby' => $openedby,
+            'completedby' => $completedby,
+            'status' => $status,
+        ]);
+        return $ticketid;
     }
 }
 

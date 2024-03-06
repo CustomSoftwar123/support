@@ -396,10 +396,7 @@ console.log(a)
 
 
 
-$('#user').select2({
 
-    placeholder:'select a user'
-});
    
 $.ajaxSetup({
         headers: {
@@ -600,7 +597,11 @@ table.on('click', '.assign', function () {
     $('#tid').val(id);
 
     $('#selectUsers').on('shown.bs.modal', function () {
-        $('#user').select2();
+        // $('#user').select2();
+      $('#user').select2({
+         dropdownParent: $("#selectUsers")
+      });
+
     });
 
     $('#selectUsers').modal('show');  
