@@ -122,7 +122,7 @@ class home extends Controller
     
 ];
       }
-      else if($duration=='This Month'){
+      else if($duration=='This Month'||$duration=='Last Month'){
         $firstDayOfMonth = Carbon::now()->startOfMonth();
      $lastDayOfMonth = Carbon::now()->endOfMonth();
      
