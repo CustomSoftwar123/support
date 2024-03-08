@@ -160,7 +160,18 @@ td {
                                                  </select>
                                              </div>
 
-                                
+                                             <div class="form-group col-md-3">
+                                            <label>SupportForDays <span>*</span></label>
+                                            <select class="form-control" id="supportfordays" name="supportfordays[]" multiple="multiple">
+                                              <option value="Monday">Monday</option>
+                                              <option value="Tuesday">Tuesday</option>
+                                              <option value="Wednesday">Wednesday</option>
+                                              <option value="Thursday">Thursday</option>
+                                              <option value="Friday">Friday</option>
+                                              <option value="Saturday">Saturday</option>
+                                              <option value="Sunday">Sunday</option>
+                                          </select>
+                                             </div>
 
                                              
                                         
@@ -210,6 +221,11 @@ td {
 
 <script type="text/javascript">
     $(document).ready(function () {
+
+      $("#supportfordays").select2({
+            placeholder: "Select Days for Support",
+            multiple: true
+        });
 
           $.ajaxSetup({
                 headers: {
@@ -310,6 +326,12 @@ td {
             $('#subdepartment').val(user[0].subdepartment).trigger('change');
             $('#InUse').val(user[0].status).trigger('change');
             $('#address').val(user[0].address);
+            const supportfordays = user[0].supportfordays;
+            const supportfordays2 = supportfordays.split(",");
+            $('#supportfordays').val(supportfordays2).trigger('change');
+            
+            
+
 
             
 
@@ -379,6 +401,7 @@ td {
                         timeout: 600000,
                         success: function(data) {
                             //console.log(data);
+                           
                                 if ($.isEmptyObject(data.error)){
                                      Lobibox.notify('success', {
                                             pauseDelayOnHover: true,

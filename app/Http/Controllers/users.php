@@ -280,6 +280,8 @@ class users extends Controller
         $address = $request->input('address');
         $role = $request->input('role');
         $status = $request->input('InUse');
+        $supportfordays = $request->input('supportfordays');
+        $supportfordays = implode(",", $supportfordays);
 
         $user = auth()->user();
         $client=$user->client;
@@ -297,7 +299,7 @@ class users extends Controller
      if ($validator->passes()) {
 
         $dif = DB::table('users')->where('id',1)->get();
-        DB::insert('insert into users (id,client, name, phone, email, password, role, status, address, city, state, country, zip, file, created_at, created_by, colorscheme, font, font_link,font_weight, resolution) values (?,?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)', 
+        DB::insert('insert into users (id,client, name, phone, email, password, role, status, address, city, state, country, zip, file, created_at, created_by, colorscheme, font, font_link,font_weight, resolution, supportfordays) values (?,?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?,?)', 
             
             [$uid,$client, $name, $phone, $email, Hash::make($password), $role, $status, $address, $city, $state, $country, $zip, 'default.jpg', date('Y-m-d H:i:s'),  $user['id'],
 
@@ -305,7 +307,8 @@ class users extends Controller
                  $dif[0]->font,
                  $dif[0]->font_link,
                  $dif[0]->font_weight,
-                 $dif[0]->resolution
+                 $dif[0]->resolution,
+                 $supportfordays
 
             ]);      
 
@@ -338,6 +341,8 @@ class users extends Controller
         $address = $request->input('address');
         $role = $request->input('role');
         $status = $request->input('InUse');
+        $supportfordays = $request->input('supportfordays');
+        $supportfordays = implode(",", $supportfordays);
 
         $user = auth()->user();
         
@@ -357,7 +362,7 @@ class users extends Controller
         DB::update("
             update users 
             set 
-            name = '$name', email = '$email' , phone = '$phone' , role = '$role',  status = '$status', address = '$address', city = '$city', state = '$state', country = '$country', zip = '$zip', updated_at = '".date('Y-m-d H:i:s')."' , updated_by = '".$user['id']."'
+            name = '$name', email = '$email' , phone = '$phone' , role = '$role',  status = '$status', address = '$address', city = '$city', state = '$state', country = '$country', zip = '$zip', updated_at = '".date('Y-m-d H:i:s')."' , updated_by = '".$user['id']."', supportfordays = '$supportfordays'
             where id =  $uid 
             ");  
 
