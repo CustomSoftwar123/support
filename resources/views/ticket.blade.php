@@ -244,10 +244,8 @@
               let loc=window.location.href;
               var parts = loc.split('/'); // Split the URL based on the "/" separator
 
-console.log(parts[5]); 
-if(parts[5]){
-data.append('taskId',parts[5]);
-}
+              data.append('taskId',parts[parts.length-1]);
+
 
               $.ajax({
                               

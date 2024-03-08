@@ -5,9 +5,12 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\ticket;
 use App\Models\Timeline;
+use App\Models\User;
 use App\Models\ticketattachment;
 use App\Models\tickettimeline;
 use App\Models\ticketmessages;
+use App\Models\projectpermission;
+use App\Models\task;
 use DB;
 use App\Mail\SignUp;
 use Mail;
@@ -217,6 +220,7 @@ $message = $request->message;
 $tid = $request->tid;
 $client=$request->client;
 $taskid=$request->taskId;
+
 
         $id = auth()->user()->role;
         $email = auth()->user()->email;
@@ -1332,7 +1336,10 @@ public function tasks(Request $request){
 		->make(true);
 
 	}
-    return view('tasks');
+
+     $users = User::all();
+
+    return view('tasks')->with('users',$users);
 }
 
 
@@ -1344,17 +1351,39 @@ public function addtask(Request $request){
 	'department' => 'required',
 	'description'=> 'required',
 	'status' => 'required',
+	'assignto' => 'required',
+
 	]);
+
+   
 
 	$subject = $request->subject;
 	$department = $request->department;
 	$description = $request->description;
 	$status = $request->status;
+
+    $assignto = $request->assignto;
+        
+
 	// $id=Str::uuid(); 
-	$test = DB::insert("INSERT INTO tasks (subject, status, department, description) VALUES (?, ?, ?, ?)", [$subject, $status, $department, $description]);
+	$task = Task::create([
+        
+        'subject' => $subject,
+        'department' => $department,
+        'description' => $description,
+        'status' => $status,
+    ]);
 
 
-	if($test){
+	if($task){
+
+        foreach($assignto as $userid){
+            Projectpermission::create([
+                "userid"=>$userid,
+                "projectid" => $task->id,
+            ]);
+        }
+
 		return response()->json(["success"=>"Task Added Successfully"]);
 	}else{
 		return response()->json(["error"=>"Error Adding Task"]);

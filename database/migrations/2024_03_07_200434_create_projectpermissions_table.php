@@ -15,9 +15,13 @@ class CreateProjectpermissionsTable extends Migration
     {
         Schema::create('projectpermissions', function (Blueprint $table) {
             $table->id();
-            $table->integer('userid');
-            $table->integer('projectid');
+            $table->unsignedBigInteger('userid');
+            $table->unsignedBigInteger('projectid'); // Use unsignedBigInteger for foreign keys
             $table->timestamps();
+    
+            // Define foreign key constraint
+            $table->foreign('projectid')->references('id')->on('tasks');
+
         });
     }
 
