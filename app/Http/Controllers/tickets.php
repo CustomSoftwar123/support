@@ -305,6 +305,11 @@ return response()->json(['status','true',$tid]);
         $status = DB::table('tickets')->select('status')->where('ticketid', $request->tid)->first();
         if ($status->status == "Completed") {
             DB::update("update tickets  set status = 'Processing' where ticketid = '" . $request->tid . "'");
+            
+            self::tickettimeline($request->tid,"Ticket Opened back by $email ",$email,"","","","Processing");
+
+            // self::tickettimeline($tid,"Ticket Completed",$useremail,$assignedto,"",$name,"Completed");
+
 
         }
 
@@ -1311,14 +1316,43 @@ where id = '" . $request->tid . "'"
         return view('error');
     }
   
+public function ticketstimeline(Request $req){
 
+	if($req->ajax()){
+
+     $data = DB::table('tickettimelines');
+
+
+return Datatables::of($data)
+
+->setRowId('id')
+->rawColumns(['action'])
+->make(true);
+    }
+return view('tickettimeline');
+}
 
 public function tasks(Request $request){
 
 	// return DB::table('tasks')->get();
 	if($request->ajax()){
 
-		$data = DB::table('tasks');
+		$loggedInUser=auth()->user()->id;
+		 $userRole=auth()->user()->role;
+		 $role= DB::table('lists')->where('id',$userRole)->pluck('Text')->toArray();
+	 	$permissions = DB::table('projectpermissions')
+		->where('userid', $loggedInUser)
+		->pluck('projectid')
+		->toArray();
+	
+
+		if ($role[0] !== 'Super Admin') {
+			$data = DB::table('tasks')
+				->whereIn('id', $permissions);
+		} else {
+			$data = DB::table('tasks');
+		}
+	
 		return Datatables::of($data)
 		->addColumn('action', function($row){
 
@@ -1331,6 +1365,7 @@ public function tasks(Request $request){
 		';
 
 		})
+		
 		->setRowId('id')
 		->rawColumns(['action'])
 		->make(true);

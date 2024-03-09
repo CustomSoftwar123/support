@@ -247,6 +247,10 @@ Route::post('getTicketsComparison', [home::class, 'getTicketsComparison'])->name
 
 
 Route::post('send-report-email', [Tickets::class, 'SendReportEmail'])->name('SendReportEmail');
+
+Route::get('ticketstimeline', [Tickets::class, 'ticketstimeline'])->name('ticketstimeline');
+
+Route::post('ticketstimeline', [Tickets::class, 'ticketstimeline'])->name('ticketstimeline');
 });
 
 

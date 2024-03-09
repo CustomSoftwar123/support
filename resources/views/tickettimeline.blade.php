@@ -12,14 +12,14 @@
           <div class="col-lg-6">
             
 
-            <h1 class="m-0" style="width:2rem; display:flex">Projects
+            <h1 class="m-0" style="width:2rem; display:flex">Tasks
          
          </h1>
          
           </div><!-- /.col -->
           <div class="col-sm-6  d-none d-sm-none d-md-block ">
             <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item active">Projects</li>
+              <li class="breadcrumb-item active">Timeline</li>
             </ol>
           </div><!-- /.col -->
         </div><!-- /.row -->
@@ -35,55 +35,7 @@
     <div class="card card-primary card-outline">
     <div class="card-body table-responsive">     
 
-    <form id="myform">
-        <input type="hidden" name="id" id="id">
-     <div class="row">
-            <div class="col-md-12"><h4>Add New Task</h4></div>
-            <div class="col-md-12 form-group ">
-            <label  class="col-form-label" for="subject">Subject <span>*</span></label>
-                 <input type="text" class="form-control" id="subject" name="subject" />
-             </div>
-    </div>   
 
-    <div class="row mb-2">
-            
-            <div class="col-md-4">
-            <label  class="form-label" for="department">Department <span>*</span></label>
-                 <input type="text" class="form-control" id="department" name="department"  />
-             </div> 
-
-             <div class="col-md-4">
-            <label class="form-label">Status <span>*</span></label>
-                 <select class="form-control" id="status" name="status">
-                     <option>Active</option>
-                     <option>InActive</option>
-                     <option>Pending</option>
-                 </select>
-             </div>
-
-             <div class="col-md-4">
-            <label class="form-label" for="assignto">Assign To <span>*</span></label>
-                 <select class="form-control" id="assignto" name="assignto[]" multiple="multiple">
-                    
-                    @foreach($users as $test)
-                     <option value="{{$test->id}}">{{$test->email}}</option>
-                     @endforeach
-                 </select>
-             </div>
-    </div>
-
-    <div class="row mb-3">
-        <div class="col-md-12">
-                 
-                 <label class="form-label" for="description">Description</label>
-                 <textarea class="form-control" rows="4" id="description" name="description"></textarea>
-
-             </div>
-             <button class="btn btn-primary m-2" type="button" id="addtask">Add Task </button>
-             <button class="btn btn-primary m-2 d-none" type="button" id="updatetask">Update Task </button>
-
-    </div>
-    </form>
 
 
 
@@ -92,13 +44,10 @@
                                   <thead>
                                     <tr>
                             
-                                      <th>ID</th>
-                                      <th>Subject</th>
-                                      <th>Description</th>
-                                      <th>Department</th>
+                                      <th>TicketId</th>
+                                      <th>Text</th>
+                                      <th>User email</th>
                                       <th>Status</th>
-                                      <th  name="created_at">Created</th>
-                                      <th name="action">Action</th>
                                       
                                    
                                     </tr>
@@ -107,12 +56,11 @@
                                   <tfoot>
                                     <tr>
                                   
-                                      <th>ID</th>
-                                      <th>Subject</th>
-                                      <th>Description</th>
-                                      <th>Department</th>
-                                      <th>Status</th>
-                                      <th>Created</th>
+                                      <th>TicketId</th>
+                                      <th>Text</th>
+
+                                    <th>User email</th> 
+                                     <th>Status</th>
                                     
                                     </tr>
                                   </tfoot> 
@@ -153,10 +101,10 @@
 <script type="text/javascript">
     $(document).ready(function () {
 
-        $("#assignto").select2({
-            placeholder: "Select Users",
-            multiple: true
-        });
+        // $("#assignto").select2({
+        //     placeholder: "Select Users",
+        //     multiple: true
+        // });
 
   $.ajaxSetup({
         headers: {
@@ -171,25 +119,18 @@
         dom: 'lBfrtip', //"Bfrtip",
 
 
-        processing: true,
+        // processing: true,
         serverSide: true,
         stateSave: true,
         ajax: {
-            url: "{{ route('tasks') }}",
+            url: "{{ route('ticketstimeline') }}",
             type: 'POST',
         },
          columns: [
-            {data: 'id', name: 'ID'},
-            {data: 'subject', name: 'Subject'},
-            {data: 'description', name: 'Description'},
-            {data: 'department', name: 'Department'},
+            {data: 'ticketid', name: 'TicketId'},
+            {data: 'text', name: 'Text'},
+            {data: 'useremail', name: 'User email'},
             {data: 'status', name: 'Status'},
-
-            {data: 'created_at', name: 'Created'},
-
-
-
-            {data: 'action', name: 'Action', orderable: false, searchable: false},
         ],
         "order":[[0, 'desc']],
 
