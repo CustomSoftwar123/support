@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateBtproductsTable extends Migration
+class AddSupportfordaysColumnToUsersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,8 @@ class CreateBtproductsTable extends Migration
      */
     public function up()
     {
-        Schema::create('btproducts', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
+        Schema::table('users', function (Blueprint $table) {
+            $table->text('supportfordays')->default('Monday,Tuesday,Wednesday,Thursday,Friday,Saturday,Sunday');
         });
     }
 
@@ -26,6 +25,8 @@ class CreateBtproductsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('btproducts');
+        Schema::table('users', function (Blueprint $table) {
+            $table->dropColumn('supportfordays');
+        });
     }
 }

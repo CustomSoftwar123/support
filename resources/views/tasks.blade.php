@@ -47,17 +47,27 @@
 
     <div class="row mb-2">
             
-            <div class="col-md-6">
+            <div class="col-md-4">
             <label  class="form-label" for="department">Department <span>*</span></label>
                  <input type="text" class="form-control" id="department" name="department"  />
              </div> 
 
-             <div class="col-md-6">
+             <div class="col-md-4">
             <label class="form-label">Status <span>*</span></label>
                  <select class="form-control" id="status" name="status">
                      <option>Active</option>
                      <option>InActive</option>
                      <option>Pending</option>
+                 </select>
+             </div>
+
+             <div class="col-md-4">
+            <label class="form-label" for="assignto">Assign To <span>*</span></label>
+                 <select class="form-control" id="assignto" name="assignto[]" multiple="multiple">
+                    
+                    @foreach($users as $test)
+                     <option value="{{$test->id}}">{{$test->email}}</option>
+                     @endforeach
                  </select>
              </div>
     </div>
@@ -142,6 +152,11 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
+
+        $("#assignto").select2({
+            placeholder: "Select Users",
+            multiple: true
+        });
 
   $.ajaxSetup({
         headers: {
@@ -326,29 +341,30 @@ $("#addtask").click(function(){
 
     }).done(function(response){
 
-         if ($.isEmptyObject(response.error)){
-                     Lobibox.notify('success', {
-                            pauseDelayOnHover: true,
-                            continueDelayOnInactiveTab: false,
-                            position: 'top right',
-                            msg: response.success,
-                            icon: 'bx bx-check-circle'
-                        });
-                      table.ajax.reload( null, false );
-                      
-                      $('#myform')[0].reset();
+          if ($.isEmptyObject(response.error)){
+                      Lobibox.notify('success', {
+                             pauseDelayOnHover: true,
+                             continueDelayOnInactiveTab: false,
+                             position: 'top right',
+                             msg: response.success,
+                             icon: 'bx bx-check-circle'
+                         });
+                       table.ajax.reload( null, false );
+                    
+                       $('#myform')[0].reset();
+                       $("#assignto").val(null).trigger('change');
 
                       
-        }
-        else{
-               Lobibox.notify('error', {
-                            pauseDelayOnHover: true,
-                            continueDelayOnInactiveTab: false,
-                            position: 'top right',
-                            msg: response.error,
-                            icon: 'bx bx-check-circle'
-                        });
-        }
+         }
+         else{
+                Lobibox.notify('error', {
+                             pauseDelayOnHover: true,
+                             continueDelayOnInactiveTab: false,
+                             position: 'top right',
+                             msg: response.error,
+                             icon: 'bx bx-check-circle'
+                         });
+         }
 
     });
 
@@ -446,6 +462,7 @@ $(document).on('click','#updatetask' ,function(){
                       table.ajax.reload( null, false );
                       
                       $('#myform')[0].reset();
+                      $("#assignto").val(null).trigger('change');
                       
         }
         else{
