@@ -13,6 +13,7 @@ use App\Models\projectpermission;
 use App\Models\task;
 use DB;
 use App\Mail\SignUp;
+use App\Mail\ProjectAssigned;
 use Mail;
 use App\Jobs\SendTicketsReport;
 // use Illuminate\Support\Facades\Mail;
@@ -23,6 +24,7 @@ use DataTables;
 use DateTime;
 use Artisan;
 use Auth;
+use App\Jobs\SendProjectAssignedEmail;
 class tickets extends Controller
 {
 
@@ -961,6 +963,10 @@ where id = '" . $request->tid . "'"
                     ->when(!empty($request->ticketid), function ($query) use ($request) {
                         return $query->where('tickets.ticketid', $request->ticketid);
                     })
+                    ->when(!empty($request->ticketid), function ($query) use ($request) {
+
+                        return $query->where('tickets.ticketid', $request->ticketid);
+                    })
                     ->when(!empty($request->priority), function ($query) use ($request) {
                         if ($request->priority != 'All') {
                             return $query->where('tickets.priority', $request->priority);
@@ -971,11 +977,18 @@ where id = '" . $request->tid . "'"
                     })
                     ->when(!empty($request->raisedby), function ($query) use ($request) {
                         return $query->where('username', 'like', '%' . $request->raisedby . '%');
+                    })
+
+                    ->when(!empty($request->task), function ($query) use ($request) {
+
+                        return $query->where('tickets.tasks_id', $request->task);
+
                     });
             } else {
 
                 if ($user->role >= 6) {
                     //nurse
+                    // return 1;
                     $loggedin = auth()->user()->email;
                     $data = DB::table('tickets')
                         ->select(
@@ -983,7 +996,7 @@ where id = '" . $request->tid . "'"
                             'users.client as client'
                         )
                         ->leftjoin('users', 'tickets.username', "=", 'users.email')
-                        ->where('users.client', $cl)
+                        // ->where('users.client', $cl)
                         ->when(!empty($request->status), function ($query) use ($request) {
 
                             return $query->where('tickets.status', $request->status);
@@ -992,6 +1005,11 @@ where id = '" . $request->tid . "'"
                         ->when(!empty($request->ticketid), function ($query) use ($request) {
 
                             return $query->where('tickets.ticketid', $request->ticketid);
+                        })
+                        ->when(!empty($request->task), function ($query) use ($request) {
+
+                            return $query->where('tickets.tasks_id', $request->task);
+
                         })
 
                         ->when(!empty($request->priority), function ($query) use ($request) {
@@ -1009,20 +1027,25 @@ where id = '" . $request->tid . "'"
                         ->when(!empty($request->raisedby), function ($query) use ($request) {
 
                             return $query->where('username', 'like', '%' . $request->raisedby . '%');
-                        })
+                        });
 
-                        ->where('tickets.username', $loggedin);
+                        if (empty($request->task)) {
+                            // return 1;
+                        $data->where('users.client', $cl)
+                        ->where('tickets.tasks_id',$request->task)
+                      ->where('tickets.username', $loggedin);
 
 
+                        }
                 } else {
-
+// return 1;
                     $data = DB::table('tickets')
                         ->select(
                             'tickets.*',
                             'users.client as client'
                         )
                         ->leftjoin('users', 'tickets.username', "=", 'users.email')
-                        ->where('users.client', $cl)
+                       
                         ->when(!empty($request->status), function ($query) use ($request) {
 
                             return $query->where('tickets.status', $request->status);
@@ -1053,6 +1076,11 @@ where id = '" . $request->tid . "'"
 
                             return $query->where('username', 'like', '%' . $request->raisedby . '%');
                         });
+                        if (empty($request->task)) {
+                            $data->where('users.client', $cl)
+                        ->where('tickets.tasks_id',NULL)
+                        ;
+                        }
 
                 }
 
@@ -1060,7 +1088,7 @@ where id = '" . $request->tid . "'"
 
 
 
-
+           
 
             return Datatables::of($data)
 
@@ -1381,6 +1409,7 @@ public function tasks(Request $request){
 public function addtask(Request $request){
 
 	
+    // return $request;
 	$validator=$request->validate([
 	'subject' => 'required',
 	'department' => 'required',
@@ -1398,7 +1427,8 @@ public function addtask(Request $request){
 	$status = $request->status;
 
     $assignto = $request->assignto;
-        
+     $assignedToEmails = json_decode($request->assignedToEmails);
+        // return $assignedToEmails[0];
 
 	// $id=Str::uuid(); 
 	$task = Task::create([
@@ -1412,11 +1442,33 @@ public function addtask(Request $request){
 
 	if($task){
 
+        $i=0;
         foreach($assignto as $userid){
             Projectpermission::create([
                 "userid"=>$userid,
                 "projectid" => $task->id,
             ]);
+             $user['to'] = $assignedToEmails[$i];
+         
+            $esubject="New Project";
+            // Mail::send('projectmail', ['messages' => 'You have been assigned to a new project','esubject'=>"New Project"], function ($message) use ($user,$esubject) {
+            //     return $esubject;
+            //     $message->to($user['to']); // Use $user['to'] instead of $assignedToEmails[$i]
+            //     $message->subject($esubject);
+            // });
+            
+            // Mail::to($assignedToEmails[$i])->send(new \App\Mail\ProjectAssigned($assignedToEmails[$i], ['messages' => 'You have been assigned to a new project', 'esubject' => 'New Project']));
+
+            $emailData=[
+                'to' => $assignedToEmails[$i],
+                'esubject'=>'New Project',
+                'messages'=>'You have been added to a new project.'
+            ];
+            // Mail::to($assignedToEmails[$i])->send(new ProjectAssigned($emailData));
+            SendProjectAssignedEmail::dispatch($emailData);
+            $i++;
+            
+            
         }
 
 		return response()->json(["success"=>"Task Added Successfully"]);
@@ -1431,8 +1483,18 @@ public function addtask(Request $request){
 public function edittask(Request $request){
 		
 		$id = $request->id;
-		$row = DB::table('tasks')->where('id',$id)->get();
-		return response()->json(["row"=>$row]);
+		 $row = DB::table('tasks')->where('id',$id)->get();
+         $projectUsers = DB::table('projectpermissions')
+         ->where('projectid', $id)
+         ->join('users', 'projectpermissions.userid', '=', 'users.id')
+         ->select('users.id', 'users.email') // Select both user ID and email
+         ->get(); // Get the query results as a collection
+     
+     // Convert the collection to an array
+     $projectUsersArray = $projectUsers->toArray();
+//    return $row[0]['emails'] = $projectUsers;
+    
+		return response()->json(["row"=>$row,"users"=>$projectUsersArray]);
 
 }
 
@@ -1440,7 +1502,7 @@ public function edittask(Request $request){
 
 public function updatetask(Request $request){
 
-	
+	// return $request;
 	$validator=$request->validate([
 	'subject' => 'required',
 	'department' => 'required',
@@ -1453,15 +1515,30 @@ public function updatetask(Request $request){
 	$department = $request->department;
 	$description = $request->description;
 	$status = $request->status;
+     $assignTo=$request->assignto;
 
 	$test = DB::update("UPDATE tasks set subject = ?, status = ?, department = ?, description = ? where id = ?",[$subject, $status, $department, $description, $id]);
 
-	if($test){
+    foreach($assignTo as $assign){
+    $exists= DB::table('projectpermissions')->where('userid',$assign)->where('projectid',$id)->count();
+   if($exists==0){
+    Projectpermission::create([
+        "userid"=>$assign,
+        "projectid" => $id,
+    ]);
+    $emailData=[
+        'esubject'=>'New Project',
+        'messages'=>'You have been added to a new project.'
+    ];
+    Mail::to($assignedToEmails[$i])->send(new ProjectAssigned($emailData));
+   }
+    }
+	// if($test){
 		return response()->json(["success"=>"Task Updated Successfully"]);
-	}else{
-		return response()->json(["error"=>"Error Updating Task"]);
+	// }else{
+	// 	return response()->json(["error"=>"Error Updating Task"]);
 
-	}
+	// }
 	
 }
 

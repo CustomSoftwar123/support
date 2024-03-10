@@ -34,11 +34,12 @@
 
     <div class="card card-primary card-outline">
     <div class="card-body table-responsive">     
+    @if(auth()->user()->role == 1387)
 
     <form id="myform">
         <input type="hidden" name="id" id="id">
      <div class="row">
-            <div class="col-md-12"><h4>Add New Task</h4></div>
+            <div class="col-md-12"><h4>Create A New Project</h4></div>
             <div class="col-md-12 form-group ">
             <label  class="col-form-label" for="subject">Subject <span>*</span></label>
                  <input type="text" class="form-control" id="subject" name="subject" />
@@ -79,11 +80,12 @@
                  <textarea class="form-control" rows="4" id="description" name="description"></textarea>
 
              </div>
-             <button class="btn btn-primary m-2" type="button" id="addtask">Add Task </button>
-             <button class="btn btn-primary m-2 d-none" type="button" id="updatetask">Update Task </button>
+             <button class="btn btn-primary m-2" type="button" id="addtask">Add Project </button>
+             <button class="btn btn-primary m-2 d-none" type="button" id="updatetask">Update Project </button>
 
     </div>
     </form>
+    @endif
 
 
 
@@ -328,9 +330,14 @@
 
 $("#addtask").click(function(){
 
+    var selectedTexts = $('#assignto option:selected').map(function() {
+            return $(this).text();
+        }).get();
+        assignedToEmails=JSON.stringify(selectedTexts)
     let myform = $("#myform")[0];
     let data = new FormData(myform);
-
+    data.append('assignedToEmails',assignedToEmails)
+console.log(data)
     $.ajax({
         url:"{{route('addtask')}}",
         type:"POST",
@@ -426,6 +433,44 @@ table.on('click', '.edit', function() {
 
                     $("#addtask").addClass('d-none');
                     $("#updatetask").removeClass('d-none');
+                    var emails = response.users;
+                    // console.log(response[1])
+console.log(emails)
+var $select = $('#assignto')
+
+// $.each(emails, function(index, email) {
+//     // console.log(email.id,email.email)
+//     var $option = $('<option>', {
+//         value: email.id,
+//         text: email.email,
+//         selected: 'selected' // Add selected attribute to all options
+//     });
+
+//     // Append the option to the select element
+//     $select.append($option);
+// });
+// // $select.val(emails);
+
+// // // Set the select element as selected
+// // $select.attr('selected', 'selected');
+// // $("#assignto").trigger('change');
+var selectedIds=[];
+$.each(emails, function(index, email) {
+selectedIds.push(email.id)
+    var $option = $('<option>', {
+        value: email.id,
+        text: email.email
+    });
+
+    // Append the option to the select element
+    // $select.append($option);
+});
+console.log(selectedIds)
+
+$select.val(selectedIds);
+// Trigger change event to update Select2
+$select.trigger('change');
+
 
                 }
 
@@ -440,6 +485,7 @@ $(document).on('click','#updatetask' ,function(){
 
     let myform = $("#myform")[0];
     let data = new FormData(myform);
+
 
     $.ajax({
         url:"{{route('updatetask')}}",

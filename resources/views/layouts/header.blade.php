@@ -264,14 +264,13 @@ thead th {
 
 
 
-  
-    @if(auth()->user()->role == 1387)
+
      <li class="nav-item {{ ( request()->is('Tickets/*') ) ? 'menu-open' : '' }} admin">
 
              <a href="#" class="nav-link {{ ( request()->is('tasks/*') ) ? 'active' : '' }}">
               <i class="nav-icon fas fa-envelope-open-text"></i>
               <p>
-                Tasks
+                Projects
                 <i class="fas fa-angle-left  right"></i>
               </p>
             </a>
@@ -287,7 +286,6 @@ thead th {
             </ul>
               
     </li>
-@endif
 
 
 <li class="nav-item">

@@ -263,8 +263,16 @@
                                         $("#result").html('Ticket has been generated successfully!')
         
         //  window.location.reload();
-          window.location="{{route('Tickets')}}/Opened/"+response[2];
+// console.log(data.taskId)
+var parts = loc.split('/'); // Split the URL based on the "/" separator
+console.log(parts)
+        if(parts[parts.length-2]=='task'){
+          window.location="{{route('Tickets')}}/task/"+parts[parts.length-1];
 
+              }
+              else{
+          window.location="{{route('Tickets')}}/Opened/"+response[2];
+              }
                                       
                                       }
                                     //  elseif(response[1] == 0)
