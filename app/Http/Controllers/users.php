@@ -115,7 +115,7 @@ class users extends Controller
         $cl=$user->client;
      if($r==4){
        
-        $data = DB::table('Users')
+        $data = DB::table('users')
         ->select([
             'users.id',
             'users.name',
