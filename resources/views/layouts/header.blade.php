@@ -288,6 +288,7 @@ thead th {
     </li>
 
 
+    @if(Auth::user()->role==1387)
 <li class="nav-item">
             <a href="{{ route('ticketstimeline') }}" class="nav-link {{ (request()->is('ticketstimeline')) ? 'active' : '' }}">
             <i class="nav-icon fas fa-file-invoice"></i>
@@ -296,6 +297,7 @@ thead th {
               </p>
             </a>
           </li>
+          @endif
           @if(\App\Http\Controllers\users::roleCheck()=='yes')
     <li class="nav-item {{ ( request()->is('Users/*')|| request()->is('User/*') || request()->is('User') ) ? 'menu-open' : '' }} admin">
           <!--     <li class="nav-item">-->

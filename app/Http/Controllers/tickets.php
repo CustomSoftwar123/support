@@ -932,7 +932,7 @@ where id = '" . $request->tid . "'"
             $cr = 0;
 
             $user = auth()->user();
-            $r = $user->role;
+         $r = $user->role;
             $cl = $user->client;
 
 
@@ -986,7 +986,52 @@ where id = '" . $request->tid . "'"
                     });
             } else {
 
-                if ($user->role >= 6) {
+                if($user->role==1387){
+                    // return 2;
+                    $data = DB::table('tickets')
+                        ->select(
+                            'tickets.*',
+                        )
+                        ->leftjoin('users', 'tickets.username', "=", 'users.email')
+                       
+                        ->when(!empty($request->status), function ($query) use ($request) {
+
+                            return $query->where('tickets.status', $request->status);
+
+                        })
+						->when(!empty($request->task), function ($query) use ($request) {
+
+                            return $query->where('tickets.tasks_id', $request->task);
+
+                        })
+                        ->when(!empty($request->ticketid), function ($query) use ($request) {
+
+                            return $query->where('tickets.ticketid', $request->ticketid);
+                        })
+
+                        ->when(!empty($request->priority), function ($query) use ($request) {
+                            if ($request->priority != 'All') {
+                                return $query->where('tickets.priority', $request->priority);
+                            }
+                        })
+
+                        ->when(!empty($request->subject), function ($query) use ($request) {
+
+                            return $query->where('tickets.subject', 'like', '%' . $request->subject . '%');
+
+                        })
+                        ->when(!empty($request->raisedby), function ($query) use ($request) {
+
+                            return $query->where('username', 'like', '%' . $request->raisedby . '%');
+                        });
+                        if (empty($request->task)) {
+                            // $data->where('users.client', $cl)
+                        $data->where('tickets.tasks_id',NULL)
+                        ;
+                        }
+                }
+                // return $user->role;
+               else if ($user->role >= 6) {
                     //nurse
                     // return 1;
                     $loggedin = auth()->user()->email;
@@ -1038,7 +1083,9 @@ where id = '" . $request->tid . "'"
 
                         }
                 } else {
-// return 1;
+                    
+                    // return 'sdf';
+                    
                     $data = DB::table('tickets')
                         ->select(
                             'tickets.*',
