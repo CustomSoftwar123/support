@@ -991,6 +991,7 @@ where id = '" . $request->tid . "'"
                     $data = DB::table('tickets')
                         ->select(
                             'tickets.*',
+                            'users.client as client'
                         )
                         ->leftjoin('users', 'tickets.username', "=", 'users.email')
                        
