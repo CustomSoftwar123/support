@@ -265,27 +265,17 @@ thead th {
 
 
 
-     <li class="nav-item {{ ( request()->is('Tickets/*') ) ? 'menu-open' : '' }} admin">
+     
 
-             <a href="#" class="nav-link {{ ( request()->is('tasks/*') ) ? 'active' : '' }}">
-              <i class="nav-icon fas fa-envelope-open-text"></i>
+              <li class="nav-item">
+            <a href="{{ route('tasks') }}" class="nav-link {{ (request()->is('tasks')) ? 'active' : '' }}">
+            <i class="nav-icon fas fa-file-invoice"></i>
               <p>
-                Projects
-                <i class="fas fa-angle-left  right"></i>
+                Projects 
               </p>
             </a>
-
-            <ul class="nav nav-treeview">
-
-            <li class="nav-item">
-                <a href="{{ route('tasks') }}" class="nav-link {{ ( request()->is('tasks') ) ? 'active' : '' }}">
-                  <i class="far fa-circle nav-icon"></i><p class="ml-0">All</p>
-                </a>
-              </li>
+          </li>
   
-            </ul>
-              
-    </li>
 
 
     @if(Auth::user()->role==1387)

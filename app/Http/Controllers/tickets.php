@@ -1431,14 +1431,29 @@ public function tasks(Request $request){
 	
 		return Datatables::of($data)
 		->addColumn('action', function($row){
-
-		return $btn = '
-		<div class="btn-group" role="group" aria-label="Basic example">
-		<button class="btn btn-info edit" id="' . $row->id . '"  >Edit </button>
-		<button class="btn btn-danger delete" id="' . $row->id . '"> Delete </button>
-		<button class="btn btn-success viewTickets" id="' . $row->id . '"> View </button>
-		</div>
-		';
+      
+            // Assuming you have a variable $user_role that holds the role of the current user
+            $userRole=auth()->user()->role;
+            if ($userRole === 1387) {
+                $btn = '
+                <div class="btn-group" role="group" aria-label="Basic example">
+                <button class="btn btn-info edit" id="' . $row->id . '"  >Edit </button>
+                <button class="btn btn-danger delete" id="' . $row->id . '"> Delete </button>
+                <button class="btn btn-success viewTickets" id="' . $row->id . '"> View </button>
+                </div>
+                ';
+            } else {
+                // If the user is not a super admin, only show the Edit button
+                $btn = '
+                <div class="btn-group" role="group" aria-label="Basic example">
+                <button class="btn btn-success viewTickets" id="' . $row->id . '"> View </button>
+                </div>
+                ';
+            }
+            
+            return $btn;
+        
+            
 
 		})
 		
