@@ -100,7 +100,7 @@ window.location="home";
     <div class="row mh-100vh"> 
    <div class="col-10 col-sm-8 col-md-6 col-lg-6 offset-1 offset-sm-2 offset-md-3 offset-lg-0 align-self-center d-lg-flex align-items-lg-center align-self-lg-stretch bg-white p-5 rounded rounded-lg-0 my-5 my-lg-0" id="login-block" style="">
         <div class="m-auto w-lg-75 w-md-75">
-          <img class="img-fluid d-block mx-auto" src="assets/img/f4978c68-751e-48c5-b076-8ccc5b88d5f7-removebg-preview.png" width="50%">
+          <img class="img-fluid d-block mx-auto" src="{{asset('/images/6398865d68122.jpg')}}" width="30%">
           <div class=""> <h3 class=" "  style="color:#01313F; width: 100%; " >
           </i> <b>OCM Support </b></h3></div>
          <br>
