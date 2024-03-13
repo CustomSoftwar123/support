@@ -1431,16 +1431,6 @@ public function tasks(Request $request){
 	
 		return Datatables::of($data)
 		->addColumn('action', function($row){
-<<<<<<< HEAD
-
-		return $btn = '
-		<div class="btn-group" role="group" aria-label="Basic example">
-		<button class="btn btn-info edit" id="' . $row->id . '"  >Edit </button>
-		<button class="btn btn-danger delete" id="' . $row->id . '"> Delete </button>
-		<button class="btn btn-success viewTickets" id="' . $row->id . '"> View </button>
-		</div>
-		';
-=======
       
             // Assuming you have a variable $user_role that holds the role of the current user
             $userRole=auth()->user()->role;
@@ -1464,7 +1454,6 @@ public function tasks(Request $request){
             return $btn;
         
             
->>>>>>> 778704542252e01d4f9eee66705b6a74b29c2a78
 
 		})
 		
