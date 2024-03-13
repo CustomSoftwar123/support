@@ -932,7 +932,7 @@ where id = '" . $request->tid . "'"
             $cr = 0;
 
             $user = auth()->user();
-            $r = $user->role;
+         $r = $user->role;
             $cl = $user->client;
 
 
@@ -986,7 +986,53 @@ where id = '" . $request->tid . "'"
                     });
             } else {
 
-                if ($user->role >= 6) {
+                if($user->role==1387){
+                    // return 2;
+                    $data = DB::table('tickets')
+                        ->select(
+                            'tickets.*',
+                            'users.client as client'
+                        )
+                        ->leftjoin('users', 'tickets.username', "=", 'users.email')
+                       
+                        ->when(!empty($request->status), function ($query) use ($request) {
+
+                            return $query->where('tickets.status', $request->status);
+
+                        })
+						->when(!empty($request->task), function ($query) use ($request) {
+
+                            return $query->where('tickets.tasks_id', $request->task);
+
+                        })
+                        ->when(!empty($request->ticketid), function ($query) use ($request) {
+
+                            return $query->where('tickets.ticketid', $request->ticketid);
+                        })
+
+                        ->when(!empty($request->priority), function ($query) use ($request) {
+                            if ($request->priority != 'All') {
+                                return $query->where('tickets.priority', $request->priority);
+                            }
+                        })
+
+                        ->when(!empty($request->subject), function ($query) use ($request) {
+
+                            return $query->where('tickets.subject', 'like', '%' . $request->subject . '%');
+
+                        })
+                        ->when(!empty($request->raisedby), function ($query) use ($request) {
+
+                            return $query->where('username', 'like', '%' . $request->raisedby . '%');
+                        });
+                        if (empty($request->task)) {
+                            // $data->where('users.client', $cl)
+                        $data->where('tickets.tasks_id',NULL)
+                        ;
+                        }
+                }
+                // return $user->role;
+               else if ($user->role >= 6) {
                     //nurse
                     // return 1;
                     $loggedin = auth()->user()->email;
@@ -1038,7 +1084,9 @@ where id = '" . $request->tid . "'"
 
                         }
                 } else {
-// return 1;
+                    
+                    // return 'sdf';
+                    
                     $data = DB::table('tickets')
                         ->select(
                             'tickets.*',
@@ -1383,6 +1431,7 @@ public function tasks(Request $request){
 	
 		return Datatables::of($data)
 		->addColumn('action', function($row){
+<<<<<<< HEAD
 
 		return $btn = '
 		<div class="btn-group" role="group" aria-label="Basic example">
@@ -1391,6 +1440,31 @@ public function tasks(Request $request){
 		<button class="btn btn-success viewTickets" id="' . $row->id . '"> View </button>
 		</div>
 		';
+=======
+      
+            // Assuming you have a variable $user_role that holds the role of the current user
+            $userRole=auth()->user()->role;
+            if ($userRole === 1387) {
+                $btn = '
+                <div class="btn-group" role="group" aria-label="Basic example">
+                <button class="btn btn-info edit" id="' . $row->id . '"  >Edit </button>
+                <button class="btn btn-danger delete" id="' . $row->id . '"> Delete </button>
+                <button class="btn btn-success viewTickets" id="' . $row->id . '"> View </button>
+                </div>
+                ';
+            } else {
+                // If the user is not a super admin, only show the Edit button
+                $btn = '
+                <div class="btn-group" role="group" aria-label="Basic example">
+                <button class="btn btn-success viewTickets" id="' . $row->id . '"> View </button>
+                </div>
+                ';
+            }
+            
+            return $btn;
+        
+            
+>>>>>>> 778704542252e01d4f9eee66705b6a74b29c2a78
 
 		})
 		

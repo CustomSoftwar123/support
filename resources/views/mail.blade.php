@@ -22,7 +22,7 @@
               </tr>
               
               <tr>
-                <th style="text-align:left;color: #ea4f33;width:120px;font-size: 13px;"><a class="btn w-100 btn-warning" href="https://support.ocmsoftware.ie/TicketView/{{$id}}">View Ticket Here</a></th>
+                <th style="text-align:left;color: #ea4f33;width:120px;font-size: 13px;"><a class="btn w-100 btn-warning" href="http://www.ocmsupport.com">View Ticket Here</a></th>
               </tr>
               
               

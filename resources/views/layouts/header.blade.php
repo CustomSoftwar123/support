@@ -265,29 +265,20 @@ thead th {
 
 
 
-     <li class="nav-item {{ ( request()->is('Tickets/*') ) ? 'menu-open' : '' }} admin">
+     
 
-             <a href="#" class="nav-link {{ ( request()->is('tasks/*') ) ? 'active' : '' }}">
-              <i class="nav-icon fas fa-envelope-open-text"></i>
+              <li class="nav-item">
+            <a href="{{ route('tasks') }}" class="nav-link {{ (request()->is('tasks')) ? 'active' : '' }}">
+            <i class="nav-icon fas fa-file-invoice"></i>
               <p>
-                Projects
-                <i class="fas fa-angle-left  right"></i>
+                Projects 
               </p>
             </a>
-
-            <ul class="nav nav-treeview">
-
-            <li class="nav-item">
-                <a href="{{ route('tasks') }}" class="nav-link {{ ( request()->is('tasks') ) ? 'active' : '' }}">
-                  <i class="far fa-circle nav-icon"></i><p class="ml-0">All</p>
-                </a>
-              </li>
+          </li>
   
-            </ul>
-              
-    </li>
 
 
+    @if(Auth::user()->role==1387)
 <li class="nav-item">
             <a href="{{ route('ticketstimeline') }}" class="nav-link {{ (request()->is('ticketstimeline')) ? 'active' : '' }}">
             <i class="nav-icon fas fa-file-invoice"></i>
@@ -296,6 +287,7 @@ thead th {
               </p>
             </a>
           </li>
+          @endif
           @if(\App\Http\Controllers\users::roleCheck()=='yes')
     <li class="nav-item {{ ( request()->is('Users/*')|| request()->is('User/*') || request()->is('User') ) ? 'menu-open' : '' }} admin">
           <!--     <li class="nav-item">-->
