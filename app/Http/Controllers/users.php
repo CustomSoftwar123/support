@@ -139,7 +139,7 @@ class users extends Controller
      }
      else{
 
-        $data = DB::table('Users')->select(
+        $data = DB::table('users')->select(
             'users.id', 
             'users.name', 
             'users.email', 
@@ -280,8 +280,8 @@ class users extends Controller
         $address = $request->input('address');
         $role = $request->input('role');
         $status = $request->input('InUse');
-        $supportfordays = $request->input('supportfordays');
-        $supportfordays = implode(",", $supportfordays);
+        $supportfordays = '';
+        // $supportfordays = implode(",", $supportfordays);
 
         $user = auth()->user();
         $client=$user->client;

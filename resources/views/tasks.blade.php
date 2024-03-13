@@ -348,33 +348,28 @@ console.log(data)
 
     }).done(function(response){
 
-          if ($.isEmptyObject(response.error)){
-                      Lobibox.notify('success', {
-                             pauseDelayOnHover: true,
-                             continueDelayOnInactiveTab: false,
-                             position: 'top right',
-                             msg: response.success,
-                             icon: 'bx bx-check-circle'
-                         });
-                       table.ajax.reload( null, false );
+        //   if ($.isEmptyObject(response.error)){
+                     
                     
-                       $('#myform')[0].reset();
-                       $("#assignto").val(null).trigger('change');
+                     
 
                       
-         }
-         else{
-                Lobibox.notify('error', {
-                             pauseDelayOnHover: true,
-                             continueDelayOnInactiveTab: false,
-                             position: 'top right',
-                             msg: response.error,
-                             icon: 'bx bx-check-circle'
-                         });
-         }
+        //  }
+        //  else{
+        //         Lobibox.notify('error', {
+        //                      pauseDelayOnHover: true,
+        //                      continueDelayOnInactiveTab: false,
+        //                      position: 'top right',
+        //                      msg: response.error,
+        //                      icon: 'bx bx-check-circle'
+        //                  });
+        //  }
 
     });
 
+    $('#myform')[0].reset();
+                       $("#assignto").val(null).trigger('change');
+                       window.location.reload()
     event.preventDefault();
 });
 
