@@ -1387,7 +1387,7 @@ public function tasks(Request $request){
 		return $btn = '
 		<div class="btn-group" role="group" aria-label="Basic example">
 		<button class="btn btn-info edit" id="' . $row->id . '"  >Edit </button>
-		<button class="btn btn-danger delete" id="' . $row->id . '"> Delete </button>
+
 		<button class="btn btn-success viewTickets" id="' . $row->id . '"> View </button>
 		</div>
 		';
