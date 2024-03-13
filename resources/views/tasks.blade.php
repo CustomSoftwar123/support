@@ -33,8 +33,7 @@
       <div class="container-fluid">
 
     <div class="card card-primary card-outline">
-    <div class="card-body table-responsive">     
-    @if(auth()->user()->role == 1387)
+    <div class="card-body table-responsive"> 
 
     <form id="myform">
         <input type="hidden" name="id" id="id">
@@ -71,7 +70,17 @@
                      @endforeach
                  </select>
              </div>
+
+             <div class="col-md-4">
+            <label class="form-label"  for="taskexpiry">Expiry<span>*</span></label>
+            <input class="form-control" type="datetime-local" name="taskexpiry" id="taskexpiry">
+             </div>
     </div>
+    
+
+  
+
+   
 
     <div class="row mb-3">
         <div class="col-md-12">
@@ -85,7 +94,7 @@
 
     </div>
     </form>
-    @endif
+    
 
 
 
