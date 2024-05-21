@@ -1,0 +1,40 @@
+{
+  "version": "3.0.0",
+  "name": "s-pagination",
+  "description": "A JavaScript library for pagination using Bootstrap components.",
+  "license": "MIT",
+  "author": "Scalesoft s.r.o.",
+  "main": "dist/pagination.esm.js",
+  "module": "dist/pagination.esm.js",
+  "types": "dist/pagination.d.ts",
+  "keywords": [
+    "pagination",
+    "pager"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Scalesoft/s-pagination.git"
+  },
+  "files": [
+    "dist/",
+    "LICENSE",
+    "README.md",
+    "package.json"
+  ],
+  "scripts": {
+    "prebuild": "npx yarn install",
+    "build": "rollup -c rollup.config.js"
+  },
+  "dependencies": {
+    "bootstrap": "^5.0"
+  },
+  "devDependencies": {
+    "@rollup/plugin-typescript": "^8.3.0",
+    "popper.js": "^1.14.5",
+    "rollup": "^2.67.0",
+    "rollup-plugin-copy": "^3.4.0",
+    "tslib": "^2.3.1",
+    "tslint": "^6.1.3",
+    "typescript": "^4.5.5"
+  }
+}
