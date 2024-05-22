@@ -1,3 +1,4 @@
+@import url(https://fonts.googleapis.com/css?family=Open+Sans:600,700,400,300);
 .lobibox .lobibox-btn.lobibox-btn-cancel.active, .lobibox .lobibox-btn.lobibox-btn-cancel:active, .lobibox .lobibox-btn.lobibox-btn-default.active, .lobibox .lobibox-btn.lobibox-btn-default:active, .lobibox .lobibox-btn.lobibox-btn-no.active, .lobibox .lobibox-btn.lobibox-btn-no:active, .lobibox .lobibox-btn.lobibox-btn-ok.active, .lobibox .lobibox-btn.lobibox-btn-ok:active, .lobibox .lobibox-btn.lobibox-btn-yes.active, .lobibox .lobibox-btn.lobibox-btn-yes:active, .open>.dropdown-toggle.lobibox .lobibox-btn.lobibox-btn-cancel, .open>.dropdown-toggle.lobibox .lobibox-btn.lobibox-btn-default, .open>.dropdown-toggle.lobibox .lobibox-btn.lobibox-btn-no, .open>.dropdown-toggle.lobibox .lobibox-btn.lobibox-btn-ok, .open>.dropdown-toggle.lobibox .lobibox-btn.lobibox-btn-yes {
 	background-image: none
 }

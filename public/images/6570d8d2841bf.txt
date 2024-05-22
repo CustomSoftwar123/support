@@ -1,5 +1,0 @@
-MSH|^~\&|OPENLAB|Biomnis Ireland|Cavan General Hospital|Cavan General Hospital - Biochemistry|202310271856||ORU^R01|2310270657-202310271856|P|2.4|||NE|NE
-PID|||002834567^^^^LAB||FARRELLY^HUBERT^^^^^L||19660105|M|||^^^^
-PV1|||CGHB^^CGHB^Cavan General Hospital - Biochemistry|||||RPCGH^Physician Cavan^Requesting|
-OBR|1|3820934|3820934^LAB^3820934^EXTREF|HPAGS^Helicobacter Pylori Antigen-Stool|||202310230000|||||||202310251432|ST^Stool|RPCGH^Physician Cavan^Requesting||Cons: Dr Recsan Maria Beatrix / Ballyjamesduff|3820934||||||F
-OBX|0|TX|HPAGS010^Helicobacter Pylori Antigen ><||Not detected||||||F|||202310271853||Gilbert Mogoko Medical Scientist||EIA Microbiology - Eurofins Biomnis (Three Rock rd)|
