@@ -1,0 +1,28 @@
+MSH|^~\&|OPENLAB|Biomnis Ireland|Cavan General Hospital|Cavan General Hospital - Biochemistry|202307041704||ORU^R01|2306270783-202307041704|P|2.4|||NE|NE
+PID|||002562290^^^^LAB|191312|OHARE^HUGH^^^^^L||19480117|M|||^^^^
+PV1|||CGHB^^CGHB^Cavan General Hospital - Biochemistry|||||RPCGH^Physician Cavan^Requesting|
+OBR|1|3766414|3766414^LAB^3766414^EXTREF|FSLC^Free Serum Light Chains|||202306261550|||||||202306271438|S^Serum|RPCGH^Physician Cavan^Requesting||Cons: Dr Fortune Ann / Haematology Clinic|3766414||||||F
+OBX|0|NM|FSLC 020^Free Kappa Light Chains||36.27|mg/L|(3.30-19.40)|H|||F|||202307041659||Pathologist in charge, Referral Lab||Eurofins Biomnis (Fr)|
+OBX|1|TX|FSLC 030^Free Lambda Light Chains||35.94|mg/L|(5.71-26.30)|H|||F|||202307041659||Pathologist in charge, Referral Lab||Eurofins Biomnis (Fr)|
+NTE|0||Free immunoglobulin light chains assay must be interpreted|
+NTE|1||in light of the clinical and biological context; this test|
+NTE|2||is in addition to serum and/or urine protein|
+NTE|3||electrophoresis and immunofixation testing.|
+OBX|2|TX|FSLC 040^KappaLambda Ratio||1.01|Ratio|(0.26-1.65)||||F|||202307041659||Pathologist in charge, Referral Lab||Eurofins Biomnis (Fr)|
+NTE|0||NB: reference range for the ratio free kappa:lambda light|
+NTE|1||chains is 0.37 - 3.10 in the presence of renal failure|
+OBR|2|3766414|3766414^LAB^3766414^EXTREF|SPE^Serum Protein Electrophoresis|||202306261550|||||||202306271438|S^Serum|RPCGH^Physician Cavan^Requesting||Cons: Dr Fortune Ann / Haematology Clinic|3766414||||||F
+OBX|0|NM|SPE  130^SPE Total Protein||71|g/L|(64-83)||||F|||202307041659||Pathologist in charge, Referral Lab||Sebia Capillarys 3 Octa - Eurofins Biomnis (Three Rock rd)|
+OBX|1|NM|SPE  020^SPE Albumin %||49.4|%|(54.1-64.8)|L|||F|||202307041659||Pathologist in charge, Referral Lab||Sebia Capillarys 3 Octa - Eurofins Biomnis (Three Rock rd)|
+OBX|2|NM|SPE  030^SPE Albumin||35.1|g/L|(38.0-51.0)|L|||F|||202307041659||Pathologist in charge, Referral Lab||Sebia Capillarys 3 Octa - Eurofins Biomnis (Three Rock rd)|
+OBX|3|NM|SPE  040^SPE Alpha 1 Fraction %||5.3|%|(3.1-5.2)|H|||F|||202307041659||Pathologist in charge, Referral Lab||Sebia Capillarys 3 Octa - Eurofins Biomnis (Three Rock rd)|
+OBX|4|NM|SPE  050^SPE Alpha 1 Fraction||3.8|g/L|(2.3-3.9)||||F|||202307041659||Pathologist in charge, Referral Lab||Sebia Capillarys 3 Octa - Eurofins Biomnis (Three Rock rd)|
+OBX|5|NM|SPE  060^SPE Alpha 2 Fraction %||9.2|%|(7.3-11.9)||||F|||202307041659||Pathologist in charge, Referral Lab||Sebia Capillarys 3 Octa - Eurofins Biomnis (Three Rock rd)|
+OBX|6|NM|SPE  070^SPE Alpha 2 Fraction||6.5|g/L|(5.3-9.0)||||F|||202307041659||Pathologist in charge, Referral Lab||Sebia Capillarys 3 Octa - Eurofins Biomnis (Three Rock rd)|
+OBX|7|NM|SPE  140^SPE Beta 1 Fraction %||5.3|%|(5.1-7.8)||||F|||202307041659||Pathologist in charge, Referral Lab||Sebia Capillarys 3 Octa - Eurofins Biomnis (Three Rock rd)|
+OBX|8|NM|SPE  150^SPE Beta 1 Fraction||3.8|g/L|(3.6-5.7)||||F|||202307041659||Pathologist in charge, Referral Lab||Sebia Capillarys 3 Octa - Eurofins Biomnis (Three Rock rd)|
+OBX|9|NM|SPE  160^SPE Beta 2 Fraction %||6.3|%|(3.6-7.7)||||F|||202307041659||Pathologist in charge, Referral Lab||Sebia Capillarys 3 Octa - Eurofins Biomnis (Three Rock rd)|
+OBX|10|NM|SPE  170^SPE Beta 2 Fraction||4.5|g/L|(2.6-5.9)||||F|||202307041659||Pathologist in charge, Referral Lab||Sebia Capillarys 3 Octa - Eurofins Biomnis (Three Rock rd)|
+OBX|11|NM|SPE  100^SPE Gamma Fraction  %||24.5|%|(10.9-20.0)|H|||F|||202307041659||Pathologist in charge, Referral Lab||Sebia Capillarys 3 Octa - Eurofins Biomnis (Three Rock rd)|
+OBX|12|NM|SPE  110^SPE Gamma Fraction||17.4|g/L|(7.7-15.5)|H|||F|||202307041659||Pathologist in charge, Referral Lab||Sebia Capillarys 3 Octa - Eurofins Biomnis (Three Rock rd)|
+OBX|13|TX|SPE  120^Comment||Monoclonal IgG Lambda in the gamma region; 11.4 g/L||||||F|||202307041659||Pathologist in charge, Referral Lab||Sebia Capillarys 3 Octa - Eurofins Biomnis (Three Rock rd)|
