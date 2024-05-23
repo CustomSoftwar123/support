@@ -52,7 +52,11 @@ class LoginController extends Controller
 
 
             $users = DB::table('users')->select('new')->where('email',$request->email)->get();
-       
+    //    return $users;
+            if($users->isEmpty()){
+                // return 1;
+        return response()->json(['error'=>'User Does not exist']);
+            }
         $state = DB::table('users')->where('email', $request->email)->value('status');
             
             if($state=='Active') {

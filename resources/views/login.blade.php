@@ -257,6 +257,7 @@ window.location="home";
             cache: false,
             timeout: 600000,
             success: function(data) {
+              // console.log(data)
                     if ($.isEmptyObject(data.error)){
                          Lobibox.notify('success', {
                                 pauseDelayOnHover: true,
@@ -269,7 +270,7 @@ window.location="home";
 
                          if(data.new == 1) {
 
-                          window.location.replace("{{route('MyProfile')}}");
+                         window.location.replace("{{route('MyProfile')}}");
 
                          } else {
 

@@ -617,8 +617,8 @@ return response()->json(['status','true',$tid]);
                 )
 
                     ->leftjoin('users', 'tickets.username', "=", 'users.email')
-                    ->where('client', $client)
-                    ->where('username', '=', $user)
+                    ->where('users.client', $client)
+                    ->where('tickets.username', '=', $user)
                     ->when($request->todate, function ($query) use ($request) {
                         $todate = $request->todate . " 00:00:00";
 
@@ -626,7 +626,7 @@ return response()->json(['status','true',$tid]);
 
 
                         $query->whereBetween(
-                            'created_at',
+                            'tickets.created_at',
                             [$todate, $tilldate]
                         );
 
@@ -672,7 +672,7 @@ return response()->json(['status','true',$tid]);
 
 
                         $query->whereBetween(
-                            'created_at',
+                            'tickets.created_at',
                             [$todate, $tilldate]
                         );
 
