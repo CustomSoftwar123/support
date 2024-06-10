@@ -950,13 +950,13 @@ where id = '" . $request->tid . "'"
                         $join->on('tickets.username', '=', 'users.email')
                             ->whereNull('tickets.created_for');
                     })
-                    ->where(function ($query) {
-                        $query->whereIn('internal', [1, 2])
-                            ->orWhere(function ($query) {
-                                $query->whereNull('internal')
-                                    ->whereNotNull('created_for');
-                            });
-                    })
+                    // ->where(function ($query) {
+                    //     // $query->whereIn('internal', [1, 2])
+                    //     //     ->orWhere(function ($query) {
+                    //     //         $query->whereNull('internal')
+                    //     //             ->whereNotNull('created_for');
+                    //     //     });
+                    // })
                     ->when(!empty($request->status), function ($query) use ($request) {
                         return $query->where('tickets.status', $request->status);
                     })
@@ -1490,6 +1490,15 @@ public function addtask(Request $request){
 
     $assignto = $request->assignto;
      $assignedToEmails = json_decode($request->assignedToEmails);
+
+     $user = Auth::user();
+
+
+    // Get the ID of the authenticated user
+    $loggedInUserID = $user->id;
+
+    // Append the ID of the logged-in user to the $assignto array
+    $assignto[] = $loggedInUserID;
         // return $assignedToEmails[0];
 
 	// $id=Str::uuid(); 

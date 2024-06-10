@@ -71,10 +71,7 @@
                  </select>
              </div>
 
-             <div class="col-md-4">
-            <label class="form-label"  for="taskexpiry">Expiry<span>*</span></label>
-            <input class="form-control" type="datetime-local" name="taskexpiry" id="taskexpiry">
-             </div>
+           
     </div>
     
 
