@@ -21,25 +21,34 @@ class CheckResponseExpiry extends Command
     {
         $now = Carbon::now();
 
-        // Fetch expired tickets
+        // Step 1: Retrieve expired tickets
         $expiredTickets = DB::table('tickets')
                             ->where('response_expiry', '<', $now)
                             ->get();
 
-        // Collect ticket IDs
-        $ticketIds = $expiredTickets->pluck('ticketid')->toArray();
+        // Step 2: Filter tickets that do not have corresponding entries in ticketmessages table
+        $unprocessedTickets = $expiredTickets->filter(function($ticket) {
+            $exists = DB::table('ticketmessages')
+                        ->where('ticketid', $ticket->ticketid)
+                        ->exists();
+            return !$exists;
+        });
+
+        // Step 3: Collect ticket IDs of unprocessed tickets
+        $unprocessedTicketIds = $unprocessedTickets->pluck('ticketid')->toArray();
+
+        // Log the full array of unprocessed ticket IDs
+        $this->line('Found ' . count($unprocessedTicketIds) . ' expired tickets without processed messages: ' . implode(', ', $unprocessedTicketIds));
 
         // Send email with ticket IDs
-        if (!empty($ticketIds)) {
-            $this->line('Found ' . count($ticketIds) . ' expired tickets: ' . implode(', ', $ticketIds));
-
-            $data = ['ticketIds' => $ticketIds];
-            Mail::send('emails.ticket-expiry', $data, function ($message) use ($ticketIds) {
+        if (!empty($unprocessedTicketIds)) {
+            $data = ['ticketIds' => $unprocessedTicketIds];
+            Mail::send('emails.ticket-expiry', $data, function ($message) use ($unprocessedTicketIds) {
                 $message->to('customsoftware2022@gmail.com');
-                $message->subject('Response Time Expired for Tickets: ' . implode(', ', $ticketIds));
+                $message->subject('Response Time Expired for Tickets: ' . implode(', ', $unprocessedTicketIds));
             });
         } else {
-            $this->line('No expired tickets found.');
+            $this->line('No expired tickets without processed messages found.');
         }
     }
 }
