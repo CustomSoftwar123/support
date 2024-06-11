@@ -26,7 +26,8 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         // $schedule->command('inspire')->hourly();
-        $schedule->command('send:ticket-notifications')->twiceDaily(0, 12);
+        // $schedule->command('send:ticket-notifications')->twiceDaily(0, 12);
+        $schedule->command('tickets:check-response-expiry')->everyMinute();
 
     }
 

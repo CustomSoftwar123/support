@@ -241,11 +241,24 @@ $taskid=$request->taskId;
 // {
 //     return response()->json(['status'=>0,'errors'=>$validator->errors()[0]]);
 // }
+if($priority=='Critical'){
+    $futureDateTime = Carbon::now()->addDay();
+}
+else if($priority=='High'){
+    $futureDateTime = Carbon::now()->addDay(2);
+}
+elseif($priority=='Medium'){
+    $futureDateTime = Carbon::now()->addDay(3);
+}
+elseif($priority=='Low'){
+    $futureDateTime = Carbon::now()->addDay(5);
+}
+
 if($taskid){
-DB::insert('insert into tickets (patientname, username, contact,sampleid,subject,department,priority,message,created_at,created_by,ticketid,status,mailed,created_for,tasks_id) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)', [$patientname,$email,$contact,$sampleid,$subject,$department,$priority,$message,$date,$id,$tid,'Opened',0,$client,$taskid]);
+DB::insert('insert into tickets (patientname, username, contact,sampleid,subject,department,priority,message,created_at,created_by,ticketid,status,mailed,created_for,tasks_id,response_expiry) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)', [$patientname,$email,$contact,$sampleid,$subject,$department,$priority,$message,$date,$id,$tid,'Opened',0,$client,$taskid,$futureDateTime]);
 }else{
 	
-DB::insert('insert into tickets (patientname, username, contact,sampleid,subject,department,priority,message,created_at,created_by,ticketid,status,mailed,created_for) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?)', [$patientname,$email,$contact,$sampleid,$subject,$department,$priority,$message,$date,$id,$tid,'Opened',0,$client]);
+DB::insert('insert into tickets (patientname, username, contact,sampleid,subject,department,priority,message,created_at,created_by,ticketid,status,mailed,created_for,response_expiry) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)', [$patientname,$email,$contact,$sampleid,$subject,$department,$priority,$message,$date,$id,$tid,'Opened',0,$client,$futureDateTime]);
 }
 return response()->json(['status','true',$tid]);
 
