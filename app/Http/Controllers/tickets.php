@@ -703,9 +703,9 @@ if(!request->status||request->status=='Opened'||$request->status=='Processing'){
                             );
                         }
                         else if ($request->status == 'Completed'){
-                            return 1;'sa';
+                            // return 1;'sa';
                             $query->whereBetween(
-                                'tickets.completed_at',
+                                'tickets.completedat',
                                 [$todate, $tilldate]
                             );
                         }
