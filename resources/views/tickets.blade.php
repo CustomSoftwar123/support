@@ -510,7 +510,7 @@ var table = $('#table').DataTable({
     "render": function (data, type, row) {
         if (type === 'display' || type === 'filter') {
             // Format the date and time in DD-MM-YY HH:mm:ss format
-            return moment(data).format('DD-MM-YY HH:mm');
+            return moment(data).format('DD-MM-YYYY HH:mm');
         } else {
             // If not displaying or filtering, return the original data
             return data;
