@@ -651,14 +651,14 @@ if(!$request->status||$request->status=='Opened'||$request->status=='Processing'
                         );
                     }
                     else if ($request->status == 'Completed'){
-                        return 1;'sa';
+                        // return 1;'sa';
                         $query->whereBetween(
                             'tickets.completed_at',
                             [$todate, $tilldate]
                         );
                     }
                     else if ($request->status == 'Closed'){
-                        return 1;'sa';
+                        // return 1;'sa';
                         $query->whereBetween(
                             'tickets.closedat',
                             [$todate, $tilldate]
@@ -716,6 +716,13 @@ if(!$request->status||$request->status=='Opened'||$request->status=='Processing'
                             // return 1;'sa';
                             $query->whereBetween(
                                 'tickets.completedat',
+                                [$todate, $tilldate]
+                            );
+                        }
+                        else if ($request->status == 'Closed'){
+                            // return 1;'sa';
+                            $query->whereBetween(
+                                'tickets.closedat',
                                 [$todate, $tilldate]
                             );
                         }
