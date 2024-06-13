@@ -693,7 +693,68 @@ if(!$request->status||$request->status=='Opened'||$request->status=='Processing'
                     ->make(true);
                 ;
 
-            } else {
+            } 
+            else if($role==4){
+                $cl=auth()->user()->client;
+                $project = DB::table('tickets')->select(
+                    'tickets.*',
+                    'users.client as client',
+                )
+                    // ->where('client', $client)
+                    ->where('users.client',$cl)
+                ->leftjoin('users', 'tickets.username' ,"=",'users.email')
+                    ->when($request->todate, function ($query) use ($request) {
+                        $todate = $request->todate . " 00:00:00";
+
+                        $tilldate = $request->tilldate . " 23:59:59";
+                        if(!$request->status||$request->status=='Opened'||$request->status=='Processing'){
+                            $query->whereBetween(
+                                'tickets.created_at',
+                                [$todate, $tilldate]
+                            );
+                        }
+                        else if ($request->status == 'Completed'){
+                            // return 1;'sa';
+                            $query->whereBetween(
+                                'tickets.completedat',
+                                [$todate, $tilldate]
+                            );
+                        }
+                        else if ($request->status == 'Closed'){
+                            // return 1;'sa';
+                            $query->whereBetween(
+                                'tickets.closedat',
+                                [$todate, $tilldate]
+                            );
+                        }
+
+                    })
+
+
+                    ->when($request->status, function ($query) use ($request) {
+                        $query->where('tickets.status', '=', $request->status);
+                    })
+                    ->when($request->assignedby, function ($query) use ($request) {
+                        $query->where('tickets.assignedby', '=', $request->assignedby);
+                    })
+
+
+                    ->when($request->assignedto, function ($query) use ($request) {
+                        $query->where('tickets.assignedto', '=', $request->assignedto);
+                    })
+                    ->when($request->client, function ($query) use ($request) {
+                        $query->where('tickets.ticket_client', '=', $request->client);
+                    })
+
+
+                    ->get();
+                return Datatables::of($project)
+                    ->addIndexColumn()
+                    ->rawColumns(['action'])
+                    ->make(true);
+                ;
+            }
+            else {
 
 
                 $project = DB::table('tickets')->select(
