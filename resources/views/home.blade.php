@@ -142,7 +142,7 @@
               <div class="card-body">
         
                    <!--  <span class="text-bold text-lg requestsTotal">182</span> -->
-                   <button class="btn btn-success reports">Reports</button>
+                 
                     <h4>
                       Tickets Report
                       <select class="form-control w-25 float-right" id="duration">
