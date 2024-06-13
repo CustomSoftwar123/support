@@ -1002,7 +1002,7 @@ where id = '" . $request->tid . "'"
 
                     })
                     ->when(!empty($request->client), function ($query) use ($request) {
-                        return $query->where('created_for',  $request->client );
+                        return $query->where('ticket_client',  $request->client );
                     })
                     ->when(!empty($request->raisedby), function ($query) use ($request) {
                         return $query->where('username', 'like', '%' . $request->raisedby . '%');
@@ -1060,7 +1060,7 @@ where id = '" . $request->tid . "'"
     
                         })
                         ->when(!empty($request->client), function ($query) use ($request) {
-                            return $query->where('created_for',  $request->client );
+                            return $query->where('ticket_client',  $request->client );
                         })
                         ->when(!empty($request->priority), function ($query) use ($request) {
                             if ($request->priority != 'All') {
@@ -1122,7 +1122,7 @@ where id = '" . $request->tid . "'"
     
                         })
                         ->when(!empty($request->client), function ($query) use ($request) {
-                            return $query->where('created_for',  $request->client );
+                            return $query->where('ticket_client',  $request->client );
                         })
                         ->when(!empty($request->priority), function ($query) use ($request) {
                             if ($request->priority != 'All') {
@@ -1193,7 +1193,7 @@ where id = '" . $request->tid . "'"
     
                         })
                         ->when(!empty($request->client), function ($query) use ($request) {
-                            return $query->where('created_for',  $request->client );
+                            return $query->where('ticket_client',  $request->client );
                         })
 
                         ->when(!empty($request->subject), function ($query) use ($request) {
