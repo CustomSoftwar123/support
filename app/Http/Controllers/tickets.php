@@ -657,6 +657,13 @@ if(!request->status||request->status=='Opened'||$request->status=='Processing'){
                             [$todate, $tilldate]
                         );
                     }
+                    else if ($request->status == 'Closed'){
+                        return 1;'sa';
+                        $query->whereBetween(
+                            'tickets.closedat',
+                            [$todate, $tilldate]
+                        );
+                    }
                     })
 
 

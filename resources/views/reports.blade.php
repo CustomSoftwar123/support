@@ -148,16 +148,16 @@
              
 
               <th>Status</th>
-              <th>Requested</th>
+              <th>Raised By</th>
               <th>Assigned</th>
               <th>Assigned By</th>
 
         
               <th>Department</th>
               <th>Priority</th>
-              <th>System</th>
               <th>Time</th>
               <th>Timetaken</th>
+              <th>Actions</th>
              
               
 
@@ -304,11 +304,21 @@ columns: [
     // {data: 'resolved', name: 'resolved'},
       {data: 'department', name: 'department'},
         {data: 'priority', name: 'priority'},
-        {data: 'internal', name: 'internal'},
         {data: 'created_at', name: 'created_at'},
 
         {data: 'timetaken', name: 'timetaken'},
-],
+        { 
+            data: null, // Use null for custom column without data source
+            name: 'action', // Name for the column (optional)
+            orderable: false, // Disable ordering on this column
+            searchable: false, // Disable searching on this column
+            render: function (data, type, row) {
+                // Custom render function for the action column
+                var url = "{{ route('TicketView', ['id' => ':id']) }}".replace(':id', row.id);
+                return '<a href="' + url + '" class="btn btn-primary"><i class="fas fa-eye"></i></a>';
+            }
+        }
+      ],
 "order":[[1, 'asc']],
 
 
