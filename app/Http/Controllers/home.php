@@ -400,7 +400,7 @@ class home extends Controller
                                         ->count();
 // return 
 $d= Carbon::now()->startOfWeek()->format('Ymd');
-       $query="SELECT * FROM `tickets` WHERE closedat >'".$d."' having status ='closed' and internal in(1,2) or created_by <=3"; 
+       $query="SELECT * FROM `tickets` WHERE closedat >'".$d."' having status ='closed' "; 
      $close=DB::select($query);
      
       $ticketsClosedThisWeek=count($close);
