@@ -224,7 +224,7 @@ $d= Carbon::now()->startOfWeek()->format('Ymd');
                                         ->orWhere('tickets.created_by','<=',3)
                                         ->count();
 
-        $ticketsCompletedThisWeek =  DB::table('ticket')
+        $ticketsCompletedThisWeek =  DB::table('tickets')
                                         ->whereBetween('tickets.completedat', 
                                              [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()]
                                          ) 
