@@ -186,8 +186,6 @@ class home extends Controller
       }
 
     }
-      
-
     public function index()
     {
         $role=Auth()->user()->role;
@@ -199,7 +197,7 @@ class home extends Controller
            $ticketsThisWeek =  DB::table('tickets')
                                     ->having('tickets.status','=','Opened')
                                     ->whereIn('tickets.internal',[1,2]) 
-                                    ->orWhere('tickets.created_by','<=',3)
+                                    // ->orWhere('tickets.created_by','<=',3)
 
                                       ->count();
 
@@ -207,7 +205,7 @@ class home extends Controller
                                        
                                         ->having('tickets.status','Processing')
                                         ->whereIn('tickets.internal',[1,2])
-                                        ->orWhere('tickets.created_by','<=',3)
+                                        // ->orWhere('tickets.created_by','<=',3)
                                         ->count();
 // return 
 $d= Carbon::now()->startOfWeek()->format('Ymd');
@@ -232,7 +230,7 @@ $d= Carbon::now()->startOfWeek()->format('Ymd');
                                          ) 
                                          ->having('tickets.status','Completed') 
                                          ->whereIn('tickets.internal',[1,2])  
-                                         ->orWhere('tickets.created_by','<=',3)
+                                        //  ->orWhere('tickets.created_by','<=',3)
                                          ->count();
  
 
@@ -322,6 +320,141 @@ $ticketsCompletedThisWeek =  DB::table('tickets')
 
          return view ('home')->with('data',$data);
     }
+
+//     public function index()
+//     {
+//         $role=Auth()->user()->role;
+//         $cl=Auth()->user()->client;
+//         if($role<=3){
+// // echo $sql="select * from tickets where status='Closed' and internal IN(1,2) and closed_at between(Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()) or created_by<=3 ";
+// // return 1;
+// //  $ticketsThisWeek =DB::select($sql);
+//            $ticketsThisWeek =  DB::table('tickets')
+//                                     ->having('tickets.status','=','Opened')
+//                                     ->whereIn('tickets.internal',[1,2]) 
+//                                     ->orWhere('tickets.created_by','<=',3)
+
+//                                       ->count();
+
+//           $ticketsProcessing =  DB::table('tickets')
+                                       
+//                                         ->having('tickets.status','Processing')
+//                                         ->whereIn('tickets.internal',[1,2])
+//                                         ->orWhere('tickets.created_by','<=',3)
+//                                         ->count();
+// // return 
+// $d= Carbon::now()->startOfWeek()->format('Ymd');
+//        $query="SELECT * FROM `tickets` WHERE closedat >'".$d."' having status ='closed' and internal in(1,2) or created_by <=3"; 
+//      $close=DB::select($query);
+     
+//       $ticketsClosedThisWeek=count($close);
+     
+      
+//       DB::table('tickets')
+//                                    ->where('tickets.closedat','>', 
+//                                              Carbon::now()->startOfWeek()->format('Ymd')
+//                                         ) 
+                                       
+//                                         ->whereIn('tickets.internal',[1,2])  
+//                                         ->orWhere('tickets.created_by','<=',3)
+//                                         ->count();
+
+//         $ticketsCompletedThisWeek =  DB::table('tickets')
+//                                         ->whereBetween('tickets.completedat', 
+//                                              [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()]
+//                                          ) 
+//                                          ->having('tickets.status','Completed') 
+//                                          ->whereIn('tickets.internal',[1,2])  
+//                                          ->orWhere('tickets.created_by','<=',3)
+//                                          ->count();
+ 
+
+//         }elseif($role==4 ||$role==5){
+//             $ticketsThisWeek =  DB::table('tickets')
+//             ->where('tickets.status','Opened')
+//             ->where('users.client',$cl)
+//                 ->leftjoin('users', 'tickets.username' ,"=",'users.email')
+            
+//               ->count();
+
+// $ticketsProcessing =  DB::table('tickets')
+               
+//                 ->where('tickets.status','Processing')
+//                 ->where('users.client',$cl)
+//                 ->leftjoin('users', 'tickets.username' ,"=",'users.email')
+//                 ->count();
+
+// $ticketsClosedThisWeek =  DB::table('tickets')
+//                ->whereBetween('tickets.closedat', 
+//                     [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()]
+//                 )   ->where('users.client',$cl)
+//                 ->leftjoin('users', 'tickets.username' ,"=",'users.email')
+//                 ->where('tickets.status','Closed') 
+                
+//                 ->count();
+
+// $ticketsCompletedThisWeek =  DB::table('tickets')
+//                 ->whereBetween('tickets.completedat', 
+//                      [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()]
+//                  ) 
+//                  ->where('users.client',$cl)
+//                  ->leftjoin('users', 'tickets.username' ,"=",'users.email')
+//                  ->where('tickets.status','Completed') 
+                
+//                  ->count();
+
+//         }else{
+//              $email=Auth()->user()->email;
+//             $ticketsThisWeek =  DB::table('tickets')
+//             ->where('tickets.status','Opened')
+//             ->where('username',$email)
+//             ->where('users.client',$cl)
+//             ->leftjoin('users', 'tickets.username' ,"=",'users.email')
+//               ->count();
+
+// $ticketsProcessing =  DB::table('tickets')
+               
+//                 ->where('tickets.status','Processing')
+//                 ->where('username',$email)
+//                 ->where('users.client',$cl)
+//                 ->leftjoin('users', 'tickets.username' ,"=",'users.email')
+//                 ->count();
+
+// $ticketsClosedThisWeek =  DB::table('tickets')
+//                ->whereBetween('closedat', 
+//                     [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()]
+//                 ) 
+//                 ->where('tickets.status','Closed') 
+//                 ->where('tickets.username',$email)
+//                 ->where('users.client',$cl)
+//                 ->leftjoin('users', 'tickets.username' ,"=",'users.email')
+//                 ->count();
+
+// $ticketsCompletedThisWeek =  DB::table('tickets')
+//                 ->whereBetween('tickets.completedat', 
+//                      [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()]
+//                  ) 
+//                  ->where('tickets.status','Completed') 
+//                  ->where('tickets.username',$email)
+//                  ->where('users.client',$cl)
+//                  ->leftjoin('users', 'tickets.username' ,"=",'users.email')
+//                  ->count();
+//         }
+    
+
+         
+//          $data = [
+
+//                 'ticketsThisWeek' => $ticketsThisWeek,
+//                 'ticketsProcessing' => $ticketsProcessing,
+//                 'ticketsClosedThisWeek' => $ticketsClosedThisWeek,
+//                 'ticketsCompletedThisWeek'=>$ticketsCompletedThisWeek
+//          ];
+
+
+
+//          return view ('home')->with('data',$data);
+//     }
 
   public function getTicketsReport(Request $request)
     {
