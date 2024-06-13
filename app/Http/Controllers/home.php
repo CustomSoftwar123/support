@@ -205,7 +205,7 @@ class home extends Controller
                                        
                                         ->having('tickets.status','Processing')
                                         ->whereIn('tickets.internal',[1,2])
-                                        // ->orWhere('tickets.created_by','<=',3)
+                                        ->orWhere('tickets.created_by','<=',3)
                                         ->count();
 // return 
 $d= Carbon::now()->startOfWeek()->format('Ymd');
@@ -224,7 +224,7 @@ $d= Carbon::now()->startOfWeek()->format('Ymd');
                                         ->orWhere('tickets.created_by','<=',3)
                                         ->count();
 
-        $ticketsCompletedThisWeek =  DB::table('tickets')
+        $ticketsCompletedThisWeek =  DB::table('ticket')
                                         ->whereBetween('tickets.completedat', 
                                              [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()]
                                          ) 
