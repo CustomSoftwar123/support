@@ -114,7 +114,6 @@
                       <option value="" disabled selected>Choose an option</option>
                       <option value="CAVAN">Cavan</option>
                       <option value="TULLAMORE">Tullamore</option>
-                      <option value="MULLINGAR">Mullingar</option>
                       <option value="St.Lukes">St.Lukes</option>
                       <option value="Portlaoise">Portlaoise</option>
                       
