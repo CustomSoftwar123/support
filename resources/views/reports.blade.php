@@ -72,6 +72,18 @@
                                                         @endforeach
                                                   </select>      
 </div>
+<div class="form -group col-md-2">
+<label>Client</label>
+                                        <select class="form-select form-control" name="client" id="client">
+                      <option value="" disabled selected>Choose an option</option>
+                      <option value="CAVAN">Cavan</option>
+                      <option value="TULLAMORE">Tullamore</option>
+                      <option value="MULLINGAR">Mullingar</option>
+                      <option value="St.Lukes">St.Lukes</option>
+                      <option value="Portlaoise">Portlaoise</option>
+                      
+                    </select>
+</div>
 <div class="form-group col-md-2">
   <label for="">Assigned By</label>
 
@@ -85,7 +97,6 @@
 <div class="form-group col-md-2 mt-4">
 
 <input type="button" id ="submit" value="Submit" class="btn btn-primary">
-<button type="button" class="btn btn-warning" id ="sendEmailModal" data-toggle="modal" data-target="#exampleModal" data-whatever="@mdo">Send Email</button>
 
 </div>
 </div>    
@@ -253,6 +264,7 @@ $.ajaxSetup({
   var status = $("#status").val();
   var assignedto = $("#assignedto").val();
   var assignedby = $("#assignedby").val();
+  var client = $("#client").val();
 
 
  var table = $('#table').DataTable({
@@ -287,7 +299,8 @@ ajax: {
  tilldate:tilldate,
  status:status,
  assignedto:assignedto,
- assignedby:assignedby
+ assignedby:assignedby,
+ client:client
 }
 },
 

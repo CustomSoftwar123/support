@@ -644,7 +644,7 @@ return response()->json(['status','true',$tid]);
 
                         $tilldate = $request->tilldate . " 23:59:59";
 
-if(!request->status||request->status=='Opened'||$request->status=='Processing'){
+if(!$request->status||$request->status=='Opened'||$request->status=='Processing'){
                         $query->whereBetween(
                             'tickets.created_at',
                             [$todate, $tilldate]
@@ -672,6 +672,9 @@ if(!request->status||request->status=='Opened'||$request->status=='Processing'){
                     })
                     ->when($request->assignedby, function ($query) use ($request) {
                         $query->where('tickets.assignedby', '=', $request->assignedby);
+                    })
+                    ->when($request->client, function ($query) use ($request) {
+                        $query->where('tickets.ticket_client', '=', $request->client);
                     })
 
 
@@ -730,6 +733,9 @@ if(!request->status||request->status=='Opened'||$request->status=='Processing'){
 
                     ->when($request->assignedto, function ($query) use ($request) {
                         $query->where('tickets.assignedto', '=', $request->assignedto);
+                    })
+                    ->when($request->client, function ($query) use ($request) {
+                        $query->where('tickets.ticket_client', '=', $request->client);
                     })
 
 
