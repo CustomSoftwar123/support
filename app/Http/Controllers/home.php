@@ -595,7 +595,6 @@ $ticketsCompletedThisWeek =  DB::table('tickets')
                                                   ['status','Closed'] 
                                                   
                                                   ])
-                                                  ->whereIn('internal',[1,2])
                                                                       ->count();                                                                            
                                                
                                                 $values4[] =  DB::table('tickets')
@@ -604,7 +603,6 @@ $ticketsCompletedThisWeek =  DB::table('tickets')
                                                                       ['status','Completed'] 
                                                                       
                                                                       ])
-                                                                      ->whereIn('internal',[1,2])
                                                                       ->count();                                                                            
                                                
                                               }
