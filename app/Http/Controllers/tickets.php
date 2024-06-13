@@ -672,11 +672,11 @@ return response()->json(['status','true',$tid]);
             } else {
 
 
-                $project = DB::table('tickets')->select(
+                $project = DB::table('ticketss')->select(
                     'tickets.*',
                     'users.client as client',
                 )
-                    ->where('client', $client)
+                    // ->where('client', $client)
                     ->leftjoin('users', 'tickets.username', "=", 'users.email')
                     ->when($request->todate, function ($query) use ($request) {
                         $todate = $request->todate . " 00:00:00";
