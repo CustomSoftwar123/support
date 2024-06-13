@@ -221,6 +221,13 @@ $priority = $request->priority;
 $message = $request->message;
 $tid = $request->tid;
 $client=$request->client;
+if(!$client){
+    $client=auth()->user()->client;
+// return $client.'sad';
+
+}
+// return $client.'asd';
+
 $taskid=$request->taskId;
 
 
