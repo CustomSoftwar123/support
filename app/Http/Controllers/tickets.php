@@ -1090,10 +1090,26 @@ where id = '" . $request->tid . "'"
                         $tilldate = $request->todate . " 23:59:59";
 
 
-                        $query->whereBetween(
-                            'tickets.created_at',
-                            [$todate, $tilldate]
-                        );
+                        if(!$request->status||$request->status=='Opened'||$request->status=='Processing'){
+                            $query->whereBetween(
+                                'tickets.created_at',
+                                [$todate, $tilldate]
+                            );
+                        }
+                        else if ($request->status == 'Completed'){
+                            // return 1;'sa';
+                            $query->whereBetween(
+                                'tickets.completed_at',
+                                [$todate, $tilldate]
+                            );
+                        }
+                        else if ($request->status == 'Closed'){
+                            // return 1;'sa';
+                            $query->whereBetween(
+                                'tickets.closedat',
+                                [$todate, $tilldate]
+                            );
+                        }
 
                     })
                     ->when(!empty($request->client), function ($query) use ($request) {
@@ -1147,11 +1163,26 @@ where id = '" . $request->tid . "'"
     
                             $tilldate = $request->todate . " 23:59:59";
     
-    
-                            $query->whereBetween(
-                                'tickets.created_at',
-                                [$todate, $tilldate]
-                            );
+                            if(!$request->status||$request->status=='Opened'||$request->status=='Processing'){
+                                $query->whereBetween(
+                                    'tickets.created_at',
+                                    [$todate, $tilldate]
+                                );
+                            }
+                            else if ($request->status == 'Completed'){
+                                // return 1;'sa';
+                                $query->whereBetween(
+                                    'tickets.completed_at',
+                                    [$todate, $tilldate]
+                                );
+                            }
+                            else if ($request->status == 'Closed'){
+                                // return 1;'sa';
+                                $query->whereBetween(
+                                    'tickets.closedat',
+                                    [$todate, $tilldate]
+                                );
+                            }
     
                         })
                         ->when(!empty($request->client), function ($query) use ($request) {
@@ -1210,10 +1241,26 @@ where id = '" . $request->tid . "'"
                             $tilldate = $request->todate . " 23:59:59";
     
     
-                            $query->whereBetween(
-                                'tickets.created_at',
-                                [$todate, $tilldate]
-                            );
+                            if(!$request->status||$request->status=='Opened'||$request->status=='Processing'){
+                                $query->whereBetween(
+                                    'tickets.created_at',
+                                    [$todate, $tilldate]
+                                );
+                            }
+                            else if ($request->status == 'Completed'){
+                                // return 1;'sa';
+                                $query->whereBetween(
+                                    'tickets.completed_at',
+                                    [$todate, $tilldate]
+                                );
+                            }
+                            else if ($request->status == 'Closed'){
+                                // return 1;'sa';
+                                $query->whereBetween(
+                                    'tickets.closedat',
+                                    [$todate, $tilldate]
+                                );
+                            }
     
                         })
                         ->when(!empty($request->client), function ($query) use ($request) {
@@ -1281,10 +1328,26 @@ where id = '" . $request->tid . "'"
                             $tilldate = $request->todate . " 23:59:59";
     
     
-                            $query->whereBetween(
-                                'tickets.created_at',
-                                [$todate, $tilldate]
-                            );
+                            if(!$request->status||$request->status=='Opened'||$request->status=='Processing'){
+                                $query->whereBetween(
+                                    'tickets.created_at',
+                                    [$todate, $tilldate]
+                                );
+                            }
+                            else if ($request->status == 'Completed'){
+                                // return 1;'sa';
+                                $query->whereBetween(
+                                    'tickets.completed_at',
+                                    [$todate, $tilldate]
+                                );
+                            }
+                            else if ($request->status == 'Closed'){
+                                // return 1;'sa';
+                                $query->whereBetween(
+                                    'tickets.closedat',
+                                    [$todate, $tilldate]
+                                );
+                            }
     
                         })
                         ->when(!empty($request->client), function ($query) use ($request) {
