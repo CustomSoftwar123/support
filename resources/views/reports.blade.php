@@ -292,7 +292,7 @@ ajax: {
 
 columns: [
   {data: 'id', name: 'id'},
-    {data: 'business', name: 'business'},
+    {data: 'ticket_client', name: 'ticket_client'},
     {data: 'ticketid', name: 'ticketid'},
     {data: 'subject', name: 'subject'},
    {data: 'patientname', name: 'patientname'},
