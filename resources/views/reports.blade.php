@@ -36,6 +36,8 @@
     <input class="form-control" type="date" name='todate' id="todate">
 </div>
 
+
+
 <div class="col-md-2">
 
 <label for="">To</label>
@@ -43,7 +45,8 @@
 </div>
 <div class="col-md-2">
 
-    
+
+
 <label for="">Status</label>
     <!-- <input  class="form-control" type="text" name="status" id="status"> -->
     <select class="form-control" name="status" id="status" >
@@ -142,9 +145,7 @@
               <th>Subject</th>
 
 
-              <th>Patient</th>
-              <th>Request#</th>
-              <th>Sample#</th>
+             
 
               <th>Status</th>
               <th>Requested</th>
@@ -295,9 +296,7 @@ columns: [
     {data: 'ticket_client', name: 'ticket_client'},
     {data: 'ticketid', name: 'ticketid'},
     {data: 'subject', name: 'subject'},
-   {data: 'patientname', name: 'patientname'},
-   {data: 'requestid', name: 'requestid'},
-    {data: 'sampleid', name: 'sampleid'},
+ 
     {data: 'status', name: 'status'},
     {data: 'username', name: 'username'},
     {data: 'assignedto', name: 'assignedto'},
