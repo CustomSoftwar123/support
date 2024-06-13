@@ -696,7 +696,7 @@ if(!request->status||request->status=='Opened'||$request->status=='Processing'){
                         $todate = $request->todate . " 00:00:00";
 
                         $tilldate = $request->tilldate . " 23:59:59";
-                        if(!request->status||request->status=='Opened'||$request->status=='Processing'){
+                        if(!$request->status||request->status=='Opened'||$request->status=='Processing'){
                             $query->whereBetween(
                                 'tickets.created_at',
                                 [$todate, $tilldate]
