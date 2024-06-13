@@ -644,12 +644,18 @@ return response()->json(['status','true',$tid]);
 
                         $tilldate = $request->tilldate . " 23:59:59";
 
-
+if(!request->status||request->status=='Opened'||$request->status=='Processing'){
                         $query->whereBetween(
                             'tickets.created_at',
                             [$todate, $tilldate]
                         );
-
+                    }
+                    else if ($request->status == 'Completed'){
+                        $query->whereBetween(
+                            'tickets.completed_at',
+                            [$todate, $tilldate]
+                        );
+                    }
                     })
 
 
