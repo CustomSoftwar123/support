@@ -672,7 +672,7 @@ return response()->json(['status','true',$tid]);
             } else {
 
 
-                $project = DB::table('ticketss')->select(
+                $project = DB::table('tickets')->select(
                     'tickets.*',
                     'users.client as client',
                 )
