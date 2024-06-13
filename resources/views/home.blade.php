@@ -42,7 +42,7 @@
                         <div class="widget-user-header">
                           <h2><i class="fas fa-file-medical float-right display-5"></i></h2>
                           <h4 id="thisWeek">{{$data['ticketsThisWeek']}}</h4>
-                          <h5>Tickets Opened</h5>
+                          <h5>Tickets Opened this week</h5>
                         </div>
                       </div>
                       <!-- /.widget-user -->
@@ -76,9 +76,9 @@
                         <!-- Add the bg color to the header using any of the bg-* classes -->
                         <div class="widget-user-header">
 
-                          <h2><i class="fas fa-file-medical float-right display-5"></i></h2>
-                          <h4 id="thisWeek">{{$data['ticketsCompletedThisWeek']}}</h4>
-                          <h5>Tickets Completed This Week</h5>
+                          <h2><i class="fas fa-file-medical float-right display-5" ></i></h2>
+                          <h4 id="thisWeek" class='compthisweekdata'>{{$data['ticketsCompletedThisWeek']}}</h4>
+                          <h5 class='compthisweeklabel'>Tickets Completed This Week</h5>
                         </div>
                       </div>
                       <!-- /.widget-user -->
@@ -93,8 +93,8 @@
                         <div class="widget-user-header">
 
                           <h2><i class="fas fa-file-medical float-right display-5"></i></h2>
-                          <h4 id="thisWeek">{{$data['ticketsClosedThisWeek']}}</h4>
-                          <h5>Tickets Closed This Week</h5>
+                          <h4 id="thisWeek" class='closedthisweekdata'>{{$data['ticketsClosedThisWeek']}}</h4>
+                          <h5 class='closedthisweeklabel' >Tickets Closed This Week</h5>
                         </div>
                       </div>
                       <!-- /.widget-user -->
@@ -386,7 +386,11 @@ $("#ticketsModal .modal-body table tbody").append(
 
 
                           $(document).on('change', '#duration', function () { 
-
+                            $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
             
                              var duration = this.value;
 
@@ -397,7 +401,7 @@ $("#ticketsModal .modal-body table tbody").append(
                                               timeout: 600000,
                                               success: function(data) {
 
-                                                  //console.log(data)
+                                                  console.log(data,"SDa")
                                                   
 
                                                   var label = data.labels;
@@ -407,7 +411,9 @@ $("#ticketsModal .modal-body table tbody").append(
                                                   var values4 = data.values4;
                                                 
                                                 $( label ).each(function(index) {
-                                    console.log(duration);
+                                    // console.log(duration);
+                                    // console.log(myChart.data.labels,"TEST")
+
                                                        myChart.data.labels[index] = label[index];
                                                        myChart.data.datasets[0].data[index] = values[index];
                                                        myChart.data.datasets[1].data[index] = values2[index];
@@ -431,14 +437,50 @@ var dd1 = String(prevl.getDate()).padStart(2, '0');
 console.log(dd);
 console.log(myChart.data.labels.splice(dd1,(myChart.data.labels.length)));
                                                       }
+                                                      // console.log("Changed", values2.length+v)
+                                                      $(".compthisweeklabel").text(`Tickets Completed ${duration} `)
+                                                      $(".closedthisweeklabel").text(`Tickets Closed ${duration} `)
                                                        myChart.update();
+                                                      //  if(duration=='This Month' ){
+
+                                                      
+                                                      //  }
                                                 })  
                                                         
 
                                               }
                                              
                                               
-                                          })         
+                                          })   
+                                          
+                                          $.ajax({
+                                            type:"post",
+    url:"{{route('getTicketsComparison')}}",
+    data: {'duration' : duration},
+    success:function(data){
+      console.log(data)
+      // alert
+      const ticketsThis = data.ticketsThis;
+      const ticketsClosedThis = data.ticketsClosedThis;
+      const ticketsOpenedThis = data.ticketsOpenedThis;
+      const ticketsProcessingThis = data.ticketsProcessingThis;
+      const ticketsCompletedThis = data.ticketsCompletedThis;
+      const ticketsLast = data.ticketsLast;
+      const ticketsClosedLast = data.ticketsClosedLast;
+      const ticketsOpenedLast = data.ticketsOpenedLast;
+      const ticketsProcessingLast = data.ticketsProcessingLast;
+      const ticketsCompletedLast = data.ticketsCompletedLast;
+      if(duration =='This Week'){
+      $(".compthisweekdata").text(data.ticketsCompletedThis)
+      $(".closedthisweekdata").text(data.ticketsClosedThis)
+      }else if(duration =='Last Week'){
+      $(".compthisweekdata").text(data.ticketsCompletedLast)
+      $(".closedthisweekdata").text(data.ticketsClosedLast)
+
+
+      }
+    }
+                                          })
 
 
        })
