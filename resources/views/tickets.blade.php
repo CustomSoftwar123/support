@@ -85,7 +85,7 @@
                                         <input type="text" class="form-control" id="ticketid">
                                     </div>
 
-                                    <div class="col-sm-3">
+                                    <div class="col-sm-2">
                                         <label>Subject</label>
                                         <input type="text" class="form-control" id="subject">
                                     </div>
@@ -96,7 +96,31 @@
                                         <input type="text" class="form-control" id="raisedby">
                                     </div>
 
+                                    <div class="col-sm-2">
+                                        <label>From</label>
+                                        <input class="form-control" type="date" name='todate' id="fromdate">
 
+                                    </div>
+
+                                    <div class="col-sm-2">
+                                        <label>To</label>
+                                        <input type="date" class="form-control" id="todate">
+                                    </div>
+                                    @if(auth::user()->role<=4)
+
+                                    <div class="col-sm-2">
+                                        <label>Client</label>
+                                        <select class="form-select form-control" name="client" id="client">
+                      <option value="" disabled selected>Choose an option</option>
+                      <option value="CAVAN">Cavan</option>
+                      <option value="TULLAMORE">Tullamore</option>
+                      <option value="MULLINGAR">Mullingar</option>
+                      <option value="St.Lukes">St.Lukes</option>
+                      <option value="Portlaoise">Portlaoise</option>
+                      
+                    </select>
+                                    </div>
+@endif
 
                                     <div class="col-sm-2">
                                         <label>Priority</label>
@@ -458,6 +482,9 @@ var table = $('#table').DataTable({
       "subject": $("#subject").val(),
       "priority": $("#priority").val(),
       "raisedby": $("#raisedby").val(),
+      "fromdate": $("#fromdate").val(),
+      "todate": $("#todate").val(),
+      "client": $("#client").val(),
       "task":Number($("#task").val())?Number($("#task").val()):''
 
     }

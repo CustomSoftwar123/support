@@ -970,13 +970,7 @@ where id = '" . $request->tid . "'"
                         $join->on('tickets.username', '=', 'users.email')
                             ->whereNull('tickets.created_for');
                     })
-                    // ->where(function ($query) {
-                    //     // $query->whereIn('internal', [1, 2])
-                    //     //     ->orWhere(function ($query) {
-                    //     //         $query->whereNull('internal')
-                    //     //             ->whereNotNull('created_for');
-                    //     //     });
-                    // })
+                   
                     ->when(!empty($request->status), function ($query) use ($request) {
                         return $query->where('tickets.status', $request->status);
                     })
@@ -995,6 +989,21 @@ where id = '" . $request->tid . "'"
                     ->when(!empty($request->subject), function ($query) use ($request) {
                         return $query->where('tickets.subject', 'like', '%' . $request->subject . '%');
                     })
+                    ->when(!empty($request->fromdate), function ($query) use ($request) {
+                        $todate = $request->fromdate . " 00:00:00";
+
+                        $tilldate = $request->todate . " 23:59:59";
+
+
+                        $query->whereBetween(
+                            'tickets.created_at',
+                            [$todate, $tilldate]
+                        );
+
+                    })
+                    ->when(!empty($request->client), function ($query) use ($request) {
+                        return $query->where('created_for',  $request->client );
+                    })
                     ->when(!empty($request->raisedby), function ($query) use ($request) {
                         return $query->where('username', 'like', '%' . $request->raisedby . '%');
                     })
@@ -1004,6 +1013,15 @@ where id = '" . $request->tid . "'"
                         return $query->where('tickets.tasks_id', $request->task);
 
                     });
+                    if (empty($request->task)) {
+                        $data = $data->where(function ($query) {
+                            $query->whereIn('internal', [1, 2])
+                                ->orWhere(function ($query) {
+                                    $query->whereNull('internal')
+                                        ->whereNotNull('created_for');
+                                });
+                        });
+                    }
             } else {
 
                 if($user->role==1387){
@@ -1029,7 +1047,21 @@ where id = '" . $request->tid . "'"
 
                             return $query->where('tickets.ticketid', $request->ticketid);
                         })
-
+                        ->when(!empty($request->fromdate), function ($query) use ($request) {
+                            $todate = $request->fromdate . " 00:00:00";
+    
+                            $tilldate = $request->todate . " 23:59:59";
+    
+    
+                            $query->whereBetween(
+                                'tickets.created_at',
+                                [$todate, $tilldate]
+                            );
+    
+                        })
+                        ->when(!empty($request->client), function ($query) use ($request) {
+                            return $query->where('created_for',  $request->client );
+                        })
                         ->when(!empty($request->priority), function ($query) use ($request) {
                             if ($request->priority != 'All') {
                                 return $query->where('tickets.priority', $request->priority);
@@ -1077,7 +1109,21 @@ where id = '" . $request->tid . "'"
                             return $query->where('tickets.tasks_id', $request->task);
 
                         })
-
+                        ->when(!empty($request->formdate), function ($query) use ($request) {
+                            $todate = $request->formdate . " 00:00:00";
+    
+                            $tilldate = $request->todate . " 23:59:59";
+    
+    
+                            $query->whereBetween(
+                                'tickets.created_at',
+                                [$todate, $tilldate]
+                            );
+    
+                        })
+                        ->when(!empty($request->client), function ($query) use ($request) {
+                            return $query->where('created_for',  $request->client );
+                        })
                         ->when(!empty($request->priority), function ($query) use ($request) {
                             if ($request->priority != 'All') {
                                 return $query->where('tickets.priority', $request->priority);
@@ -1133,6 +1179,21 @@ where id = '" . $request->tid . "'"
                             if ($request->priority != 'All') {
                                 return $query->where('tickets.priority', $request->priority);
                             }
+                        })
+                        ->when(!empty($request->fromdate), function ($query) use ($request) {
+                            $todate = $request->fromdate . " 00:00:00";
+    
+                            $tilldate = $request->todate . " 23:59:59";
+    
+    
+                            $query->whereBetween(
+                                'tickets.created_at',
+                                [$todate, $tilldate]
+                            );
+    
+                        })
+                        ->when(!empty($request->client), function ($query) use ($request) {
+                            return $query->where('created_for',  $request->client );
                         })
 
                         ->when(!empty($request->subject), function ($query) use ($request) {
