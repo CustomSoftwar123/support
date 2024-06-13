@@ -492,7 +492,7 @@ var table = $('#table').DataTable({
   "stateSave": true,
   "columns": [
     { "data": "id", "name": "id" },
-    { "data": "client", "name": "users.name" },
+    { "data": "client", "name": "client" },
     { "data": "ticketid", "name": "ticketid" },
     { "data": "subject", "name": "subject" },
     { "data": "patientname", "name": "patientname" },
