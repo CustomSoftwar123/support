@@ -230,6 +230,13 @@ $d= Carbon::now()->startOfWeek()->format('Ymd');
                                          ) 
                                          ->having('tickets.status','Completed') 
                                          ->whereIn('tickets.internal',[1,2])  
+                                         ->where(function ($query) {
+                                          $query->whereIn('internal', [1, 2])
+                                              ->orWhere(function ($query) {
+                                                  $query->whereNull('internal')
+                                                      ->whereNotNull('created_for');
+                                              });
+                                      })
                                         //  ->orWhere('tickets.created_by','<=',3)
                                          ->count();
  
