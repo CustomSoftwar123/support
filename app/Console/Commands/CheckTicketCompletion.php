@@ -41,7 +41,7 @@ class CheckTicketCompletion extends Command
         // Send email notification
         $data = ['tickets' => $tickets];
         Mail::send('emails.ticket-completion', $data, function ($message) {
-            $message->to('customsoftware2022@gmail.com');
+            $message->to(['customsoftware2022@gmail.com','aqeel@ocmsoftware.ie']);
             $message->subject('Tickets Not Closed');
         });
 

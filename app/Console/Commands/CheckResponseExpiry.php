@@ -45,7 +45,7 @@ class CheckResponseExpiry extends Command
         if (!empty($unprocessedTicketIds)) {
             $data = ['ticketIds' => $unprocessedTicketIds];
             Mail::send('emails.ticket-expiry', $data, function ($message) use ($unprocessedTicketIds) {
-                $message->to(['customsoftware2022@gmail.com']);
+                $message->to(['customsoftware2022@gmail.com','aqeel@ocmsoftware.ie']);
                 $message->subject('Response Time Expired for Tickets: ' . implode(', ', $unprocessedTicketIds));
             });
         } else {
