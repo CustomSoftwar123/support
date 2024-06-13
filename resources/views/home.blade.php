@@ -470,10 +470,10 @@ console.log(myChart.data.labels.splice(dd1,(myChart.data.labels.length)));
       const ticketsOpenedLast = data.ticketsOpenedLast;
       const ticketsProcessingLast = data.ticketsProcessingLast;
       const ticketsCompletedLast = data.ticketsCompletedLast;
-      if(duration =='This Week'){
+      if(duration =='This Week'||duration=='This Month'){
       $(".compthisweekdata").text(data.ticketsCompletedThis)
       $(".closedthisweekdata").text(data.ticketsClosedThis)
-      }else if(duration =='Last Week'){
+      }else if(duration =='Last Week'|| duration=='Last Month'){
       $(".compthisweekdata").text(data.ticketsCompletedLast)
       $(".closedthisweekdata").text(data.ticketsClosedLast)
 
