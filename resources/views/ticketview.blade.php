@@ -173,7 +173,7 @@
                                   @endif
                                    </b></p>
                                 
-                                <p class="m-0">Message <button class="btn btn-dark float-right mr-1">{{$data22['ticketinfo'][0]->created_at}}</button> </p>  
+                                <p class="m-0">Message <button class="btn btn-dark float-right mr-1">{{ \App\Http\Controllers\tickets::DateTime($data22['ticketinfo'][0]->created_at)}}</button> </p>  
                                 <div class="jumbotron py-2 px-2 mb-0">
                                   {{$data22['ticketinfo'][0]->message}}
                                 </div>
@@ -250,7 +250,7 @@ pathinfo($ticketattachment->filename, PATHINFO_EXTENSION) == 'flv'
                                 </h3>
                              
                                   
-                               <p class="m-0">Message <button class="btn btn-dark float-right mr-1">{{$ticketmessage->created_at}}</button> </p>  
+                               <p class="m-0">Message <button class="btn btn-dark float-right mr-1">{{\App\Http\Controllers\tickets::DateTime($ticketmessage->created_at)}}</button> </p>  
                                 <div class="jumbotron py-2 px-2 mb-0">
                                  {{$ticketmessage->message}}
                                 </div>

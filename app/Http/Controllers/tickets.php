@@ -1679,6 +1679,11 @@ public function SendReportEmail(Request $request)
         ]);
         return $ticketid;
     }
+
+    public static function DateTime($value)
+    {
+        return date('d-m-Y H:i', strtotime($value)) ;
+    }
 }
 
 
