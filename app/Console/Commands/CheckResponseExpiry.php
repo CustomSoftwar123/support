@@ -87,7 +87,7 @@ DB::table('daily_reports')->insert([
         if (!empty($unprocessedTicketIds)) {
             $data = ['tickets' => $unprocessedTickets];
             Mail::send('emails.ticket-expiry', $data, function ($message) use ($unprocessedTicketIds) {
-                $message->to(['customsoftware2022@gmail.com']);
+                $message->to(['customsoftware2022@gmail.com','aqeel@ocmsoftware.ie']);
                 $message->subject('Response Time Expired for Tickets: ' . implode(', ', $unprocessedTicketIds));
             });
         } else {
