@@ -1174,7 +1174,8 @@ where id = '" . $request->tid . "'"
                                     $query->whereNull('internal')
                                         ->whereNotNull('created_for');
                                 });
-                        });
+                        })->whereNull('tasks_id');
+                        
                     }
             } else {
 
