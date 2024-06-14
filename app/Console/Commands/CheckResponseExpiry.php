@@ -35,6 +35,48 @@ class CheckResponseExpiry extends Command
             return !$exists;
         });
 
+        foreach($unprocessedTickets as $unprocessedTicket){
+           
+
+// Insert query with column names and values
+DB::table('daily_reports')->insert([
+    'ticket_view_id'=>$unprocessedTicket->id,
+    'ticketid' => $unprocessedTicket->ticketid,
+    'subject' => $unprocessedTicket->subject,
+   
+    'assignedto' => $unprocessedTicket->assignedto,
+    'createdby' => $unprocessedTicket->username,
+    'ticket_created_at' => $unprocessedTicket->created_at,
+    'client'=>$unprocessedTicket->ticket_client,
+]);
+
+
+        }
+        $threeDaysAgo = Carbon::now()->subDays(3);
+        $tickets = DB::table('tickets')
+        ->where('created_at', '<', $threeDaysAgo)
+        ->where('status', '!=', 'Completed')
+        ->where('status', '!=', 'Closed')
+        ->get();
+        foreach ($tickets as $unprocessedTicket) {
+            // Check if the ticket ID already exists in daily_reports table
+            $exists = DB::table('daily_reports')
+                ->where('ticketid', $unprocessedTicket->ticketid)
+                ->exists();
+        
+            // If the ticket ID does not exist, insert it
+            if (!$exists) {
+                DB::table('daily_reports')->insert([
+                    'ticket_view_id'=>$unprocessedTicket->id,
+                    'ticketid' => $unprocessedTicket->ticketid,
+                    'subject' => $unprocessedTicket->subject,
+                    'assignedto' => $unprocessedTicket->assignedto,
+                    'createdby' => $unprocessedTicket->username,
+                    'ticket_created_at' => $unprocessedTicket->created_at,
+                    'client'=>$unprocessedTicket->ticket_client,
+                ]);
+            }
+        }
         // Step 3: Collect ticket IDs of unprocessed tickets
         $unprocessedTicketIds = $unprocessedTickets->pluck('ticketid')->toArray();
 
@@ -45,7 +87,7 @@ class CheckResponseExpiry extends Command
         if (!empty($unprocessedTicketIds)) {
             $data = ['tickets' => $unprocessedTickets];
             Mail::send('emails.ticket-expiry', $data, function ($message) use ($unprocessedTicketIds) {
-                $message->to(['customsoftware2022@gmail.com','aqeel@ocmsoftware.ie']);
+                $message->to(['customsoftware2022@gmail.com']);
                 $message->subject('Response Time Expired for Tickets: ' . implode(', ', $unprocessedTicketIds));
             });
         } else {

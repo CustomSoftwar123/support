@@ -488,7 +488,7 @@ var table = $('#table').DataTable({
 
     }
   },
-  "stateSave": true,
+  // "stateSave": true,
   "columns": [
     { "data": "id", "name": "id" },
     { "data": "client", "name": "client" },

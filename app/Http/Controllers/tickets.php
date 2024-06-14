@@ -1910,6 +1910,19 @@ public function SendReportEmail(Request $request)
     {
         return date('d-m-Y H:i', strtotime($value)) ;
     }
+
+    public function dailyreports(Request $req){
+        // return 2;
+        return view('dailyreports');
+    }
+
+    public function dailyreportsdata()
+    {
+        $tickets = DB::table('daily_reports')
+        ->select(['id', 'ticketid', 'subject', 'created_At', 'assignedto','last_reply', 'createdby', 'completedat', 'ticket_created_at','ticket_view_id','client']);
+    
+        return Datatables::of($tickets)->make(true);
+    }
 }
 
 

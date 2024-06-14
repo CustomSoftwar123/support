@@ -452,7 +452,7 @@ console.log(myChart.data.labels.splice(dd1,(myChart.data.labels.length)));
     url:"{{route('getTicketsComparison')}}",
     data: {'duration' : duration},
     success:function(data){
-      console.log(data)
+      // console.log(data,"testts")
       // alert
       const ticketsThis = data.ticketsThis;
       const ticketsClosedThis = data.ticketsClosedThis;
@@ -464,10 +464,16 @@ console.log(myChart.data.labels.splice(dd1,(myChart.data.labels.length)));
       const ticketsOpenedLast = data.ticketsOpenedLast;
       const ticketsProcessingLast = data.ticketsProcessingLast;
       const ticketsCompletedLast = data.ticketsCompletedLast;
-      if(duration == 'This Week'||'This Month'){
+      console.log("Closed This",ticketsClosedThis)
+      console.log("Closed Last",ticketsClosedLast)
+      console.log(duration,"DURATIONNN")
+      if(duration == 'This Week'||duration=='This Month'){
+        // console.log("HERE")
+
         $('.compthisweekdata').text(ticketsCompletedThis)
         $('.closedthisweekdata').text(ticketsClosedThis)
-      }else{
+      }else {
+        console.log("HERE")
         $('.compthisweekdata').text(ticketsCompletedLast)
         $('.closedthisweekdata').text(ticketsClosedLast)
       }

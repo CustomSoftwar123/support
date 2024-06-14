@@ -234,6 +234,10 @@ Route::post('updatetask',[tickets::class,'updatetask'])->name('updatetask');
 Route::post('deletetask',[tickets::class,'deletetask'])->name('deletetask');
 
 
+// routes/web.php
+
+
+
 
 
 
@@ -251,6 +255,9 @@ Route::post('send-report-email', [Tickets::class, 'SendReportEmail'])->name('Sen
 Route::get('ticketstimeline', [Tickets::class, 'ticketstimeline'])->name('ticketstimeline');
 
 Route::post('ticketstimeline', [Tickets::class, 'ticketstimeline'])->name('ticketstimeline');
+
+Route::get('dailyreports', [tickets::class, 'dailyreports'])->name('dailyreports');
+Route::get('dailyreportsdata', [tickets::class, 'dailyreportsdata'])->name('dailyreportsdata');
 });
 
 
