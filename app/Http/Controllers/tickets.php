@@ -755,7 +755,49 @@ if(!$request->status||$request->status=='Opened'||$request->status=='Processing'
                 ;
             }
             else {
+if($role<=3){
+    $project = DB::table('tickets')->select(
+        'tickets.*',
+        DB::raw("CASE WHEN tickets.created_for IS NOT NULL THEN tickets.created_for ELSE users.client END as client")
+    )
+    ->leftJoin('users', function ($join) {
+        $join->on('tickets.username', '=', 'users.email')
+            ->whereNull('tickets.created_for');
+    })
+    ->when($request->todate, function ($query) use ($request) {
+        $todate = $request->todate . " 00:00:00";
+        $tilldate = $request->tilldate . " 23:59:59";
+        
+        if(!$request->status || $request->status == 'Opened' || $request->status == 'Processing'){
+            $query->whereBetween('tickets.created_at', [$todate, $tilldate]);
+        } else if ($request->status == 'Completed') {
+            $query->whereBetween('tickets.completedat', [$todate, $tilldate]);
+        } else if ($request->status == 'Closed') {
+            $query->whereBetween('tickets.closedat', [$todate, $tilldate]);
+        }
+    })
+    ->when($request->status, function ($query) use ($request) {
+        $query->where('tickets.status', '=', $request->status);
+    })
+    ->when($request->assignedby, function ($query) use ($request) {
+        $query->where('tickets.assignedby', '=', $request->assignedby);
+    })
+    ->when($request->assignedto, function ($query) use ($request) {
+        $query->where('tickets.assignedto', '=', $request->assignedto);
+    })
+    ->when($request->client, function ($query) use ($request) {
+        $query->where('tickets.ticket_client', '=', $request->client);
+    })
+    ->where(function ($query) {
+        $query->whereIn('internal', [1, 2])
+            ->orWhere(function ($query) {
+                $query->whereNull('internal')
+                    ->whereNotNull('created_for');
+            });
+    })
+    ->get();
 
+}else{
 
                 $project = DB::table('tickets')->select(
                     'tickets.*',
@@ -806,8 +848,9 @@ if(!$request->status||$request->status=='Opened'||$request->status=='Processing'
                         $query->where('tickets.ticket_client', '=', $request->client);
                     })
 
-
+                
                     ->get();
+                }
                 return Datatables::of($project)
                     ->addIndexColumn()
                     ->rawColumns(['action'])
