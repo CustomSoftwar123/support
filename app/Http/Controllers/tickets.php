@@ -1916,11 +1916,18 @@ public function SendReportEmail(Request $request)
         return view('dailyreports');
     }
 
-    public function dailyreportsdata()
+    public function dailyreportsdata(Request $request)
     {
         $tickets = DB::table('daily_reports')
         ->select(['id', 'ticketid', 'subject', 'created_At', 'assignedto','last_reply', 'createdby', 'completedat', 'ticket_created_at','ticket_view_id','client']);
+    // return $request;
+        if ($request->has('date') && !empty($request->date)) {
+            // return 1;
+            $searchValue = $request->date;
     
+            // Apply custom search on created_at column
+            $tickets->where('created_at', 'like', '%' . $searchValue . '%');
+        }
         return Datatables::of($tickets)->make(true);
     }
 }

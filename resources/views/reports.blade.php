@@ -43,7 +43,7 @@
 <label for="">To</label>
     <input class="form-control" type="date" name="tilldate" id="tilldate" >
 </div>
-<div class="col-md-2">
+<div class="col-md-1">
 
 
 
@@ -72,7 +72,7 @@
                                                         @endforeach
                                                   </select>      
 </div>
-<div class="form -group col-md-2">
+<div class="form -group col-md-1">
 <label>Client</label>
                                         <select class="form-select form-control" name="client" id="client">
                       <option value="" disabled selected>Choose an option</option>

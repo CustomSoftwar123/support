@@ -91,7 +91,7 @@
                                     </div>
 
 
-                                    <div class="col-sm-2">
+                                    <div class="col-sm-1">
                                         <label>Raised By</label>
                                         <input type="text" class="form-control" id="raisedby">
                                     </div>
@@ -121,7 +121,7 @@
                                     </div>
 @endif
 
-                                    <div class="col-sm-2">
+                                    <div class="col-sm-1">
                                         <label>Priority</label>
                                         <select type="text" class="form-control" id="priority">
                                             <option>All</option>

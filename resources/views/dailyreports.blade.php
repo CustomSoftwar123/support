@@ -8,7 +8,7 @@
 <div class="container-fluid">
   <div class="row mb-0">
     <div class="col-sm-6">
-      <h1 class="m-0">Tickets
+      <h1 class="m-0">Outstanding Tickets
          <a class="btn btn-info btn-sm" href="{{(request()->segment(2))}}"><i class="fas fa-sync"></i></a>
          
          <a class="btn btn-info btn-sm" href="{{route('Ticket')}}"><i class="fas fa-plus"></i> Ticket </a>
@@ -24,13 +24,27 @@
 </div><!-- /.container-fluid -->
 </div>
 <!-- /.content-header -->
+<div class="container-fluid">
 
+<div class="card card-primary card-outline p-2">
+<div class="row">
+    <div class="col-md-2">
+      <label for="">Date</label>
+    <input class="form-control" type="date" name='todate' id="todate">
+</div>
+<div class="col-sm-1">
+                                        <label class="text-white">.</label>
+                                        <button type="button" class="btn btn-primary btn-block" id="search">Search</button>
+                                    </div>
+</div>
+</div>
+</div>
 
 <!-- Main content -->
 <div class="content">
 
-<div class="card card-primary card-outline">
-                            <div class="card-body table-responsive"> 
+
+                            <div class=" card card-body table-responsive"> 
     <table id="tickets-table"class="table mb-0 table-striped table">
         <thead>
             <tr>
@@ -68,10 +82,16 @@
 <script src="{{ asset('plugins/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
 <script type="text/javascript">
 $(document).ready(function() {
-    $('#tickets-table').DataTable({
+    var table =$('#tickets-table').DataTable({
         processing: true,
         serverSide: true,
-        ajax: '{!! route('dailyreportsdata') !!}',
+        ajax:{ 
+          url:'{!! route('dailyreportsdata') !!}',
+          data: function (d) {
+                d.date = $('#todate').val(); // Dynamically fetch the value of #todate input
+                
+            }
+      },
         columns: [
             { data: 'id', name: 'id' },
             { data: 'ticketid', name: 'ticketid' },
@@ -97,6 +117,9 @@ $(document).ready(function() {
             }
         }
         ]
+    });
+    $('#search').on('click', function() {
+        table.draw();
     });
 });
 </script>
