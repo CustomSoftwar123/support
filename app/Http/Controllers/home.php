@@ -449,7 +449,7 @@ $ticketsClosedLastWeek = $result[0]->count;
            $ticketsThisWeek =  DB::table('tickets')
                                     ->having('tickets.status','=','Opened')
                                     ->whereIn('tickets.internal',[1,2]) 
-                                    // ->orWhere('tickets.created_by','<=',3)
+                                    ->orWhere('tickets.created_by','<=',3)
 
                                       ->count();
 
