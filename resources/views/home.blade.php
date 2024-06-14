@@ -431,7 +431,7 @@ var dd1 = String(prevl.getDate()).padStart(2, '0');
 console.log(dd);
 console.log(myChart.data.labels.splice(dd1,(myChart.data.labels.length)));
                                                       }
-                                                      $(".compthisweeklabel").text(`Tickets Compleetd ${duration}`)
+                                                      $(".compthisweeklabel").text(`Tickets Completed ${duration}`)
                                                       $(".closedthisweeklabel").text(`Tickets Closed ${duration}`)
                                                        myChart.update();
                                                 })  
