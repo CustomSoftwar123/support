@@ -1595,7 +1595,7 @@ where id = '" . $request->tid . "'"
 
 
         // return view('tickets')->with('data', $data);  
-
+// return $request;
 
         return view('tickets', [
 

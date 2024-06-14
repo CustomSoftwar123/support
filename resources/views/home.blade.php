@@ -71,7 +71,7 @@
 
 <div class="col-md-3  mt-1">
                       <!-- Widget: user widget style 2 -->
-                        <a id="Requests" href="../Tickets/Completed">
+                        <a id="Requests" href="#" class="Requests">
                       <div class="card card-widget mb-0  widget-user-2 bg-info counter-cards">
                         <!-- Add the bg color to the header using any of the bg-* classes -->
                         <div class="widget-user-header">
@@ -87,7 +87,7 @@
 
                     <div class="col-md-3  mt-1">
                       <!-- Widget: user widget style 2 -->
-                        <a id="Requests" href="../Tickets/Closed">
+                        <a id="Requests" class="Requests"  href='#'>
                       <div class="card card-widget mb-0  widget-user-2 bg-success counter-cards">
                         <!-- Add the bg color to the header using any of the bg-* classes -->
                         <div class="widget-user-header">
@@ -483,7 +483,23 @@ console.log(myChart.data.labels.splice(dd1,(myChart.data.labels.length)));
        })
 
 
-                        
+                     $(".Requests").click(function(){
+                     let duration=$("#duration").val()
+                      var text = $('#Requests .widget-user-header h5').text();
+                      // var hasClass = ;
+
+                     let condition=$(this).find('h5').text();
+                     let status='';
+
+                     if(condition.includes('Completed')){
+                      status='Completed'
+                     }
+                     else if(condition.includes('Closed')){
+                      status='Closed'
+                     }
+                     window.location=`{{route('Tickets')}}/${status}/${duration}`
+
+                     })   
 
               })
 

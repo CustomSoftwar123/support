@@ -429,6 +429,7 @@ $.ajaxSetup({
 
  
 
+   
   var role = {!! json_encode((array)auth()->user()->role) !!}
   // alert(role);
   // console.log(role)
@@ -463,6 +464,7 @@ $(document).ready(function () {
 
 function tickets() {
 
+  // alert( $("#client").val())
 
 // alert($("#task").val());
 // let task=
@@ -491,7 +493,7 @@ var table = $('#table').DataTable({
   // "stateSave": true,
   "columns": [
     { "data": "id", "name": "id" },
-    { "data": "client", "name": "client" },
+    { "data": "ticket_client", "name": "client" },
     { "data": "ticketid", "name": "ticketid" },
     { "data": "subject", "name": "subject" },
     { "data": "patientname", "name": "patientname" },
@@ -779,13 +781,130 @@ if (segment3 !== '') {
     type: 'GET'
   });
 }
+function getLastWeekStartDate() {
+            var currentDate = new Date();
+            var lastWeekStartDate = new Date(currentDate);
+            lastWeekStartDate.setDate(lastWeekStartDate.getDate() - 7); // Subtract 7 days
+            var dayOfWeek = lastWeekStartDate.getDay(); // Get the day of the week (0 for Sunday, 1 for Monday, etc.)
+            var mondayOffset = (dayOfWeek === 0) ? -6 : 1; // If Sunday, go back 6 days, else go back to Monday
+            lastWeekStartDate.setDate(lastWeekStartDate.getDate() - (dayOfWeek - mondayOffset)); // Adjust to Monday
+            return lastWeekStartDate.toISOString().slice(0,10); // Format the date as YYYY-MM-DD
+        }
 
+        function getLastWeekEndDate() {
+            var currentDate = new Date();
+            var lastWeekStartDate = new Date(currentDate);
+            lastWeekStartDate.setDate(lastWeekStartDate.getDate() - 7); // Subtract 7 days for start date of last week
+            var dayOfWeek = lastWeekStartDate.getDay(); // Get the day of the week (0 for Sunday, 1 for Monday, etc.)
+            var mondayOffset = (dayOfWeek === 0) ? -6 : 1; // If Sunday, go back 6 days, else go back to Monday
+            lastWeekStartDate.setDate(lastWeekStartDate.getDate() - (dayOfWeek - mondayOffset)); // Adjust to Monday
 
+            var lastWeekEndDate = new Date(lastWeekStartDate);
+            lastWeekEndDate.setDate(lastWeekEndDate.getDate() + 6); // Add 6 days to get end date of last week
+            return lastWeekEndDate.toISOString().slice(0,10); // Format the date as YYYY-MM-DD
+        }
+
+        function getLastMonthStartDate() {
+    var currentDate = new Date(); // Get current date
+    var firstDayOfCurrentMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1); // Set the date to the first day of the current month
+    firstDayOfCurrentMonth.setDate(1); // Ensure it's the first day of the current month
+    firstDayOfCurrentMonth.setMonth(firstDayOfCurrentMonth.getMonth() - 1); // Subtract one month to get to the previous month
+    return firstDayOfCurrentMonth.toISOString().slice(0,10); // Format the date as YYYY-MM-DD
+}
+        function getLastMonthEndDate() {
+            var currentDate = new Date(); // Get current date
+            var firstDayOfCurrentMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1); // Set the date to the first day of the current month
+            firstDayOfCurrentMonth.setDate(firstDayOfCurrentMonth.getDate() - 1); // Move to the last day of the previous month
+            return firstDayOfCurrentMonth.toISOString().slice(0,10); // Format the date as YYYY-MM-DD
+        }
      
-    
+        // function getLastDay
+var fullUrl = window.location.href;
+    var segments = fullUrl.split('/');
+    var lastSegment = decodeURIComponent(segments[segments.length - 1]); 
+
+    if(lastSegment =='This Week'){
+    var currentDate = new Date();
+            
+    var startOfWeek = new Date(currentDate);
+            var dayOfWeek = currentDate.getDay(); 
+            var mondayOffset = (dayOfWeek === 0) ? -6 : 1;
+            startOfWeek.setDate(startOfWeek.getDate() - (dayOfWeek - mondayOffset)); 
+            
+            var formattedStartDate = startOfWeek.toISOString().slice(0,10);
+            var formattedEndDate = currentDate.toISOString().slice(0,10);
+console.log(formattedStartDate)
+      $("#fromdate").val(formattedStartDate);
+     $("#todate").val(formattedEndDate);
+    //  $()
+    }
+    else if(lastSegment =='Last Week'){
+
+
+      $("#fromdate").val(getLastWeekStartDate());
+     $("#todate").val(getLastWeekEndDate());
+    //  $()
+    }
+
+    else if(lastSegment =='Last Month'){
+      var currentDate = new Date();
+
+// Calculate the first day of last month
+var firstDayOfLastMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1);
+// Adjust for cases where the current month is January
+if (currentDate.getMonth() === 0) {
+    firstDayOfLastMonth.setFullYear(currentDate.getFullYear() - 1);
+    firstDayOfLastMonth.setMonth(11); // December
+}
+
+// Calculate the last day of last month
+var lastDayOfLastMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 0);
+
+// Output the first and last day of last month
+console.log("First day of last month:", firstDayOfLastMonth);
+console.log("Last day of last month:", lastDayOfLastMonth);
+
+// Format the date for display in the date field
+var formattedFirstDay = formatDate(firstDayOfLastMonth);
+var lastDayOfLastMonth = formatDate(lastDayOfLastMonth);
+console.log("Formatted first day:", formattedFirstDay);
+
+function formatDate(date) {
+    var year = date.getFullYear();
+    var month = date.getMonth() + 1; // Months are zero-based
+    var day = date.getDate();
+    return year + '-' + (month < 10 ? '0' : '') + month + '-' + (day < 10 ? '0' : '') + day;
+
+}
+      // var firstDayOfLastMonth = moment().subtract(1, 'months').startOf('month')
+$("#fromdate").val(formattedFirstDay);
+$("#todate").val(lastDayOfLastMonth);
+//  $()
+}
+else if(lastSegment =='This Month'){
+ var currentDate = new Date();
+
+// Calculate the first day of the current month
+var firstDayOfCurrentMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+
+// Format the first day of the current month for display in the date field
+var formattedFirstDayOfCurrentMonth = formatDate(firstDayOfCurrentMonth);
+console.log("Formatted first day of current month:", formattedFirstDayOfCurrentMonth);
+
+function formatDate(date) {
+    var year = date.getFullYear();
+    var month = date.getMonth() + 1; // Months are zero-based
+    var day = date.getDate();
+    return year + '-' + (month < 10 ? '0' : '') + month + '-' + (day < 10 ? '0' : '') + day;
+}
+
+var formattedEndDate = currentDate.toISOString().slice(0,10);
 
 
 
+  $("#fromdate").val(formattedFirstDayOfCurrentMonth);
+$("#todate").val(formattedEndDate);
+}
 
    
 
