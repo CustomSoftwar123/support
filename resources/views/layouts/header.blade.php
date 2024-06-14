@@ -335,6 +335,18 @@ thead th {
             </a>
           </li>
           @endif
+
+          @if(Auth::user()->role<=4 )
+
+          <li class="nav-item">
+            <a href="{{ route('dailyreports') }}" class="nav-link {{ (request()->is('dailyreports')) ? 'active' : '' }}">
+            <i class="nav-icon fas fa-file-invoice"></i>
+              <p>
+               Daily Reports 
+              </p>
+            </a>
+          </li>
+          @endif
           
           @if(Auth::user()->role==4 || Auth::user()->role==1)
           
