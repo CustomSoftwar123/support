@@ -77,8 +77,8 @@
                         <div class="widget-user-header">
 
                           <h2><i class="fas fa-file-medical float-right display-5"></i></h2>
-                          <h4 id="thisWeek">{{$data['ticketsCompletedThisWeek']}}</h4>
-                          <h5>Tickets Completed This Week</h5>
+                          <h4 id="thisWeek" class="compthisweekdata">{{$data['ticketsCompletedThisWeek']}}</h4>
+                          <h5 class="compthisweeklabel">Tickets Completed This Week</h5>
                         </div>
                       </div>
                       <!-- /.widget-user -->
@@ -93,8 +93,8 @@
                         <div class="widget-user-header">
 
                           <h2><i class="fas fa-file-medical float-right display-5"></i></h2>
-                          <h4 id="thisWeek">{{$data['ticketsClosedThisWeek']}}</h4>
-                          <h5>Tickets Closed This Week</h5>
+                          <h4 id="thisWeek" class="closedthisweekdata">{{$data['ticketsClosedThisWeek']}}</h4>
+                          <h5 class="closedthisweeklabel">Tickets Closed This Week</h5>
                         </div>
                       </div>
                       <!-- /.widget-user -->
@@ -431,6 +431,8 @@ var dd1 = String(prevl.getDate()).padStart(2, '0');
 console.log(dd);
 console.log(myChart.data.labels.splice(dd1,(myChart.data.labels.length)));
                                                       }
+                                                      $(".compthisweeklabel").text(`Tickets Compleetd ${duration}`)
+                                                      $(".closedthisweeklabel").text(`Tickets Closed ${duration}`)
                                                        myChart.update();
                                                 })  
                                                         
@@ -438,8 +440,39 @@ console.log(myChart.data.labels.splice(dd1,(myChart.data.labels.length)));
                                               }
                                              
                                               
-                                          })         
-
+                                          })      
+                                          
+                                          $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+                                          $.ajax({
+    type:"post",
+    url:"{{route('getTicketsComparison')}}",
+    data: {'duration' : duration},
+    success:function(data){
+      console.log(data)
+      // alert
+      const ticketsThis = data.ticketsThis;
+      const ticketsClosedThis = data.ticketsClosedThis;
+      const ticketsOpenedThis = data.ticketsOpenedThis;
+      const ticketsProcessingThis = data.ticketsProcessingThis;
+      const ticketsCompletedThis = data.ticketsCompletedThis;
+      const ticketsLast = data.ticketsLast;
+      const ticketsClosedLast = data.ticketsClosedLast;
+      const ticketsOpenedLast = data.ticketsOpenedLast;
+      const ticketsProcessingLast = data.ticketsProcessingLast;
+      const ticketsCompletedLast = data.ticketsCompletedLast;
+      if(duration == 'This Week'||'This Month'){
+        $('.compthisweekdata').text(ticketsCompletedThis)
+        $('.closedthisweekdata').text(ticketsClosedThis)
+      }else{
+        $('.compthisweekdata').text(ticketsCompletedLast)
+        $('.closedthisweekdata').text(ticketsClosedLast)
+      }
+    }
+  })
 
        })
 

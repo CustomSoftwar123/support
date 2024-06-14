@@ -61,8 +61,8 @@ class home extends Controller
 
     public function getTicketsComparison(Request $request){
       $duration=$request->duration;
-      $role=auth()->user->role;
-      $cl=auth()->user->client;
+      $role=auth()->user()->role;
+      $cl=auth()->user()->client;
       if($duration=='This Week'||$duration=='Last Week'){
         if($role<=3){
 
