@@ -82,10 +82,21 @@ class home extends Controller
       ->whereIn('tickets.internal',[1,2])
       ->count();
       $ticketsCompletedThisWeek = DB::table('tickets')
-      ->where('status','Completed')
-      ->whereBetween('completedat', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])
-      ->whereIn('tickets.internal',[1,2])
+      ->leftJoin('users', function ($join) {
+          $join->on('tickets.username', '=', 'users.email')
+              ->whereNull('tickets.created_for');
+      })
+      ->where('tickets.status', 'Completed')
+      ->whereBetween('tickets.completedat', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])
+      ->where(function ($query) {
+          $query->whereIn('tickets.internal', [1, 2])
+              ->orWhere(function ($query) {
+                  $query->whereNull('tickets.internal')
+                      ->whereNotNull('tickets.created_for');
+              });
+      })
       ->count();
+  
       $ticketsClosedThisWeek = DB::table('tickets')
       ->where('status','Closed')
       ->whereBetween('closedat', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])
@@ -130,11 +141,24 @@ $ticketsClosedLastWeek = $result[0]->count;
   
     ->count();
     $ticketsCompletedLastWeek = DB::table('tickets')
-    ->where('status','Completed')
-    ->whereBetween('completedat', [Carbon::now()->startOfWeek()->subWeek(), Carbon::now()->startOfWeek()->subSecond()])
-    ->whereIn('tickets.internal',[1,2])
-   
+    ->leftJoin('users', function ($join) {
+        $join->on('tickets.username', '=', 'users.email')
+            ->whereNull('tickets.created_for');
+    })
+    ->where('tickets.status', 'Completed')
+    ->whereBetween('tickets.completedat', [
+        Carbon::now()->startOfWeek()->subWeek(), // Start of the week from a week ago
+        Carbon::now()->startOfWeek()->subSecond() // End of the current week from a week ago (subSecond to go just before the current week)
+    ])
+    ->where(function ($query) {
+        $query->whereIn('tickets.internal', [1, 2])
+            ->orWhere(function ($query) {
+                $query->whereNull('tickets.internal')
+                    ->whereNotNull('tickets.created_for');
+            });
+    })
     ->count();
+
     $ticketsLastWeek = DB::table('tickets')
     ->whereBetween('created_at', [Carbon::now()->startOfWeek()->subWeek(), Carbon::now()->startOfWeek()->subSecond()])
     ->whereIn('tickets.internal',[1,2])
@@ -258,11 +282,21 @@ $ticketsClosedLastWeek = $result[0]->count;
 
          ->count();
          $ticketsCompletedThisMonth = DB::table('tickets')
-         ->where('status','Completed')
-         ->whereBetween('completedat', [$firstDayOfMonth, $lastDayOfMonth])
-    ->whereIn('tickets.internal',[1,2])
-
+         ->leftJoin('users', function ($join) {
+             $join->on('tickets.username', '=', 'users.email')
+                 ->whereNull('tickets.created_for');
+         })
+         ->where('tickets.status', 'Completed')
+         ->whereBetween('tickets.completedat', [$firstDayOfMonth, $lastDayOfMonth])
+         ->where(function ($query) {
+             $query->whereIn('tickets.internal', [1, 2])
+                 ->orWhere(function ($query) {
+                     $query->whereNull('tickets.internal')
+                         ->whereNotNull('tickets.created_for');
+                 });
+         })
          ->count();
+     
 
          $firstDayOfLastMonth = Carbon::now()->subMonth()->startOfMonth();
          $lastDayOfLastMonth = Carbon::now()->subMonth()->endOfMonth();
@@ -292,11 +326,23 @@ $ticketsClosedLastWeek = $result[0]->count;
 
          ->count();
          $ticketsCompletedLastMonth = DB::table('tickets')
-         ->where('tickets.status','Completed')
+         ->leftJoin('users', function ($join) {
+             $join->on('tickets.username', '=', 'users.email')
+                 ->whereNull('tickets.created_for');
+         })
+         ->where('tickets.status', 'Completed')
          ->whereBetween('tickets.completedat', [$firstDayOfLastMonth, $lastDayOfLastMonth])
-    ->whereIn('tickets.internal',[1,2])
-
+         ->where(function ($query) {
+             $query->whereIn('tickets.internal', [1, 2])
+                 ->orWhere(function ($query) {
+                     $query->whereNull('tickets.internal')
+                         ->whereNotNull('tickets.created_for');
+                 });
+         })
          ->count();
+     
+
+       
         }else if ($role==5||$role==4){
           $firstDayOfMonth = Carbon::now()->startOfMonth();
           $lastDayOfMonth = Carbon::now()->endOfMonth();
