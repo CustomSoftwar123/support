@@ -70,14 +70,20 @@ class home extends Controller
  
       ->whereBetween('created_at', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])
       ->whereIn('tickets.internal',[1,2])
+      ->where('tickets.tasks_id',NULL)
+
       ->count();
       $ticketsOpenedThisWeek = DB::table('tickets')
       ->where('status','Opened')
       ->whereBetween('created_at', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])
       ->whereIn('tickets.internal',[1,2])
+      ->where('tickets.tasks_id',NULL)
+
       ->count();
       $ticketsProcessingThisWeek = DB::table('tickets')
       ->where('status','Processing')
+      ->where('tickets.tasks_id',NULL)
+
       ->whereBetween('created_at', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])
       ->whereIn('tickets.internal',[1,2])
       ->count();
@@ -95,17 +101,23 @@ class home extends Controller
                       ->whereNotNull('tickets.created_for');
               });
       })
+      ->where('tickets.tasks_id',NULL)
+
       ->count();
   
       $ticketsClosedThisWeek = DB::table('tickets')
       ->where('status','Closed')
       ->whereBetween('closedat', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])
+      ->where('tickets.tasks_id',NULL)
+
       ->whereIn('tickets.internal',[1,2])
       ->count();
 
       $ticketsLastWeek = DB::table('tickets')
     ->whereBetween('created_at', [Carbon::now()->startOfWeek()->subWeek(), Carbon::now()->startOfWeek()->subSecond()])
     ->whereIn('tickets.internal',[1,2])
+    ->where('tickets.tasks_id',NULL)
+
     ->count();
 
     // $ticketsClosedLastWeek = DB::table('tickets')
@@ -132,12 +144,16 @@ $ticketsClosedLastWeek = $result[0]->count;
     ->where('status','Opened')
     ->whereBetween('created_at', [Carbon::now()->startOfWeek()->subWeek(), Carbon::now()->startOfWeek()->subSecond()])
     ->whereIn('tickets.internal',[1,2])
+    ->where('tickets.tasks_id',NULL)
+
     
     ->count();
     $ticketsProcessingLastWeek = DB::table('tickets')
     ->where('status','Processing')
     ->whereBetween('created_at', [Carbon::now()->startOfWeek()->subWeek(), Carbon::now()->startOfWeek()->subSecond()])
     ->whereIn('tickets.internal',[1,2])
+    ->where('tickets.tasks_id',NULL)
+
   
     ->count();
     $ticketsCompletedLastWeek = DB::table('tickets')
@@ -146,6 +162,8 @@ $ticketsClosedLastWeek = $result[0]->count;
             ->whereNull('tickets.created_for');
     })
     ->where('tickets.status', 'Completed')
+    ->where('tickets.tasks_id',NULL)
+
     ->whereBetween('tickets.completedat', [
         Carbon::now()->startOfWeek()->subWeek(), // Start of the week from a week ago
         Carbon::now()->startOfWeek()->subSecond() // End of the current week from a week ago (subSecond to go just before the current week)
@@ -160,36 +178,47 @@ $ticketsClosedLastWeek = $result[0]->count;
     ->count();
 
     $ticketsLastWeek = DB::table('tickets')
+    ->where('tickets.tasks_id',NULL)
+
     ->whereBetween('created_at', [Carbon::now()->startOfWeek()->subWeek(), Carbon::now()->startOfWeek()->subSecond()])
     ->whereIn('tickets.internal',[1,2])
     
     ->count();
         } else if ($role==4||$role==5){
           $ticketsThisWeek = DB::table('tickets')
+          ->where('tickets.tasks_id',NULL)
  
           ->whereBetween('tickets.created_at', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])
           ->where('users.client',$cl)
           ->leftjoin('users', 'tickets.username' ,"=",'users.email')
           ->count();
           $ticketsOpenedThisWeek = DB::table('tickets')
+    ->where('tickets.tasks_id',NULL)
+
           ->where('tickets.status','Opened')
           ->whereBetween('tickets.created_at', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])
           ->where('users.client',$cl)
                 ->leftjoin('users', 'tickets.username' ,"=",'users.email')
           ->count();
           $ticketsProcessingThisWeek = DB::table('tickets')
+    ->where('tickets.tasks_id',NULL)
+
           ->where('tickets.status','Processing')
           ->whereBetween('tickets.created_at', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])
           ->where('users.client',$cl)
                 ->leftjoin('users', 'tickets.username' ,"=",'users.email')
           ->count();
           $ticketsCompletedThisWeek = DB::table('tickets')
+    ->where('tickets.tasks_id',NULL)
+
           ->where('tickets.status','Completed')
           ->whereBetween('tickets.completedat', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])
           ->where('users.client',$cl)
                 ->leftjoin('users', 'tickets.username' ,"=",'users.email')
           ->count();
           $ticketsClosedThisWeek = DB::table('tickets')
+    ->where('tickets.tasks_id',NULL)
+
           ->where('tickets.status','Closed')
           ->whereBetween('closedat', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])
           ->where('users.client',$cl)
@@ -197,18 +226,24 @@ $ticketsClosedLastWeek = $result[0]->count;
           ->count();
     
           $ticketsLastWeek = DB::table('tickets')
+    ->where('tickets.tasks_id',NULL)
+
         ->whereBetween('tickets.created_at', [Carbon::now()->startOfWeek()->subWeek(), Carbon::now()->startOfWeek()->subSecond()])
         ->where('users.client',$cl)
         ->leftjoin('users', 'tickets.username' ,"=",'users.email')
         ->count();
     
         $ticketsClosedLastWeek = DB::table('tickets')
+    ->where('tickets.tasks_id',NULL)
+
         ->where('tickets.status','Closed')
         ->whereBetween('tickets.closedat', [Carbon::now()->startOfWeek()->subWeek(), Carbon::now()->startOfWeek()->subSecond()])
         ->where('users.client',$cl)
         ->leftjoin('users', 'tickets.username' ,"=",'users.email')
         ->count();
         $ticketsOpenedLastWeek = DB::table('tickets')
+    ->where('tickets.tasks_id',NULL)
+
         ->where('tickets.status','Opened')
         ->whereBetween('tickets.created_at', [Carbon::now()->startOfWeek()->subWeek(), Carbon::now()->startOfWeek()->subSecond()])
         ->where('users.client',$cl)
@@ -216,6 +251,8 @@ $ticketsClosedLastWeek = $result[0]->count;
         
         ->count();
         $ticketsProcessingLastWeek = DB::table('tickets')
+    ->where('tickets.tasks_id',NULL)
+
         ->where('tickets.status','Processing')
         ->whereBetween('tickets.created_at', [Carbon::now()->startOfWeek()->subWeek(), Carbon::now()->startOfWeek()->subSecond()])
         ->where('users.client',$cl)
@@ -223,6 +260,8 @@ $ticketsClosedLastWeek = $result[0]->count;
       
         ->count();
         $ticketsCompletedLastWeek = DB::table('tickets')
+    ->where('tickets.tasks_id',NULL)
+
         ->where('tickets.status','Completed')
         ->whereBetween('completedat', [Carbon::now()->startOfWeek()->subWeek(), Carbon::now()->startOfWeek()->subSecond()])
         ->where('users.client',$cl)
@@ -230,6 +269,8 @@ $ticketsClosedLastWeek = $result[0]->count;
        
         ->count();
         $ticketsLastWeek = DB::table('tickets')
+    ->where('tickets.tasks_id',NULL)
+
         ->whereBetween('tickets.created_at', [Carbon::now()->startOfWeek()->subWeek(), Carbon::now()->startOfWeek()->subSecond()])
         ->where('users.client',$cl)
                 ->leftjoin('users', 'tickets.username' ,"=",'users.email')
@@ -257,18 +298,24 @@ $ticketsClosedLastWeek = $result[0]->count;
      $lastDayOfMonth = Carbon::now()->endOfMonth();
      
        $ticketsThisMonth = DB::table('tickets')
+    ->where('tickets.tasks_id',NULL)
+
          ->whereBetween('created_at', [$firstDayOfMonth, $lastDayOfMonth])
     ->whereIn('tickets.internal',[1,2])
 
          ->count();
 
          $ticketsOpenedThisMonth = DB::table('tickets')
+    ->where('tickets.tasks_id',NULL)
+
          ->where('status','Opened')
          ->whereBetween('created_at', [$firstDayOfMonth, $lastDayOfMonth])
     ->whereIn('tickets.internal',[1,2])
 
          ->count();
          $ticketsProcessingThisMonth = DB::table('tickets')
+    ->where('tickets.tasks_id',NULL)
+
          ->where('status','Processing')
          ->whereBetween('created_at', [$firstDayOfMonth, $lastDayOfMonth])
     ->whereIn('tickets.internal',[1,2])
@@ -276,12 +323,16 @@ $ticketsClosedLastWeek = $result[0]->count;
          ->count();
          
          $ticketsClosedThisMonth = DB::table('tickets')
+    ->where('tickets.tasks_id',NULL)
+
          ->where('status','Closed')
          ->whereBetween('closedat', [$firstDayOfMonth, $lastDayOfMonth])
     ->whereIn('tickets.internal',[1,2])
 
          ->count();
          $ticketsCompletedThisMonth = DB::table('tickets')
+    ->where('tickets.tasks_id',NULL)
+
          ->leftJoin('users', function ($join) {
              $join->on('tickets.username', '=', 'users.email')
                  ->whereNull('tickets.created_for');
@@ -323,9 +374,12 @@ $ticketsClosedLastWeek = $result[0]->count;
          ->where('tickets.status','Closed')
          ->whereBetween('tickets.closedat', [$firstDayOfLastMonth, $lastDayOfLastMonth])
     ->whereIn('tickets.internal',[1,2])
+    ->where('tickets.tasks_id',NULL)
 
          ->count();
          $ticketsCompletedLastMonth = DB::table('tickets')
+    ->where('tickets.tasks_id',NULL)
+
          ->leftJoin('users', function ($join) {
              $join->on('tickets.username', '=', 'users.email')
                  ->whereNull('tickets.created_for');
@@ -348,6 +402,8 @@ $ticketsClosedLastWeek = $result[0]->count;
           $lastDayOfMonth = Carbon::now()->endOfMonth();
           
             $ticketsThisMonth = DB::table('tickets')
+    ->where('tickets.tasks_id',NULL)
+
               ->whereBetween('tickets.created_at', [$firstDayOfMonth, $lastDayOfMonth])
               ->where('users.client',$cl)
               ->leftjoin('users', 'tickets.username' ,"=",'users.email')
@@ -355,6 +411,8 @@ $ticketsClosedLastWeek = $result[0]->count;
               ->count();
      
               $ticketsOpenedThisMonth = DB::table('tickets')
+    ->where('tickets.tasks_id',NULL)
+
               ->where('tickets.status','Opened')
               ->whereBetween('tickets.created_at', [$firstDayOfMonth, $lastDayOfMonth])
               ->where('users.client',$cl)
@@ -362,6 +420,8 @@ $ticketsClosedLastWeek = $result[0]->count;
      
               ->count();
               $ticketsProcessingThisMonth = DB::table('tickets')
+    ->where('tickets.tasks_id',NULL)
+
               ->where('tickets.status','Processing')
               ->whereBetween('tickets.created_at', [$firstDayOfMonth, $lastDayOfMonth])
               ->where('users.client',$cl)
@@ -370,6 +430,8 @@ $ticketsClosedLastWeek = $result[0]->count;
               ->count();
               
               $ticketsClosedThisMonth = DB::table('tickets')
+    ->where('tickets.tasks_id',NULL)
+
               ->where('tickets.status','Closed')
               ->whereBetween('tickets.closedat', [$firstDayOfMonth, $lastDayOfMonth])
               ->where('users.client',$cl)
@@ -377,6 +439,8 @@ $ticketsClosedLastWeek = $result[0]->count;
      
               ->count();
               $ticketsCompletedThisMonth = DB::table('tickets')
+    ->where('tickets.tasks_id',NULL)
+
               ->where('tickets.status','Completed')
               ->whereBetween('tickets.completedat', [$firstDayOfMonth, $lastDayOfMonth])
               ->where('users.client',$cl)
@@ -388,12 +452,16 @@ $ticketsClosedLastWeek = $result[0]->count;
               $lastDayOfLastMonth = Carbon::now()->subMonth()->endOfMonth();
               
               $ticketsLastMonth = DB::table('tickets')
+    ->where('tickets.tasks_id',NULL)
+
                   ->whereBetween('tickets.created_at', [$firstDayOfLastMonth, $lastDayOfLastMonth])
                   ->where('users.client',$cl)
                   ->leftjoin('users', 'tickets.username' ,"=",'users.email')
      
                   ->count();
               $ticketsOpenedLastMonth = DB::table('tickets')
+    ->where('tickets.tasks_id',NULL)
+
               ->where('tickets.status','Opened')
               ->whereBetween('tickets.created_at', [$firstDayOfLastMonth, $lastDayOfLastMonth])
               ->where('users.client',$cl)
@@ -401,6 +469,8 @@ $ticketsClosedLastWeek = $result[0]->count;
      
               ->count();
               $ticketsProcessingLastMonth = DB::table('tickets')
+    ->where('tickets.tasks_id',NULL)
+
               ->where('tickets.status','Processing')
               ->whereBetween('tickets.created_at', [$firstDayOfLastMonth, $lastDayOfLastMonth])
               ->where('users.client',$cl)
@@ -409,6 +479,8 @@ $ticketsClosedLastWeek = $result[0]->count;
               ->count();
               
               $ticketsClosedLastMonth = DB::table('tickets')
+    ->where('tickets.tasks_id',NULL)
+
               ->where('tickets.status','Closed')
               ->whereBetween('tickets.closedat', [$firstDayOfLastMonth, $lastDayOfLastMonth])
               ->where('users.client',$cl)
@@ -416,6 +488,8 @@ $ticketsClosedLastWeek = $result[0]->count;
      
               ->count();
               $ticketsCompletedLastMonth = DB::table('tickets')
+    ->where('tickets.tasks_id',NULL)
+
               ->where('tickets.status','Completed')
               ->whereBetween('tickets.completedat', [$firstDayOfLastMonth, $lastDayOfLastMonth])
               ->where('users.client',$cl)
@@ -450,6 +524,7 @@ $ticketsClosedLastWeek = $result[0]->count;
                                     ->having('tickets.status','=','Opened')
                                     ->whereIn('tickets.internal',[1,2]) 
                                     ->orWhere('tickets.created_by','<=',3)
+                                    ->where('tickets.tasks_id',NULL)
 
                                       ->count();
 
@@ -458,10 +533,12 @@ $ticketsClosedLastWeek = $result[0]->count;
                                         ->having('tickets.status','Processing')
                                         ->whereIn('tickets.internal',[1,2])
                                         ->orWhere('tickets.created_by','<=',3)
+                                    ->where('tickets.tasks_id',NULL)
+
                                         ->count();
 // return 
 $d= Carbon::now()->startOfWeek()->format('Ymd');
-       $query="SELECT * FROM `tickets` WHERE closedat >'".$d."' having status ='closed' and internal in (1,2) "; 
+       $query="SELECT * FROM `tickets` WHERE closedat >'".$d."' having status ='closed' and internal in (1,2) and tasks_id is Null "; 
      $close=DB::select($query);
      
       $ticketsClosedThisWeek=count($close);
@@ -474,6 +551,8 @@ $d= Carbon::now()->startOfWeek()->format('Ymd');
                                        
                                         ->whereIn('tickets.internal',[1,2])  
                                         ->orWhere('tickets.created_by','<=',3)
+                                    ->where('tickets.tasks_id',NULL)
+
                                         ->count();
 
         $ticketsCompletedThisWeek =  DB::table('tickets')
@@ -481,6 +560,8 @@ $d= Carbon::now()->startOfWeek()->format('Ymd');
                                              [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()]
                                          ) 
                                          ->having('tickets.status','Completed') 
+                                    ->where('tickets.tasks_id',NULL)
+
                                       //    ->whereIn('tickets.internal',[1,2])  
                                       //    ->where(function ($query) {
                                       //     $query->whereIn('internal', [1, 2])
@@ -496,6 +577,8 @@ $d= Carbon::now()->startOfWeek()->format('Ymd');
         }elseif($role==4 ||$role==5){
             $ticketsThisWeek =  DB::table('tickets')
             ->where('tickets.status','Opened')
+            ->where('tickets.tasks_id',NULL)
+
             ->where('users.client',$cl)
                 ->leftjoin('users', 'tickets.username' ,"=",'users.email')
             
@@ -504,6 +587,8 @@ $d= Carbon::now()->startOfWeek()->format('Ymd');
 $ticketsProcessing =  DB::table('tickets')
                
                 ->where('tickets.status','Processing')
+                ->where('tickets.tasks_id',NULL)
+
                 ->where('users.client',$cl)
                 ->leftjoin('users', 'tickets.username' ,"=",'users.email')
                 ->count();
@@ -512,6 +597,8 @@ $ticketsClosedThisWeek =  DB::table('tickets')
                ->whereBetween('tickets.closedat', 
                     [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()]
                 )   ->where('users.client',$cl)
+                ->where('tickets.tasks_id',NULL)
+
                 ->leftjoin('users', 'tickets.username' ,"=",'users.email')
                 ->where('tickets.status','Closed') 
                 
@@ -523,6 +610,8 @@ $ticketsCompletedThisWeek =  DB::table('tickets')
                  ) 
                  ->where('users.client',$cl)
                  ->leftjoin('users', 'tickets.username' ,"=",'users.email')
+                 ->where('tickets.tasks_id',NULL)
+
                  ->where('tickets.status','Completed') 
                 
                  ->count();
@@ -533,6 +622,8 @@ $ticketsCompletedThisWeek =  DB::table('tickets')
             ->where('tickets.status','Opened')
             ->where('username',$email)
             ->where('users.client',$cl)
+            ->where('tickets.tasks_id',NULL)
+
             ->leftjoin('users', 'tickets.username' ,"=",'users.email')
               ->count();
 
@@ -541,6 +632,8 @@ $ticketsProcessing =  DB::table('tickets')
                 ->where('tickets.status','Processing')
                 ->where('username',$email)
                 ->where('users.client',$cl)
+                ->where('tickets.tasks_id',NULL)
+
                 ->leftjoin('users', 'tickets.username' ,"=",'users.email')
                 ->count();
 
@@ -551,6 +644,8 @@ $ticketsClosedThisWeek =  DB::table('tickets')
                 ->where('tickets.status','Closed') 
                 ->where('tickets.username',$email)
                 ->where('users.client',$cl)
+                ->where('tickets.tasks_id',NULL)
+
                 ->leftjoin('users', 'tickets.username' ,"=",'users.email')
                 ->count();
 
@@ -561,6 +656,8 @@ $ticketsCompletedThisWeek =  DB::table('tickets')
                  ->where('tickets.status','Completed') 
                  ->where('tickets.username',$email)
                  ->where('users.client',$cl)
+                 ->where('tickets.tasks_id',NULL)
+
                  ->leftjoin('users', 'tickets.username' ,"=",'users.email')
                  ->count();
         }
