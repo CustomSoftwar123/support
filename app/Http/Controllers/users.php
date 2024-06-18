@@ -299,7 +299,7 @@ class users extends Controller
      if ($validator->passes()) {
 
         $dif = DB::table('users')->where('id',1)->get();
-        DB::insert('insert into users (id,client, name, phone, email, password, role, status, address, city, state, country, zip, file, created_at, created_by, colorscheme, font, font_link,font_weight, resolution, supportfordays) values (?,?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?,?)', 
+        DB::insert('insert into users (id,client, name, phone, email, password, role, status, address, city, state, country, zip, file, created_at, created_by, colorscheme, font, font_link,font_weight, resolution) values (?,?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?,?)', 
             
             [$uid,$client, $name, $phone, $email, Hash::make($password), $role, $status, $address, $city, $state, $country, $zip, 'default.jpg', date('Y-m-d H:i:s'),  $user['id'],
 
@@ -308,7 +308,7 @@ class users extends Controller
                  $dif[0]->font_link,
                  $dif[0]->font_weight,
                  $dif[0]->resolution,
-                 $supportfordays
+              
 
             ]);      
 
