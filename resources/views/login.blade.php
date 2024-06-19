@@ -110,10 +110,14 @@ window.location="home";
         <label class="form-label text-secondary">Email</label>
         <input class="form-control" type="email" name="email" id="email" required="" autocomplete="off">
     </div>
+    <div style="display: none;">
+ <input type="text" id="PreventChromeAutocomplete" 
+  name="PreventChromeAutocomplete" autocomplete="address-level4" />
+</div>
     <div class="form-group mb-3">
         <label class="form-label text-secondary">Password</label>
-        <input type="text" style="display:none">
-        <input class="form-control" type="password" required="" id="password" name="password" autocomplete="new-password">
+       
+        <input class="form-control" type="search" required="" id="password" name="password" autocomplete="new-password">
     </div>
     <button class="btn mt-2 text-light" style="background-color:#01313F;" type="button" id="submit">Login</button>
 </form>
