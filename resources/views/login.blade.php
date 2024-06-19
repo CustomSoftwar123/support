@@ -104,15 +104,16 @@ window.location="home";
           <div class=""> <h3 class=" "  style="color:#01313F; width: 100%; " >
           </i> <b>OCM Support </b></h3></div>
          <br>
-         <form id="form">
+         <form id="form" autocomplete ="off">
           {{csrf_field()}}
     <div class="form-group mb-3">
         <label class="form-label text-secondary">Email</label>
-        <input class="form-control" type="text" name="email" id="email" required="" autocomplete="off">
+        <input class="form-control" type="email" name="email" id="email" required="" autocomplete="off">
     </div>
     <div class="form-group mb-3">
         <label class="form-label text-secondary">Password</label>
-        <input class="form-control" type="password" required="" id="password" name="password">
+        <input type="text" style="display:none">
+        <input class="form-control" type="password" required="" id="password" name="password" autocomplete="new-password">
     </div>
     <button class="btn mt-2 text-light" style="background-color:#01313F;" type="button" id="submit">Login</button>
 </form>
@@ -155,6 +156,9 @@ window.location="home";
     });
 
  $(document).ready(function () {
+
+  document.getElementById('email').setAttribute('autocomplete', 'off');
+  // document.getElementById('password').setAttribute('autocomplete', 'off');
 
   //  $('#email').select2({
   //     minimumInputLength:3
