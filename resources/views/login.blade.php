@@ -82,6 +82,17 @@
     white-space: nowrap;
 }
 
+@font-face {
+  font-family: 'password';
+  font-style: normal;
+  font-weight: 400;
+  src: url(https://jsbin-user-assets.s3.amazonaws.com/rafaelcastrocouto/password.ttf);
+}
+
+#password {
+  font-family: 'password';
+  /* width: 100px; height: 16px;   */
+}
   </style>
 
 </head>
@@ -117,7 +128,7 @@ window.location="home";
     <div class="form-group mb-3">
         <label class="form-label text-secondary">Password</label>
        
-        <input class="form-control" type="search" required="" id="password" name="password" autocomplete="new-password">
+        <input class="form-control" type="search" required="" id="password" name="password" autocomplete="current-password">
     </div>
     <button class="btn mt-2 text-light" style="background-color:#01313F;" type="button" id="submit">Login</button>
 </form>
@@ -161,7 +172,7 @@ window.location="home";
 
  $(document).ready(function () {
 
-  document.getElementById('email').setAttribute('autocomplete', 'off');
+  // document.getElementById('email').setAttribute('autocomplete', 'off');
   // document.getElementById('password').setAttribute('autocomplete', 'off');
 
   //  $('#email').select2({
@@ -184,8 +195,10 @@ window.location="home";
 
   $("#password").keyup(function(e) {
           
-              $("#password").attr('type','password')
+              // $("#password").attr('type','password')
         });
+
+      
  
 
    function loadInfo() { 
