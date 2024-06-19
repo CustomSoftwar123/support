@@ -108,7 +108,7 @@ window.location="home";
           {{csrf_field()}}
     <div class="form-group mb-3">
         <label class="form-label text-secondary">Email</label>
-        <input class="form-control" type="text" name="email" id="email" required="">
+        <input class="form-control" type="text" name="email" id="email" required="" autocomplete="off">
     </div>
     <div class="form-group mb-3">
         <label class="form-label text-secondary">Password</label>
