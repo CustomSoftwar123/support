@@ -221,11 +221,13 @@ $priority = $request->priority;
 $message = $request->message;
 $tid = $request->tid;
 $client=$request->client;
-if(!$client){
-    $client=auth()->user()->client;
-// return $client.'sad';
+// if(!$client){
+//     $client=auth()->user()->client;
+// // return $client.'sad';
 
-}
+// }
+
+$ticket_client=auth()->user()->client;
 // return $client.'asd';
 
 $taskid=$request->taskId;
@@ -262,10 +264,10 @@ elseif($priority=='Low'){
 }
 
 if($taskid){
-DB::insert('insert into tickets (patientname, username, contact,sampleid,subject,department,priority,message,created_at,created_by,ticketid,status,mailed,created_for,tasks_id,response_expiry) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)', [$patientname,$email,$contact,$sampleid,$subject,$department,$priority,$message,$date,$id,$tid,'Opened',0,$client,$taskid,$futureDateTime]);
+DB::insert('insert into tickets (patientname, username, contact,sampleid,subject,department,priority,message,created_at,created_by,ticketid,status,mailed,created_for,tasks_id,response_expiry,ticket_client) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)', [$patientname,$email,$contact,$sampleid,$subject,$department,$priority,$message,$date,$id,$tid,'Opened',0,$client,$taskid,$futureDateTime,$ticket_client]);
 }else{
 	
-DB::insert('insert into tickets (patientname, username, contact,sampleid,subject,department,priority,message,created_at,created_by,ticketid,status,mailed,created_for,response_expiry) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)', [$patientname,$email,$contact,$sampleid,$subject,$department,$priority,$message,$date,$id,$tid,'Opened',0,$client,$futureDateTime]);
+DB::insert('insert into tickets (patientname, username, contact,sampleid,subject,department,priority,message,created_at,created_by,ticketid,status,mailed,created_for,response_expiry,ticket_client) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)', [$patientname,$email,$contact,$sampleid,$subject,$department,$priority,$message,$date,$id,$tid,'Opened',0,$client,$futureDateTime,$ticket_client]);
 }
 return response()->json(['status','true',$tid]);
 
