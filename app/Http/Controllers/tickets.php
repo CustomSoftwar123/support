@@ -13,6 +13,7 @@ use App\Models\projectpermission;
 use App\Models\task;
 use DB;
 use App\Mail\SignUp;
+use App\Mail\TicketReplyMail;
 use App\Mail\ProjectAssigned;
 use Mail;
 use App\Jobs\SendTicketsReport;
@@ -1975,6 +1976,28 @@ public function SendReportEmail(Request $request)
             $tickets->where('created_at', 'like', '%' . $searchValue . '%');
         }
         return Datatables::of($tickets)->make(true);
+    }
+
+    public function sendReply(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email',
+            // 'reply' => 'required|string',
+        ]);
+
+
+        $email = $request->input('email');
+        $reply = $request->input('messages');
+        $ticketNumber = $request->input('ticketNumber');
+        $subject = $request->input('subject');
+        $repliedBy=auth()->user()->email;
+if($email!=$repliedBy){
+
+        Mail::to($email)->send(new TicketReplyMail($reply,$ticketNumber,$repliedBy,$subject));
+}
+        return response()->json(['message' => 'Reply sent successfully'], 200);
+
+
     }
 }
 

@@ -75,7 +75,7 @@
                          <div class="card card-primary card-outline pb-0">
                             <div class="card-body row">  
                               <div class="col-md-12">
-                                <h3 class="mb-3" >
+                                <h3 class="mb-3 crih" >
                                   Ticket #{{$data22['ticketinfo'][0]->ticketid}} by {{$data22['ticketinfo'][0]->username}}
                                   
 
@@ -105,7 +105,7 @@
                                     elseif($data22['ticketinfo'][0]->priority == 'Critical') {
 
                                         ?>
-                                        <button class="btn btn-danger float-right">{{$data22['ticketinfo'][0]->priority}}</button>
+                                        <button class="btn btn-danger float-right cri">{{$data22['ticketinfo'][0]->priority}}</button>
                                         <?php
 
                                     } 
@@ -879,6 +879,7 @@ console.log(d);
     $(".saveupdatebtn").click(function(){
       $(".saveupdatebtn").attr("disabled", true);
       $('#loading-image').removeClass('d-none');
+      
     let myform=document.getElementById("form");
     let data=new FormData(myform);
     var messages= $('#message').val();
@@ -886,6 +887,7 @@ console.log(d);
     $.ajax({
                     
             url: "../updateTicketInfo",
+
             data: data,    
             cache: false,
             processData: false,
@@ -896,8 +898,58 @@ console.log(d);
                             if(response > 0) {
 
                                 $("#result").html('Ticket has been generated successfully!')
+                              const val=$(".cri").text()
+                              console.log(val)
+                              if(val=='Critical'){
+                                // alert()
+                                // const h3Element = document.querySelector('h3');
+        
+        // Get the text content of the h3 element
+        const h3Element =$(".crih")
+        var textContent = h3Element.contents().filter(function() {
+                return this.nodeType === 3; // Node type 3 is a text node
+            }).text().trim();
+// console.log("tc",textContent)
+        // Find the posicontion of the word "by"
+        const byIndex = textContent.indexOf('by');
+        
+        // Extract the email after the word "by"
+        // const email = textContent.substring(byIndex + 3).trim();
+        // console.log (email)
+        var regex = /Ticket #(\w+) by (\S+)/;
+            var matches = textContent.match(regex);
 
-                             window.location="../../TicketView/"+response;
+            if (matches) {
+                var ticketNumber = matches[1];
+                var email = matches[2];
+
+                // Log the extracted values to the console
+                console.log('Ticket Number:', ticketNumber);
+                console.log('Email:', data);
+                $.ajax({
+                            url: '/send-reply',
+                            method: 'POST',
+                            data: {
+                                email: email,
+                                ticketNumber: ticketNumber,
+                                messages:messages,
+                                subject:data.get('subject')
+                            },
+                            headers: {
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                            },
+                            success: function(response) {
+                                // alert('Reply sent successfully!');
+                            },
+                            error: function(xhr) {
+                                // alert('An error occurred while sending the reply.');
+                            }
+                        });
+            } else {
+                console.log('No match found');
+            }
+                              }
+                             //window.location="../../TicketView/"+response;
                              // $("#result").html('Ticket has been generated successfully!')
 
                              $(".saveupdatebtn").removeAttr("disabled");

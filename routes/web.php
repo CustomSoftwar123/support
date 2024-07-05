@@ -101,6 +101,7 @@ Route::get('Users', [tickets::class, 'usert'])->name('Users');
 Route::get('Userdelete/{id}', [tickets::class, 'userd']);
 
 Route::get('sendMail/{tid?}', [tickets::class, 'sendMail'])->name('sendMail');
+Route::post('/send-reply', [tickets::class, 'sendReply'])->name('sendReply');
 
 Route::post('sendMail', [tickets::class, 'sendMail']);
 Route::post('rateNow', [tickets::class, 'rateNow'])->name('rateNow');
