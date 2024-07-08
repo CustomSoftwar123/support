@@ -50,7 +50,10 @@
         <div class="row mb-0">
           <div class="col-sm-6">
             <h1 class="m-0">Tickets
+              @if (strpos(Request::url(), 'task')===false)
+
                <a class="btn btn-info btn-sm" href="{{(request()->segment(2))}}"><i class="fas fa-sync"></i></a>
+               @endif
                @if(request()->segment(2)==='task')
                
                <a class="btn btn-info btn-sm" href="{{route('Ticket')}}/task/{{request()->segment(3)}}"><i class="fas fa-plus"></i> Ticket </a>
