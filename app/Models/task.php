@@ -14,5 +14,6 @@ class task extends Model
         'status',
         'description',
         'department',
+        'timeline'
     ];
 }

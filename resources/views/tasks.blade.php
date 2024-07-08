@@ -71,6 +71,11 @@
                  </select>
              </div>
 
+             <div class="col-md-12">
+                <label class="form-label" for="timeline">Timeline <span>*</span></label>
+                <input class="form-control" name="timeline" type="date" id="timeline">
+             </div>
+
            
     </div>
     
@@ -106,6 +111,7 @@
                                       <th>Department</th>
                                       <th>Status</th>
                                       <th  name="created_at">Created</th>
+                                      <th>Timeline</th>
                                       <th name="action">Action</th>
                                       
                                    
@@ -192,8 +198,19 @@
             {data: 'description', name: 'Description'},
             {data: 'department', name: 'Department'},
             {data: 'status', name: 'Status'},
+            {data: 'created_at', name: 'created_at',render: function (data, type, row) {
+                if(data){
+            return moment(data).format('DD-MM-YYYY');}else{
+                return '';
+            }
+        }},
+            {data: 'timeline', name: 'timeline',render: function (data, type, row) {
+                if(data){
 
-            {data: 'created_at', name: 'Created'},
+            return moment(data).format('DD-MM-YYYY');}else{
+                return '';
+            }
+        }},
 
 
 
@@ -375,6 +392,7 @@ console.log(data)
 
     $('#myform')[0].reset();
                        $("#assignto").val(null).trigger('change');
+                        
                        window.location.reload()
     event.preventDefault();
 });

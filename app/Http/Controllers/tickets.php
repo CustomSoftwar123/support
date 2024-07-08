@@ -1757,13 +1757,15 @@ public function tasks(Request $request){
 public function addtask(Request $request){
 
 	
-    // return $request;
+   
 	$validator=$request->validate([
 	'subject' => 'required',
 	'department' => 'required',
 	'description'=> 'required',
 	'status' => 'required',
 	'assignto' => 'required',
+	'timeline' => 'required',
+
 
 	]);
 
@@ -1773,6 +1775,8 @@ public function addtask(Request $request){
 	$department = $request->department;
 	$description = $request->description;
 	$status = $request->status;
+	$timeline = $request->timeline;
+
 
     $assignto = $request->assignto;
      $assignedToEmails = json_decode($request->assignedToEmails);
@@ -1785,6 +1789,9 @@ public function addtask(Request $request){
 
     // Append the ID of the logged-in user to the $assignto array
     $assignto[] = $loggedInUserID;
+
+    // print_r($assignto);
+    // return count($assignto);
         // return $assignedToEmails[0];
 
 	// $id=Str::uuid(); 
@@ -1794,6 +1801,8 @@ public function addtask(Request $request){
         'department' => $department,
         'description' => $description,
         'status' => $status,
+        'timeline' => $timeline,
+
     ]);
 
 
@@ -1805,16 +1814,10 @@ public function addtask(Request $request){
                 "userid"=>$userid,
                 "projectid" => $task->id,
             ]);
+            if($i<count($assignto)-1){
              $user['to'] = $assignedToEmails[$i];
          
             $esubject="New Project";
-            // Mail::send('projectmail', ['messages' => 'You have been assigned to a new project','esubject'=>"New Project"], function ($message) use ($user,$esubject) {
-            //     return $esubject;
-            //     $message->to($user['to']); // Use $user['to'] instead of $assignedToEmails[$i]
-            //     $message->subject($esubject);
-            // });
-            
-            // Mail::to($assignedToEmails[$i])->send(new \App\Mail\ProjectAssigned($assignedToEmails[$i], ['messages' => 'You have been assigned to a new project', 'esubject' => 'New Project']));
 
             $emailData=[
                 'to' => $assignedToEmails[$i],
@@ -1824,7 +1827,7 @@ public function addtask(Request $request){
             // Mail::to($assignedToEmails[$i])->send(new ProjectAssigned($emailData));
             SendProjectAssignedEmail::dispatch($emailData);
             $i++;
-            
+        }
             
         }
 
@@ -1859,12 +1862,14 @@ public function edittask(Request $request){
 
 public function updatetask(Request $request){
 
-	// return $request;
+	 
 	$validator=$request->validate([
 	'subject' => 'required',
 	'department' => 'required',
 	'description'=> 'required',
 	'status' => 'required',
+	'timeline' => 'required',
+
 	]);
 
 	$id = $request->id;
@@ -1872,9 +1877,10 @@ public function updatetask(Request $request){
 	$department = $request->department;
 	$description = $request->description;
 	$status = $request->status;
-     $assignTo=$request->assignto;
+    $assignTo=$request->assignto;
+    $timeline = $request->timeline;
 
-	$test = DB::update("UPDATE tasks set subject = ?, status = ?, department = ?, description = ? where id = ?",[$subject, $status, $department, $description, $id]);
+	$test = DB::update("UPDATE tasks set subject = ?, status = ?, department = ?, description = ?,timeline = ? where id = ?",[$subject, $status, $department, $description,$timeline, $id]);
 
     foreach($assignTo as $assign){
     $exists= DB::table('projectpermissions')->where('userid',$assign)->where('projectid',$id)->count();
