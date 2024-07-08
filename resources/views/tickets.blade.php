@@ -517,7 +517,7 @@ var columns=[
       "data": "response_expiry", 
       "name": "response_expiry",
       "render": function (data, type, row) {
-        if (type === 'display' || type === 'filter') {
+        if (data) {
           return moment(data).format('DD-MM-YYYY');
         } else {
           return '';
