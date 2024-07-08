@@ -514,8 +514,8 @@ var columns=[
 
     // Insert the new column before the 'action' column
     columns.splice(actionIndex, 0, { 
-      "data": "taskColumn", 
-      "name": "taskColumn",
+      "data": "response_expiry", 
+      "name": "response_expiry",
       "render": function (data, type, row) {
         if (type === 'display' || type === 'filter') {
           return moment(data).format('DD-MM-YYYY');
