@@ -30,6 +30,8 @@ class SendExpiredTasksEmail extends Command
         $data = DB::table('tickets')
             ->whereNotNull('tasks_id')
             ->where('response_expiry', '<', $today)
+            ->where('status', '!=', 'Completed')
+        ->where('status', '!=', 'Closed')
             ->get();
 
         // If there are any tickets, send the email
