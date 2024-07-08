@@ -252,16 +252,16 @@ $taskid=$request->taskId;
 //     return response()->json(['status'=>0,'errors'=>$validator->errors()[0]]);
 // }
 if($priority=='Critical'){
-    $futureDateTime = Carbon::now()->addDay();
-}
-else if($priority=='High'){
-    $futureDateTime = Carbon::now()->addDay(2);
-}
-elseif($priority=='Medium'){
     $futureDateTime = Carbon::now()->addDay(3);
 }
+else if($priority=='High'){
+    $futureDateTime = Carbon::now()->addDay(7);
+}
+elseif($priority=='Medium'){
+    $futureDateTime = Carbon::now()->addDay(10);
+}
 elseif($priority=='Low'){
-    $futureDateTime = Carbon::now()->addDay(5);
+    $futureDateTime = Carbon::now()->addDay(15);
 }
 
 if($taskid){

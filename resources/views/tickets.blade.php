@@ -198,8 +198,10 @@
               <th>System</th>
               <th>Time</th>
               <th>Timetaken</th>
-            
-              
+          
+              @if (strpos(Request::url(), 'task') !== false)
+              <th>New Column</th>
+            @endif
 
               <th>Actions</th>
 
@@ -468,7 +470,61 @@ function tickets() {
 
 // alert($("#task").val());
 // let task=
+var columns=[
+    { "data": "id", "name": "id" },
+    { "data": "ticket_client", "name": "client" },
+    { "data": "ticketid", "name": "ticketid" },
+    { "data": "subject", "name": "subject" },
+    { "data": "patientname", "name": "patientname" },
+    { "data": "requestid", "name": "requestid" },
+    { "data": "sampleid", "name": "sampleid" },
+    { "data": "status", "name": "status" },
+    { "data": "username", "name": "username" },
+    { "data": "assignedto", "name": "assignedto", "className": "assigned" },
+    { "data": "assignedby", "name": "assignedby" },
+    { "data": "department", "name": "department" },
+    { "data": "priority", "name": "priority" },
+    { "data": "internal", "name": "internal" },
+    {"data": "created_at",
+    "name": "created_at",
+    "render": function (data, type, row) {
+        if (type === 'display' || type === 'filter') {
+            // Format the date and time in DD-MM-YY HH:mm:ss format
+            return moment(data).format('DD-MM-YYYY ');
+        } else {
+            // If not displaying or filtering, return the original data
+            return data;
+        }
+    }
+    },
+    { "data": "timetaken", "name": "timetaken" },
+    {
+      "data": "action",
+      "name": "action",
+      "orderable": false,
+      "searchable": false
+    }
+  ]
+  var url = window.location.href;
+  if (url.includes('task')) {
+    // Find the index of the 'action' column
+    var actionIndex = columns.findIndex(function(column) {
+      return column.data === 'action';
+    });
 
+    // Insert the new column before the 'action' column
+    columns.splice(actionIndex, 0, { 
+      "data": "taskColumn", 
+      "name": "taskColumn",
+      "render": function (data, type, row) {
+        if (type === 'display' || type === 'filter') {
+          return moment(data).format('DD-MM-YYYY');
+        } else {
+          return data;
+        }
+      }
+    });
+  }
 var table = $('#table').DataTable({
   "paging": true,
   "processing": true,
@@ -491,41 +547,7 @@ var table = $('#table').DataTable({
     }
   },
   // "stateSave": true,
-  "columns": [
-    { "data": "id", "name": "id" },
-    { "data": "ticket_client", "name": "client" },
-    { "data": "ticketid", "name": "ticketid" },
-    { "data": "subject", "name": "subject" },
-    { "data": "patientname", "name": "patientname" },
-    { "data": "requestid", "name": "requestid" },
-    { "data": "sampleid", "name": "sampleid" },
-    { "data": "status", "name": "status" },
-    { "data": "username", "name": "username" },
-    { "data": "assignedto", "name": "assignedto", "className": "assigned" },
-    { "data": "assignedby", "name": "assignedby" },
-    { "data": "department", "name": "department" },
-    { "data": "priority", "name": "priority" },
-    { "data": "internal", "name": "internal" },
-    {"data": "created_at",
-    "name": "created_at",
-    "render": function (data, type, row) {
-        if (type === 'display' || type === 'filter') {
-            // Format the date and time in DD-MM-YY HH:mm:ss format
-            return moment(data).format('DD-MM-YYYY HH:mm');
-        } else {
-            // If not displaying or filtering, return the original data
-            return data;
-        }
-    }
-    },
-    { "data": "timetaken", "name": "timetaken" },
-    {
-      "data": "action",
-      "name": "action",
-      "orderable": false,
-      "searchable": false
-    }
-  ],
+  "columns": columns,
   "order": [[14, 'desc']],
   "dom": "Blfrtip",
   "buttons": [
@@ -701,6 +723,7 @@ if(response > 0) {
     })
 
 });
+
 
 }
 
