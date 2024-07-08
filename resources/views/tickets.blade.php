@@ -520,7 +520,7 @@ var columns=[
         if (type === 'display' || type === 'filter') {
           return moment(data).format('DD-MM-YYYY');
         } else {
-          return data;
+          return '';
         }
       }
     });
