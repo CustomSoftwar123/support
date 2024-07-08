@@ -296,6 +296,7 @@ return response()->json(['status','true',$tid]);
         $message = $request->message;
         $tid = $request->tid;
         $mid = $request->mid;
+        $resExpiry = $request->resExpiry;
 
         $user = auth()->user()->id;
         $email = auth()->user()->email;
@@ -322,7 +323,7 @@ return response()->json(['status','true',$tid]);
             'insert into ticketmessages (ticketid, mid, username, message, user, created_at, created_by) values (?, ?, ?, ?, ?, ?, ?)',
             [$request->tid, $request->mid, $email, $message, 'client', date('Y-m-d H:i:s'), $user]
         );
-        DB::update("update tickets  set priority = '$priority'  where ticketid = '" . $tid . "'");
+        DB::update("update tickets  set priority = '$priority',response_expiry='$resExpiry'  where ticketid = '" . $tid . "'");
         // DB::table('tickets')
 // ->where('ticketid', $request->tid)
 // ->update(['priority' => $priority]);

@@ -250,7 +250,7 @@ pathinfo($ticketattachment->filename, PATHINFO_EXTENSION) == 'flv'
                                 </h3>
                              
                                   
-                               <p class="m-0">Message <button class="btn btn-dark float-right mr-1">{{\App\Http\Controllers\tickets::DateTime($ticketmessage->created_at)}}</button> </p>  
+                               <p class="m-0">Messages <button class="btn btn-dark float-right mr-1">{{\App\Http\Controllers\tickets::DateTime($ticketmessage->created_at)}}</button> </p>  
                                 <div class="jumbotron py-2 px-2 mb-0">
                                  {{$ticketmessage->message}}
                                 </div>
@@ -355,14 +355,14 @@ pathinfo($attachment->filename, PATHINFO_EXTENSION) == 'flv'
                 </div>
 
    
-                  <div class="col-md-3">
+                  <div class="col-md-2">
                     <label class="form-label">Department</label>
                     <select class="form-select form-control" name="department" readonly required id="department">
                       <option value="0">Choose an option</option>
                       <option>Technical Department</option>
                     </select>
                   </div>
-                  <div class="col-md-3">
+                  <div class="col-md-2">
                     <label class="form-label">Priority</label>
                     <select class="form-select form-control" name="priority" required id="priority">
                       <option value="">Choose an option</option>
@@ -372,7 +372,12 @@ pathinfo($attachment->filename, PATHINFO_EXTENSION) == 'flv'
                       <option>Critical</option>
                     </select>
                   </div>
-
+                  @if($data22['ticketinfo'][0]->tasks_id)
+                  <div class="col-md-2">
+                    <label class="form-label">Timeline</label>
+                  <input type="date" class="form-control"name= "timeline" id="res_expiry" value={{ $data22['ticketinfo'][0]->response_expiry}}>
+                  </div>
+                  @endif
 
                    <div class="form-group col-md-6 patientInfo">
                     <label for="patientName">Patient Name</label>
@@ -395,6 +400,7 @@ pathinfo($attachment->filename, PATHINFO_EXTENSION) == 'flv'
                     <input type="text" class="form-control f-one" readonly name="sampleid" id="sampleid" placeholder="Sample ID" required>
                 </div>
 
+
                 @if(Auth::user()->email == $data22['ticketinfo'][0]->assignedto && ($data22['ticketinfo'][0]->status == 'Opened' || $data22['ticketinfo'][0]->status == 'Processing' ))
                 <div class="form-group col-md-3">
                 <label for="duration">Duration</label>
@@ -415,7 +421,7 @@ pathinfo($attachment->filename, PATHINFO_EXTENSION) == 'flv'
 
                 <!-- Message Area -->
                 <div class="form-outline my-2 col-md-12">
-                    <label class="form-label" for="textAreaExample2">Message</label>
+                    <label class="form-label" for="textAreaExample2">Messages</label>
                     <textarea class="form-control" rows="9" name="message" id="message" placeholder="Reply" required></textarea>
                 </div>
 
@@ -883,7 +889,9 @@ console.log(d);
     let myform=document.getElementById("form");
     let data=new FormData(myform);
     var messages= $('#message').val();
+    var timeline=$("#res_expiry").val()
     data.append('messages',messages);
+    data.append('resExpiry',timeline);
     $.ajax({
                     
             url: "../updateTicketInfo",
