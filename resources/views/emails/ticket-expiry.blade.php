@@ -20,8 +20,8 @@
     </style>
 </head>
 <body>
-    <p>Dear User,</p>
-    <p>The following tickets have expired:</p>
+    <p>Dear {{$users}},</p>
+    <p>Resolution Time for the Following ticktes has expired.</p>
     <table>
         <thead>
             <tr>
