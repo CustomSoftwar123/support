@@ -200,7 +200,7 @@
               <th>Timetaken</th>
           
               @if (strpos(Request::url(), 'task') !== false)
-              <th>New Column</th>
+              <th>Time line</th>
             @endif
 
               <th>Actions</th>
