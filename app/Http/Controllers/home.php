@@ -521,14 +521,24 @@ $ticketsClosedLastWeek = $result[0]->count;
 // return 1;
 //  $ticketsThisWeek =DB::select($sql);
            $ticketsThisWeek =  DB::table('tickets')
+           ->select(
+               'tickets.*',
+               DB::raw("CASE WHEN created_for IS NOT NULL THEN created_for ELSE users.client END as client")
+           )
+           ->leftJoin('users', function ($join) {
+               $join->on('tickets.username', '=', 'users.email')
+                   ->whereNull('tickets.created_for');
+           })
            ->where(function ($query) {
                $query->whereIn('internal', [1, 2])
-                     ->orWhere('created_by', '<=', 3);
+                     ->orWhere(function ($query) {
+                         $query->whereNull('internal')
+                               ->whereNotNull('created_for');
+                     });
            })
            ->whereNull('tasks_id')
            ->where('status', 'Opened')
            ->count();
-
           $ticketsProcessing =  DB::table('tickets')
           ->where(function ($query) {
               $query->whereIn('internal', [1, 2])
