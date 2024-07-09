@@ -521,21 +521,22 @@ $ticketsClosedLastWeek = $result[0]->count;
 // return 1;
 //  $ticketsThisWeek =DB::select($sql);
            $ticketsThisWeek =  DB::table('tickets')
-                                    ->having('tickets.status','=','Opened')
-                                    ->whereIn('tickets.internal',[1,2]) 
-                                    ->orWhere('tickets.created_by','<=',3)
-                                    ->where('tickets.tasks_id',NULL)
-
-                                      ->count();
+           ->where(function ($query) {
+               $query->whereIn('internal', [1, 2])
+                     ->orWhere('created_by', '<=', 3);
+           })
+           ->whereNull('tasks_id')
+           ->where('status', 'Opened')
+           ->count();
 
           $ticketsProcessing =  DB::table('tickets')
-                                       
-                                        ->having('tickets.status','Processing')
-                                        ->whereIn('tickets.internal',[1,2])
-                                        ->orWhere('tickets.created_by','<=',3)
-                                    ->where('tickets.tasks_id',NULL)
-
-                                        ->count();
+          ->where(function ($query) {
+              $query->whereIn('internal', [1, 2])
+                    ->orWhere('created_by', '<=', 3);
+          })
+          ->whereNull('tasks_id')
+          ->where('status', 'Processing')
+          ->count();
 // return 
 $d= Carbon::now()->startOfWeek()->format('Ymd');
        $query="SELECT * FROM `tickets` WHERE closedat >'".$d."' having status ='closed' and internal in (1,2) and tasks_id is Null "; 
