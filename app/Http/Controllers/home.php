@@ -536,8 +536,8 @@ $ticketsClosedLastWeek = $result[0]->count;
                                ->whereNotNull('created_for');
                      });
            })
-           ->whereNull('tasks_id')
-           ->where('status', 'Opened')
+           ->whereNull('tickets.tasks_id')
+           ->where('tickets.status', 'Opened')
            ->count();
           $ticketsProcessing =  DB::table('tickets')
           ->where(function ($query) {
