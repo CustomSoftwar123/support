@@ -12,7 +12,10 @@ class CorsMiddleware
 
         $response->headers->set('Access-Control-Allow-Origin', '*');
         $response->headers->set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-        $response->headers->set('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+       
+        $response->header('Access-Control-Allow-Credentials', true);
+        $response->header('Access-Control-Allow-Headers', 'X-Requested-With,Content-Type,X-Token-Auth,Authorization');
+        $response->header('Accept', 'application/json');
 
         return $response;
     }
