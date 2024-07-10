@@ -266,6 +266,6 @@ Route::get('dailyreportsdata', [tickets::class, 'dailyreportsdata'])->name('dail
 
 
 Route::get('/uploadGPFiles', [FileUploadController::class, 'showUploadForm']);
-Route::post('/uploadGPFiles', [FileUploadController::class, 'uploadGPFiles'])->middleware('check.macaddress');
+Route::post('/uploadGPFiles', [FileUploadController::class, 'uploadGPFiles'])->middleware('cors');
 
 
