@@ -1734,7 +1734,7 @@ public function tasks(Request $request){
             $userRole=auth()->user()->role;
             $userEmail=auth()->user()->email;
             $userRole=auth()->user()->role;
-            if ($userRole === 1387||$userEmail=='aqeel@ocmsoftware.ie'||$userEmail=='zain@ocmsoftware.ie'||$userEmail='ken@ocmsoftwaare.ie') {
+            if ($userRole === 1387||$userEmail=='aqeel@ocmsoftware.ie'||$userEmail=='zain@ocmsoftware.ie'||$userEmail='kengregg@ocmsoftware.ie ') {
                 $btn = '
                 <div class="btn-group" role="group" aria-label="Basic example">
                 <button class="btn btn-info edit" id="' . $row->id . '"  >Edit </button>
