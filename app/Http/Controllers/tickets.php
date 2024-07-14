@@ -209,6 +209,17 @@ $ticketattachments=DB::table('ticketattachments')->where('mid', null)->where('ti
 
     }
 
+    public static function getTaskTitleByID($tid)
+    {
+
+
+
+        $mid = DB::table('tasks')->where('id', $tid)->first();
+
+        return $mid->subject;
+
+
+    }
 
     public function save(Request $request)
     {
@@ -1721,7 +1732,9 @@ public function tasks(Request $request){
       
             // Assuming you have a variable $user_role that holds the role of the current user
             $userRole=auth()->user()->role;
-            if ($userRole === 1387) {
+            $userEmail=auth()->user()->email;
+            $userRole=auth()->user()->role;
+            if ($userRole === 1387||$userEmail=='aqeel@ocmsoftware.ie'||$userEmail=='zain@ocmsoftware.ie'||$userEmail='ken@ocmsoftwaare.ie') {
                 $btn = '
                 <div class="btn-group" role="group" aria-label="Basic example">
                 <button class="btn btn-info edit" id="' . $row->id . '"  >Edit </button>
@@ -1844,7 +1857,10 @@ public function addtask(Request $request){
 public function edittask(Request $request){
 		
 		$id = $request->id;
-		 $row = DB::table('tasks')->where('id',$id)->get();
+		 $row = DB::table('tasks')->where('id',$id)->first();
+        //  $row->timeline=Carbon::parse($row->timeline)->format('dd/mm/YYYY');
+        //  $row->projected_timeline=Carbon::parse($row->projected_timeline)->format('d/m/Y');
+        
          $projectUsers = DB::table('projectpermissions')
          ->where('projectid', $id)
          ->join('users', 'projectpermissions.userid', '=', 'users.id')
@@ -1870,9 +1886,10 @@ public function updatetask(Request $request){
 	'description'=> 'required',
 	'status' => 'required',
 	'timeline' => 'required',
+	'ptimeline' => 'required',
 
 	]);
-
+ $request;    
 	$id = $request->id;
 	$subject = $request->subject;
 	$department = $request->department;
@@ -1880,8 +1897,9 @@ public function updatetask(Request $request){
 	$status = $request->status;
     $assignTo=$request->assignto;
     $timeline = $request->timeline;
+    $ptimeline = $request->ptimeline;
 
-	$test = DB::update("UPDATE tasks set subject = ?, status = ?, department = ?, description = ?,timeline = ? where id = ?",[$subject, $status, $department, $description,$timeline, $id]);
+	$test = DB::update("UPDATE tasks set subject = ?, status = ?, department = ?, description = ?,timeline = ?,projected_timeline=? where id = ?",[$subject, $status, $department, $description,$timeline,$ptimeline, $id]);
 
     foreach($assignTo as $assign){
     $exists= DB::table('projectpermissions')->where('userid',$assign)->where('projectid',$id)->count();

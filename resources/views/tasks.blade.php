@@ -71,9 +71,14 @@
                  </select>
              </div>
 
-             <div class="col-md-12">
+             <div class="col-md-6">
                 <label class="form-label" for="timeline">Timeline <span>*</span></label>
                 <input class="form-control" name="timeline" type="date" id="timeline">
+             </div>
+
+             <div class="col-md-6">
+                <label class="form-label" for="ptimeline">Projected Timeline <span>*</span></label>
+                <input class="form-control" name="ptimeline" type="date" id="ptimeline">
              </div>
 
            
@@ -112,24 +117,14 @@
                                       <th>Status</th>
                                       <th  name="created_at">Created</th>
                                       <th>Timeline</th>
+                                      <th>Projected Timeline</th>
                                       <th name="action">Action</th>
                                       
                                    
                                     </tr>
                                   </thead> 
 
-                                  <tfoot>
-                                    <tr>
-                                  
-                                      <th>ID</th>
-                                      <th>Subject</th>
-                                      <th>Description</th>
-                                      <th>Department</th>
-                                      <th>Status</th>
-                                      <th>Created</th>
-                                    
-                                    </tr>
-                                  </tfoot> 
+                               
 
 
                                 </table>                 
@@ -210,9 +205,19 @@
             return moment(data).format('DD-MM-YYYY');}else{
                 return '';
             }
+
+            
         }},
 
+        {data: 'projected_timeline', name: 'projected_timeline',render: function (data, type, row) {
+                if(data){
 
+            return moment(data).format('DD-MM-YYYY');}else{
+                return '';
+            }
+
+            
+        }},
 
             {data: 'action', name: 'Action', orderable: false, searchable: false},
         ],
@@ -443,11 +448,13 @@ table.on('click', '.edit', function() {
         }).done(function(response){
 
                 if(response){
-                    $("#subject").val(response.row[0]['subject']);
-                    $("#department").val(response.row[0]['department']);
-                    $("#description").val(response.row[0]['description']);
-                    $("#status").val(response.row[0]['status']);
-                    $("#id").val(response.row[0]['id']);
+                    $("#subject").val(response.row['subject']);
+                    $("#department").val(response.row['department']);
+                    $("#description").val(response.row['description']);
+                    $("#status").val(response.row['status']);
+                    $("#id").val(response.row['id']);
+                    $("#timeline").val(response.row['timeline']);
+                    $("#ptimeline").val(response.row['projected_timeline']);
 
 
                     $("#addtask").addClass('d-none');

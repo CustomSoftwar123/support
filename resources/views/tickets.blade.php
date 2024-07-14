@@ -49,10 +49,17 @@
       <div class="container-fluid">
         <div class="row mb-0">
           <div class="col-sm-6">
-            <h1 class="m-0">Tickets
+            <h1 class="m-0">
+              
               @if (strpos(Request::url(), 'task')===false)
+              Tickets
 
                <a class="btn btn-info btn-sm" href="{{(request()->segment(2))}}"><i class="fas fa-sync"></i></a>
+               @else
+               
+            
+               {{$result = \App\Http\Controllers\Tickets::getTaskTitleByID(request()->segment(3));
+    }}
                @endif
                @if(request()->segment(2)==='task')
                
