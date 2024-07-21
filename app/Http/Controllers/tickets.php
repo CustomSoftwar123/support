@@ -537,6 +537,7 @@ return response()->json(['status','true',$tid]);
         $message = $request->message;
         $tid = $request->tid;
         $mid = $request->mid;
+        $changes = $request->changes;
 
         $user = auth()->user()->id;
         $email = auth()->user()->email;
@@ -614,7 +615,7 @@ return response()->json(['status','true',$tid]);
         );
 
 
-        DB::update("update tickets  set status = 'Completed',  timetaken='" . $ab . "' where ticketid = '" . $request->tid . "'");
+        DB::update("update tickets  set status = 'Completed',  timetaken='" . $ab . "',changes='".$changes."' where ticketid = '" . $request->tid . "'");
         DB::update("update tickets  set priority = '$priority'  where ticketid = '" . $tid . "'");
         DB::update("update tickets  set completedat ='$date' where ticketid = '" . $request->tid . "'");
 

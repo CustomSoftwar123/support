@@ -252,11 +252,18 @@ pathinfo($ticketattachment->filename, PATHINFO_EXTENSION) == 'flv'
                                   
                                <p class="m-0">Messages <button class="btn btn-dark float-right mr-1">{{\App\Http\Controllers\tickets::DateTime($ticketmessage->created_at)}}</button> </p>  
                                 <div class="jumbotron py-2 px-2 mb-0">
-                                 {{$ticketmessage->message}}
+                                 {{$ticketmessage->message}} 
                                 </div>
 
+                                @if($loop->last)
+                                @if($data22['ticketinfo'][0]->changes)
+                                <p class="m-0 mt-1">Changes and Effects  </p>  
+                                <div class="jumbotron py-2 px-2 mb-0">
+                                 {{$data22['ticketinfo'][0]->changes}} 
+                                </div>
 
-
+                             @endif
+                             @endif
                                     
                                   <?php 
 
@@ -338,7 +345,8 @@ pathinfo($attachment->filename, PATHINFO_EXTENSION) == 'flv'
                           </div>
                           @endforeach
 
-
+                         
+                          
                   <form id="form">
                                        {{ csrf_field() }}
                                                   
@@ -421,7 +429,9 @@ pathinfo($attachment->filename, PATHINFO_EXTENSION) == 'flv'
 
                 <!-- Message Area -->
                 <div class="form-outline my-2 col-md-12">
-                    <label class="form-label" for="textAreaExample2">Messages</label>
+                  <label for="">Chanegs And Effects</label>
+                  <input type="text" class="changes form-control">
+                    <label class="form-label mt-1" for="textAreaExample2">Messages</label>
                     <textarea class="form-control" rows="9" name="message" id="message" placeholder="Reply" required></textarea>
                 </div>
 
@@ -766,11 +776,49 @@ icon: 'bx bx-info-circle'
   $(".replyandcomplete").attr("disabled", true);
 // console.log(tid);
 // return true;
-      $('#loading-image').removeClass('d-none');
 let myform=document.getElementById("form");
 let data=new FormData(myform);
 var messages= $('#message').val();
     data.append('messages',messages);
+
+
+    var words = messages.trim().split(/\s+/);
+    
+   
+    var wordCount = words.length;
+    if (wordCount<50){
+      Lobibox.notify('warning', {
+          pauseDelayOnHover: true,
+          continueDelayOnInactiveTab: false,
+          position: 'top right',
+          msg: 'The resolution message can nott be less than  50 words',
+          icon: 'bx bx-info-circle'           
+});
+$(".replyandcomplete").attr("disabled", false);
+
+return false;
+    }
+   const changes= $(".changes").val();
+   const changeCount= changes.trim().split(/\s+/);
+   const changeCount2=changeCount.length;
+  //  alert(changeCount2)
+  //  return false;
+   if(changeCount2<50){
+    Lobibox.notify('warning', {
+          pauseDelayOnHover: true,
+          continueDelayOnInactiveTab: false,
+          position: 'top right',
+          msg: 'The Changes and affects message can not be less than 50 words',
+          icon: 'bx bx-info-circle'           
+});
+$(".replyandcomplete").attr("disabled", false);
+
+return false;
+   }
+   data.append('changes',changes);
+
+    $('#loading-image').removeClass('d-none');
+
     // data.append('me',messages);
 $.ajax({
                 
