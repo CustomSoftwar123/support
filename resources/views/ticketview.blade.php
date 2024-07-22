@@ -450,9 +450,12 @@ pathinfo($attachment->filename, PATHINFO_EXTENSION) == 'flv'
 
                  
 
-                  @if(Auth::user()->role==4)
+                  @if(Auth::user()->role==4||(Auth::user()->role<3&&$data22['ticketinfo'][0]->tasks_id))
                
                <button type="button" class="btn btn-warning float-right ml-1 replyandclose mr-1" value="Submit">Reply & Close Ticket</button>
+               @endif
+               @if(Auth::user()->role==4)
+
                <button type="button" class="btn btn-danger float-right sendtoocm" value="Submit">Send to OCM Support</button>
 
                   
