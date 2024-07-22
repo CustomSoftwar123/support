@@ -429,7 +429,7 @@ pathinfo($attachment->filename, PATHINFO_EXTENSION) == 'flv'
 
                 <!-- Message Area -->
                 <div class="form-outline my-2 col-md-12">
-                  <label for="">Chanegs And Effects</label>
+                  <label for="">Changes And Effects</label>
                   <input type="text" class="changes form-control">
                     <label class="form-label mt-1" for="textAreaExample2">Messages</label>
                     <textarea class="form-control" rows="9" name="message" id="message" placeholder="Reply" required></textarea>
