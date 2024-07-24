@@ -247,6 +247,9 @@ Route::post('deletetask',[tickets::class,'deletetask'])->name('deletetask');
 
 
 
+Route::post('assignToProject', [tickets::class, 'assignToProject'])->name('assignToProject');
+
+
 Route::post('changeStatus', [files::class, 'changeStatus'])->name('changeStatus');
 
 Route::post('getTicketsComparison', [home::class, 'getTicketsComparison'])->name('getTicketsComparison');

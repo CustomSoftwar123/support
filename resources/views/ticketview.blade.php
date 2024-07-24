@@ -447,8 +447,7 @@ pathinfo($attachment->filename, PATHINFO_EXTENSION) == 'flv'
               
                 <div class="col-md-12 mt-2">
 
-
-                 
+                
 
                   @if(Auth::user()->role==4||(Auth::user()->role<3&&$data22['ticketinfo'][0]->tasks_id))
                
@@ -456,6 +455,7 @@ pathinfo($attachment->filename, PATHINFO_EXTENSION) == 'flv'
                @endif
                @if(Auth::user()->role==4)
 
+               
                <button type="button" class="btn btn-danger float-right sendtoocm" value="Submit">Send to OCM Support</button>
 
                   
@@ -471,12 +471,25 @@ pathinfo($attachment->filename, PATHINFO_EXTENSION) == 'flv'
               
 
                   <button type="button" class="btn btn-primary float-right ml-1 saveupdatebtn" value="Submit">Generate Ticket</button>
+
+                  @if(Auth::user()->role<=3)
+                  <div class='col-md-2'>
+                    <select name="assignToProject" id="assignToProject" class="form-control">
+                     <option hidden selected disabled>Select a Project</option>
+                    
+                     @foreach($data22['projects'] as $project)
+                     <option value="{{$project->id}}">{{$project->subject}}</option>
+                      @endforeach
+                    </select>
+                   </div>
+                   @endif
+
                   @if(($data22['ticketTimeline'][0]['time2'] ?? null) == '0000-00-00 00:00:00' && count($data22['ticketTimeline'])!==0)
                   <button type="button" class="btn btn-secondary float-right paused ml-1">Pause</button>
                   @endif
                   @if( ( ($data22['ticketTimeline'][0]['time1'] ?? null) && $data22['ticketTimeline'][0]['time2'] != '0000-00-00 00:00:00')||count($data22['ticketTimeline'])===0)
 
-                  <button type="button" class="btn btn-warning float-right started ml-1">Start</button>
+                  {{-- <button type="button" class="btn btn-warning float-right started ml-1 d-none">Start</button> --}}
                @endif
                   <div id="result">
                   <img src="/images/Iphone-spinner-2.gif" alt="Loading..." id='loading-image' class='d-none'>
@@ -1165,6 +1178,32 @@ data.append('filename',filename);
                     })
         
                 })
+
+
+                $(document).on('change','#assignToProject',function(){
+                  const projectid = $(this).val();
+                  const currentUrl = window.location.href;
+                  const urlSegments = currentUrl.split('/');
+                  const lastSegment = urlSegments[urlSegments.length - 1];
+                  console.log(lastSegment);
+                  console.log(projectid);
+
+                  
+                    $.ajax({
+                    type: 'POST',
+                    url: "{{route('assignToProject')}}",
+                    data: {
+                      projectid:projectid,
+                      ticketid:lastSegment
+                    }
+
+                    }).done(function(response){
+                      if(response == 1){
+                        window.location = "";
+                      }
+                    })
+
+                });
 
 
     });

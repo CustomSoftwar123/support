@@ -173,7 +173,7 @@ $ticketattachments=DB::table('ticketattachments')->where('mid', null)->where('ti
         // $maxid=DB::table('timeline')->where('ticketid','=',$ticketinfo[0]->ticketid)->max('id');
 
         //  $status=DB::table('timeline')->select('status')->where('id','=',$maxid)->get(); 
-
+        $projects = DB::table('tasks')->select('subject','id')->where('id'>14)->get();
         $internal = DB::table('tickets')->where('id', $id)->pluck('internal');
         $data22 = [
 
@@ -183,7 +183,8 @@ $ticketattachments=DB::table('ticketattachments')->where('mid', null)->where('ti
 'ticketmessages' => $ticketmessages,
 'patients' => $patients,
 'internal'=>$internal,
-'ticketTimeline'=>$ticketTimeline
+'ticketTimeline'=>$ticketTimeline,
+'projects'=>$projects,
 
 
         ];
@@ -2024,6 +2025,15 @@ if($email!=$repliedBy){
         return response()->json(['message' => 'Reply sent successfully'], 200);
 
 
+    }
+
+    public function assignToProject(Request $request){
+
+     return  DB::table('tickets')
+        ->where('id', $request->ticketid)
+        ->update(['tasks_id' => $request->projectid]);
+
+    
     }
 }
 
