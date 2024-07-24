@@ -173,7 +173,7 @@ $ticketattachments=DB::table('ticketattachments')->where('mid', null)->where('ti
         // $maxid=DB::table('timeline')->where('ticketid','=',$ticketinfo[0]->ticketid)->max('id');
 
         //  $status=DB::table('timeline')->select('status')->where('id','=',$maxid)->get(); 
-        $projects = DB::table('tasks')->select('subject','id')->where('id'>14)->get();
+        $projects = DB::table('tasks')->select('subject','id')->where('id','>',14)->get();
         $internal = DB::table('tickets')->where('id', $id)->pluck('internal');
         $data22 = [
 
