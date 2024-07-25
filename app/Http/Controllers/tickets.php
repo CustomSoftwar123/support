@@ -241,6 +241,9 @@ $client=$request->client;
 // }
 
 $ticket_client=auth()->user()->client;
+if(!$ticket_client){
+    $ticket_client=$client;
+}
 // return $client.'asd';
 
 $taskid=$request->taskId;
