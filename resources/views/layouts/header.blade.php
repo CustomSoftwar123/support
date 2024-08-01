@@ -346,6 +346,14 @@ thead th {
               </p>
             </a>
           </li>
+          <li class="nav-item">
+            <a href="{{ route('versioncontrol') }}" class="nav-link {{ (request()->is('versioncontrol')) ? 'active' : '' }}">
+            <i class="nav-icon fas fa-file-invoice"></i>
+              <p>
+               Version Control 
+              </p>
+            </a>
+          </li>
           @endif
           
           @if(Auth::user()->role==4 || Auth::user()->role==1)

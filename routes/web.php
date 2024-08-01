@@ -14,6 +14,8 @@ use App\Http\Controllers\reportsController;
 use App\Http\Controllers\versions;
 use App\Http\Controllers\patienthistorybt;
 use App\Http\Controllers\FileUploadController;
+use App\Http\Controllers\versioncontrol;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -255,6 +257,7 @@ Route::post('changeStatus', [files::class, 'changeStatus'])->name('changeStatus'
 Route::post('getTicketsComparison', [home::class, 'getTicketsComparison'])->name('getTicketsComparison');
 
 
+
 Route::post('send-report-email', [Tickets::class, 'SendReportEmail'])->name('SendReportEmail');
 
 Route::get('ticketstimeline', [Tickets::class, 'ticketstimeline'])->name('ticketstimeline');
@@ -271,4 +274,7 @@ Route::get('dailyreportsdata', [tickets::class, 'dailyreportsdata'])->name('dail
 Route::get('/uploadGPFiles', [FileUploadController::class, 'showUploadForm']);
 Route::post('/uploadGPFiles', [FileUploadController::class, 'uploadGPFiles']);
 
+Route::get('versioncontrol',[versioncontrol::class, 'versioncontrol'])->name('versioncontrol');
+Route::post('versioncontrolsubmit',[versioncontrol::class, 'versioncontrolsubmit'])->name('versioncontrolsubmit');
+Route::post('versioncontrolupdate',[versioncontrol::class, 'versioncontrolupdate'])->name('versioncontrolupdate');
 
