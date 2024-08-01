@@ -262,6 +262,21 @@ pathinfo($ticketattachment->filename, PATHINFO_EXTENSION) == 'flv'
                                  {{$data22['ticketinfo'][0]->changes}} 
                                 </div>
 
+                                <div class="form-group col-md-12 d-flex mr-2">
+                                  
+                                  <div class="col-md-6">
+                                  <label for="sentdate">Exe Sent Date</label>
+                                  <input type="date" class="form-control f-one"  name="sentdate" id="sentdate" value="{{$data22['ticketinfo'][0]->exesentdate}}" readonly >
+                                </div>
+                              <div class="col-md-6">
+                                  <label for="version">Version</label>
+                                  <input type="text" class="form-control f-one"  name="version" id="version" placeholder="Version" 
+                                  value="{{$data22['ticketinfo'][0]->version}}" readonly>
+                                </div>
+                              </div>
+                
+                            
+
                              @endif
                              @endif
                                     
@@ -405,8 +420,21 @@ pathinfo($attachment->filename, PATHINFO_EXTENSION) == 'flv'
                 <div class="form-group col-md-3 sampleInfo">
                    
                     <label for="sampleid">Sample ID</label>
-                    <input type="text" class="form-control f-one" readonly name="sampleid" id="sampleid" placeholder="Sample ID" required>
+                    <input type="text" class="form-control f-one" readonly name="sampleid" id="sampleid" placeholder="Sample ID" >
                 </div>
+
+                <div class="form-group col-md-3 ">
+                   
+                  <label for="sentdate">Exe Sent Date</label>
+                  <input type="date" class="form-control f-one"  name="sentdate" id="sentdate"  >
+              </div>
+
+              <div class="form-group col-md-3 ">
+                   
+                <label for="version">Version</label>
+                <input type="text" class="form-control f-one"  name="version" id="version" placeholder="Version" 
+               >
+            </div>
 
 
                 @if(Auth::user()->email == $data22['ticketinfo'][0]->assignedto && ($data22['ticketinfo'][0]->status == 'Opened' || $data22['ticketinfo'][0]->status == 'Processing' ))
@@ -831,7 +859,11 @@ $(".replyandcomplete").attr("disabled", false);
 
 return false;
    }
+  const esdate= $("#sentdate").val()
+  const ver= $("#version").val()
    data.append('changes',changes);
+   data.append('esdate',esdate);
+   data.append('ver',ver);
 
     $('#loading-image').removeClass('d-none');
 

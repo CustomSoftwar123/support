@@ -173,6 +173,7 @@ $ticketattachments=DB::table('ticketattachments')->where('mid', null)->where('ti
         // $maxid=DB::table('timeline')->where('ticketid','=',$ticketinfo[0]->ticketid)->max('id');
 
         //  $status=DB::table('timeline')->select('status')->where('id','=',$maxid)->get(); 
+        $ticketinfo[0]->exesentdate = Carbon::parse($ticketinfo[0]->exesentdate)->format('Y-m-d');
         $projects = DB::table('tasks')->select('subject','id')->where('id','>',14)->get();
         $internal = DB::table('tickets')->where('id', $id)->pluck('internal');
         $data22 = [
@@ -542,6 +543,8 @@ return response()->json(['status','true',$tid]);
         $tid = $request->tid;
         $mid = $request->mid;
         $changes = $request->changes;
+        $esdate = $request->esdate;
+        $ver = $request->ver;
 
         $user = auth()->user()->id;
         $email = auth()->user()->email;
@@ -619,7 +622,7 @@ return response()->json(['status','true',$tid]);
         );
 
 
-        DB::update("update tickets  set status = 'Completed',  timetaken='" . $ab . "',changes='".$changes."' where ticketid = '" . $request->tid . "'");
+        DB::update("update tickets  set status = 'Completed',  timetaken='" . $ab . "',changes='".$changes."' ,version='".$ver."',exesentdate='".$esdate."' where ticketid = '" . $request->tid . "'");
         DB::update("update tickets  set priority = '$priority'  where ticketid = '" . $tid . "'");
         DB::update("update tickets  set completedat ='$date' where ticketid = '" . $request->tid . "'");
 
