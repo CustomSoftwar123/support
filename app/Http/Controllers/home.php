@@ -641,7 +641,7 @@ $d= Carbon::now()->startOfWeek()->format('Ymd');
 $ticketsProcessing =  DB::table('tickets')
                
                 ->where('tickets.status','Processing')
-                // ->where('tickets.tasks_id',NULL)
+                ->where('tickets.tasks_id',NULL)
 
                 ->where('users.client',$cl)
                 ->leftjoin('users', 'tickets.username' ,"=",'users.email')
@@ -651,7 +651,7 @@ $ticketsClosedThisWeek =  DB::table('tickets')
                ->whereBetween('tickets.closedat', 
                     [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()]
                 )   ->where('users.client',$cl)
-                // ->where('tickets.tasks_id',NULL)
+                ->where('tickets.tasks_id',NULL)
 
                 ->leftjoin('users', 'tickets.username' ,"=",'users.email')
                 ->where('tickets.status','Closed') 
@@ -664,7 +664,7 @@ $ticketsCompletedThisWeek =  DB::table('tickets')
                  ) 
                  ->where('users.client',$cl)
                  ->leftjoin('users', 'tickets.username' ,"=",'users.email')
-                //  ->where('tickets.tasks_id',NULL)
+                 ->where('tickets.tasks_id',NULL)
 
                  ->where('tickets.status','Completed') 
                 
