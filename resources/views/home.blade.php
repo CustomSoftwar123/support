@@ -41,7 +41,7 @@
                         <!-- Add the bg color to the header using any of the bg-* classes -->
                         <div class="widget-user-header">
                           <h2><i class="fas fa-file-medical float-right display-5"></i></h2>
-                          <h4 id="thisWeek">{{$data['ticketsThisWeek']}}</h4>
+                          <h4 id="thisWeek" class='openthisweekdata'>{{$data['ticketsThisWeek']}}</h4>
                           <h5>Tickets Opened</h5>
                         </div>
                       </div>
@@ -60,7 +60,7 @@
                         <div class="widget-user-header">
 
                           <h2><i class="fas fa-file-medical float-right display-5"></i></h2>
-                          <h4 id="thisWeek">{{$data['ticketsProcessing']}}</h4>
+                          <h4 id="thisWeek" class='processingthisweekdata'>{{$data['ticketsProcessing']}}</h4>
                           <h5>Tickets Processing</h5>
                         </div>
                       </div>
@@ -145,12 +145,19 @@
                  
                     <h4>
                       Tickets Report
+                      @if(Auth::user()->role<=3)
+                      <select class="form-control w-25 float-right ml-2" id="ticketsbreakdown">
+                        <option>All</option>
+                        <option>Projects</option>
+                  </select>
+                  @endif
                       <select class="form-control w-25 float-right" id="duration">
                             <option>This Week</option>
                             <option>Last Week</option>
                             <option>This Month</option>
                             <option>Last Month</option>
                       </select>
+
                     </h4>
          
 
@@ -383,17 +390,72 @@ $("#ticketsModal .modal-body table tbody").append(
 
   })
 })
+$(document).on('change', '#ticketsbreakdown', function () { 
+  const duration=$("#duration").val()
+  if($(this).val()=='All'){
+    location.reload()
+  }
+
+  $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+  const projOrAll=this.value;
+$.ajax({
+  type: "post",
+url:"{{ route( 'getProjOrAll') }}",
+data: {
+'projOrAll':projOrAll,
+'duration':duration
+},
+success: function(data) {
+  // alert(duration)
+  if(duration=='This Week'){
+$(".openthisweekdata").text(data.projOpenedTotal)
+$(".processingthisweekdata").text(data.projProcessingTotal)
+$(".compthisweekdata").text(data.projectTicketsCompletedThisWeek)
+$(".closedthisweekdata").text(data.projectTicketsClosedThisWeek)
+  }
+  if(duration=='Last Week'){
+    $(".openthisweekdata").text(data.projOpenedTotal)
+$(".processingthisweekdata").text(data.projProcessingTotal)
+$(".compthisweekdata").text(data.projectTicketsCompletedLastWeek)
+$(".closedthisweekdata").text(data.projectTicketsClosedLastWeek)
+  }
+
+  if(duration=='This Month'){
+$(".openthisweekdata").text(data.projOpenedTotal)
+$(".processingthisweekdata").text(data.projProcessingTotal)
+$(".compthisweekdata").text(data.projectTicketsCompletedThisMonth)
+// $(".closedthisweekdata").text(data.projectTicketsClosedThisMonth)
+  }
+  if(duration=='Last Month'){
+    // alert("true")
+    console.log(data.projectTicketsCompletedLastMonth)
+    $(".openthisweekdata").text(data.projOpenedTotal)
+$(".processingthisweekdata").text(data.projProcessingTotal)
+$(".compthisweekdata").text(data.projectTicketsCompletedLastMonth)
+// $(".closedthisweekdata").text(data.projectTicketsClosedLastMonth)
+  }
+}
+})
+})
 
 
                           $(document).on('change', '#duration', function () { 
 
             
                              var duration = this.value;
-
+                             const param=$("#ticketsbreakdown").val()
+                            //  alert(param) 
                                         $.ajax({
                                               type: "get",
                                               url:"{{ route( 'getTicketsReport') }}",
-                                              data: {'duration' : duration},
+                                              data: {'duration' : duration,
+                                              'param':param
+
+                                              },
                                               timeout: 600000,
                                               success: function(data) {
 
@@ -447,10 +509,13 @@ console.log(myChart.data.labels.splice(dd1,(myChart.data.labels.length)));
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
     });
+
                                           $.ajax({
     type:"post",
     url:"{{route('getTicketsComparison')}}",
-    data: {'duration' : duration},
+    data: {'duration' : duration,
+      'param':param
+    },
     success:function(data){
       // console.log(data,"testts")
       // alert
@@ -468,9 +533,10 @@ console.log(myChart.data.labels.splice(dd1,(myChart.data.labels.length)));
       console.log("Closed Last",ticketsClosedLast)
       console.log(duration,"DURATIONNN")
       if(duration == 'This Week'||duration=='This Month'){
-        // console.log("HERE")
+        console.log("HERE NEEW")
 
         $('.compthisweekdata').text(ticketsCompletedThis)
+        // $('.openthisweekdata').text(ticketsCompletedThis)
         $('.closedthisweekdata').text(ticketsClosedThis)
       }else {
         console.log("HERE")

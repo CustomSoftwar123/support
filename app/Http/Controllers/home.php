@@ -61,6 +61,7 @@ class home extends Controller
 
     public function getTicketsComparison(Request $request){
       $duration=$request->duration;
+     $param=$request->param;
       $role=auth()->user()->role;
       $cl=auth()->user()->client;
       if($duration=='This Week'||$duration=='Last Week'){
@@ -70,7 +71,12 @@ class home extends Controller
  
       ->whereBetween('created_at', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])
       ->whereIn('tickets.internal',[1,2])
-      ->where('tickets.tasks_id',NULL)
+      ->when($param == 'Projects', function ($query) {
+        $query->whereNotNull('tickets.tasks_id');
+    }, function ($query) {
+        $query->whereNull('tickets.tasks_id');
+    })
+    //   ->where('tickets.tasks_id',NULL)
 
       ->count();
       $ticketsOpenedThisWeek = DB::table('tickets')
@@ -101,14 +107,22 @@ class home extends Controller
                       ->whereNotNull('tickets.created_for');
               });
       })
-      ->where('tickets.tasks_id',NULL)
+      ->when($param == 'Projects', function ($query) {
+        $query->whereNotNull('tickets.tasks_id');
+    }, function ($query) {
+        $query->whereNull('tickets.tasks_id');
+    })
 
       ->count();
   
       $ticketsClosedThisWeek = DB::table('tickets')
       ->where('status','Closed')
       ->whereBetween('closedat', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])
-      ->where('tickets.tasks_id',NULL)
+      ->when($param == 'Projects', function ($query) {
+        $query->whereNotNull('tickets.tasks_id');
+    }, function ($query) {
+        $query->whereNull('tickets.tasks_id');
+    })
 
       ->whereIn('tickets.internal',[1,2])
       ->count();
@@ -162,7 +176,11 @@ $ticketsClosedLastWeek = $result[0]->count;
             ->whereNull('tickets.created_for');
     })
     ->where('tickets.status', 'Completed')
-    ->where('tickets.tasks_id',NULL)
+    ->when($param == 'Projects', function ($query) {
+        $query->whereNotNull('tickets.tasks_id');
+    }, function ($query) {
+        $query->whereNull('tickets.tasks_id');
+    })
 
     ->whereBetween('tickets.completedat', [
         Carbon::now()->startOfWeek()->subWeek(), // Start of the week from a week ago
@@ -323,15 +341,20 @@ $ticketsClosedLastWeek = $result[0]->count;
          ->count();
          
          $ticketsClosedThisMonth = DB::table('tickets')
-    ->where('tickets.tasks_id',NULL)
+    // ->where('tickets.tasks_id',NULL)
 
          ->where('status','Closed')
          ->whereBetween('closedat', [$firstDayOfMonth, $lastDayOfMonth])
+         ->when($param == 'Projects', function ($query) {
+            $query->whereNotNull('tickets.tasks_id');
+        }, function ($query) {
+            $query->whereNull('tickets.tasks_id');
+        })
     ->whereIn('tickets.internal',[1,2])
 
          ->count();
          $ticketsCompletedThisMonth = DB::table('tickets')
-    ->where('tickets.tasks_id',NULL)
+    // ->where('tickets.tasks_id',NULL)
 
          ->leftJoin('users', function ($join) {
              $join->on('tickets.username', '=', 'users.email')
@@ -346,6 +369,11 @@ $ticketsClosedLastWeek = $result[0]->count;
                          ->whereNotNull('tickets.created_for');
                  });
          })
+         ->when($param == 'Projects', function ($query) {
+            $query->whereNotNull('tickets.tasks_id');
+        }, function ($query) {
+            $query->whereNull('tickets.tasks_id');
+        })
          ->count();
      
 
@@ -374,7 +402,11 @@ $ticketsClosedLastWeek = $result[0]->count;
          ->where('tickets.status','Closed')
          ->whereBetween('tickets.closedat', [$firstDayOfLastMonth, $lastDayOfLastMonth])
     ->whereIn('tickets.internal',[1,2])
-    ->where('tickets.tasks_id',NULL)
+    ->when($param == 'Projects', function ($query) {
+        $query->whereNotNull('tickets.tasks_id');
+    }, function ($query) {
+        $query->whereNull('tickets.tasks_id');
+    })
 
          ->count();
          $ticketsCompletedLastMonth = DB::table('tickets')
@@ -393,6 +425,11 @@ $ticketsClosedLastWeek = $result[0]->count;
                          ->whereNotNull('tickets.created_for');
                  });
          })
+         ->when($param == 'Projects', function ($query) {
+            $query->whereNotNull('tickets.tasks_id');
+        }, function ($query) {
+            $query->whereNull('tickets.tasks_id');
+        })
          ->count();
      
 
@@ -516,10 +553,10 @@ $ticketsClosedLastWeek = $result[0]->count;
     {
         $role=Auth()->user()->role;
         $cl=Auth()->user()->client;
+        // $param=$request->param;
+        // return $role;
         if($role<=3){
-// echo $sql="select * from tickets where status='Closed' and internal IN(1,2) and closed_at between(Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()) or created_by<=3 ";
-// return 1;
-//  $ticketsThisWeek =DB::select($sql);
+
            $ticketsThisWeek =  DB::table('tickets')
            ->select(
                'tickets.*',
@@ -535,8 +572,9 @@ $ticketsClosedLastWeek = $result[0]->count;
                          $query->whereNull('internal')
                                ->whereNotNull('created_for');
                      });
+                    
            })
-        //    ->whereNull('tickets.tasks_id')
+        //    ->whereNotNull('tickets.tasks_id')
            ->where('tickets.status', 'Opened')
            ->count();
           $ticketsProcessing =  DB::table('tickets')
@@ -828,6 +866,7 @@ $ticketsCompletedThisWeek =  DB::table('tickets')
         $cl=Auth()->user()->client;
 
              $duration =  $request->duration;  
+             $param =  $request->param;  
 
                 $now = Carbon::now();
                 
@@ -1027,6 +1066,238 @@ $ticketsCompletedThisWeek =  DB::table('tickets')
   
 
    
+public function getProjOrAll(Request $request){
+    $param=$request->projOrAll;
+    $duration=$request->duration;
+      $role=auth()->user()->role;
+      $cl=auth()->user()->client;
+    //   if($duration=='This Week'||$duration=='Last Week'){
+        if($role<=3){
 
+      $projTicketsTotal = DB::table('tickets')
+ 
+    //   ->whereBetween('created_at', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])
+      ->whereIn('tickets.internal',[1,2])
+      ->when($param == 'Projects', function ($query) {
+        $query->whereNotNull('tickets.tasks_id');
+    }, function ($query) {
+        $query->whereNull('tickets.tasks_id');
+    })
+    //   ->where('tickets.tasks_id',NULL)
+
+      ->count();
+
+      $projTicketsProcessingTotal = DB::table('tickets')
+      ->where('status','Processing')
+      ->whereIn('tickets.internal',[1,2])
+
+      ->whereNotNull('tickets.tasks_id')
+
+      ->whereBetween('created_at', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])
+      ->whereIn('tickets.internal',[1,2])
+      ->count();
+     
+      $projectTicketsCompletedThisWeek = DB::table('tickets')
+      ->leftJoin('users', function ($join) {
+          $join->on('tickets.username', '=', 'users.email')
+              ->whereNull('tickets.created_for');
+      })
+      ->where('tickets.status', 'Completed')
+      ->whereBetween('tickets.completedat', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])
+      ->where(function ($query) {
+          $query->whereIn('tickets.internal', [1, 2])
+              ->orWhere(function ($query) {
+                  $query->whereNull('tickets.internal')
+                      ->whereNotNull('tickets.created_for');
+              });
+      })
+      ->whereNotNull('tickets.tasks_id')
+
+      ->count();
+  
+      $projectTicketsClosedThisWeek = DB::table('tickets')
+      ->where('status','Closed')
+      ->whereBetween('closedat', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])
+      ->whereNotNull('tickets.tasks_id')
+
+      ->whereIn('tickets.internal',[1,2])
+      ->count();
+
+      $ticketsLastWeek = DB::table('tickets')
+    ->whereBetween('created_at', [Carbon::now()->startOfWeek()->subWeek(), Carbon::now()->startOfWeek()->subSecond()])
+    ->whereIn('tickets.internal',[1,2])
+    ->where('tickets.tasks_id',NULL)
+
+    ->count();
+
+    // $ticketsClosedLastWeek = DB::table('tickets')
+    // ->where('status','Closed')
+    // ->whereBetween('closedat', [Carbon::now()->startOfWeek()->subWeek(), Carbon::now()->startOfWeek()->subSecond()])
+    // ->whereIn('tickets.internal',[1,2])
+    // ->count();
+
+    $startOfLastWeek = Carbon::now()->startOfWeek()->subWeek()->format('Y-m-d H:i:s');
+$endOfLastWeek = Carbon::now()->startOfWeek()->subSecond()->format('Y-m-d H:i:s');
+
+$query = "
+    SELECT COUNT(*) as count 
+    FROM tickets 
+    WHERE status = 'Closed' 
+    AND closedat BETWEEN '$startOfLastWeek' AND '$endOfLastWeek' 
+    AND tickets.internal IN (1, 2)
+";
+
+$result = DB::select($query);
+$ticketsClosedLastWeek = $result[0]->count;
+
+    $projectticketsOpenedLastWeek = DB::table('tickets')
+    ->where('status','Opened')
+    // ->whereBetween('created_at', [Carbon::now()->startOfWeek()->subWeek(), Carbon::now()->startOfWeek()->subSecond()])
+    ->whereIn('tickets.internal',[1,2])
+    ->whereNotNull('tickets.tasks_id')
+
+    
+    ->count();
+    $projectticketsProcessingLastWeek = DB::table('tickets')
+    ->where('status','Processing')
+    ->whereBetween('created_at', [Carbon::now()->startOfWeek()->subWeek(), Carbon::now()->startOfWeek()->subSecond()])
+    ->whereIn('tickets.internal',[1,2])
+    ->whereNotNull('tickets.tasks_id')
+
+  
+    ->count();
+    $projectticketsCompletedLastWeek = DB::table('tickets')
+    ->leftJoin('users', function ($join) {
+        $join->on('tickets.username', '=', 'users.email')
+            ->whereNull('tickets.created_for');
+    })
+    ->where('tickets.status', 'Completed')
+    ->whereNotNull('tickets.tasks_id')
+
+    ->whereBetween('tickets.completedat', [
+        Carbon::now()->startOfWeek()->subWeek(), // Start of the week from a week ago
+        Carbon::now()->startOfWeek()->subSecond() // End of the current week from a week ago (subSecond to go just before the current week)
+    ])
+    ->where(function ($query) {
+        $query->whereIn('tickets.internal', [1, 2])
+            ->orWhere(function ($query) {
+                $query->whereNull('tickets.internal')
+                    ->whereNotNull('tickets.created_for');
+            });
+    })
+    ->count();
+
+    $projectticketsCompletedLastMonth = DB::table('tickets')
+    ->leftJoin('users', function ($join) {
+        $join->on('tickets.username', '=', 'users.email')
+            ->whereNull('tickets.created_for');
+    })
+    ->where('tickets.status', 'Completed')
+    ->whereNotNull('tickets.tasks_id')
+    ->whereBetween('tickets.completedat', [
+        Carbon::now()->startOfMonth()->subMonth(), // Start of the previous month
+        Carbon::now()->startOfMonth()->subSecond() // End of the previous month (subSecond to go just before the current month)
+    ])
+    ->where(function ($query) {
+        $query->whereIn('tickets.internal', [1, 2])
+            ->orWhere(function ($query) {
+                $query->whereNull('tickets.internal')
+                    ->whereNotNull('tickets.created_for');
+            });
+    })
+    ->count();
+
+    $projectticketsCompletedThisMonth = DB::table('tickets')
+    ->leftJoin('users', function ($join) {
+        $join->on('tickets.username', '=', 'users.email')
+            ->whereNull('tickets.created_for');
+    })
+    ->where('tickets.status', 'Completed')
+    ->whereNotNull('tickets.tasks_id')
+    ->whereBetween('tickets.completedat', [
+        Carbon::now()->startOfMonth()->subMonth(), // Start of the previous month
+        Carbon::now()->startOfMonth()->subSecond() // End of the previous month (subSecond to go just before the current month)
+    ])
+    ->where(function ($query) {
+        $query->whereIn('tickets.internal', [1, 2])
+            ->orWhere(function ($query) {
+                $query->whereNull('tickets.internal')
+                    ->whereNotNull('tickets.created_for');
+            });
+    })
+    ->count();
+
+    $ticketsLastWeek = DB::table('tickets')
+    ->where('tickets.tasks_id',NULL)
+
+    ->whereBetween('created_at', [Carbon::now()->startOfWeek()->subWeek(), Carbon::now()->startOfWeek()->subSecond()])
+    ->whereIn('tickets.internal',[1,2])
+    
+    ->count();
+        }
+    // }
+    $projectticketsCompletedThisMonth = DB::table('tickets')
+    ->leftJoin('users', function ($join) {
+        $join->on('tickets.username', '=', 'users.email')
+            ->whereNull('tickets.created_for');
+    })
+    ->where('tickets.status', 'Completed')
+    ->whereNotNull('tickets.tasks_id')
+    ->whereBetween('tickets.completedat', [
+        Carbon::now()->startOfMonth(), // Start of the current month
+        Carbon::now()->endOfMonth() // End of the current month
+    ])
+    // ->where(function ($query) {
+    //     $query->whereIn('tickets.internal', [1, 2])
+    //         ->orWhere(function ($query) {
+    //             $query->whereNull('tickets.internal')
+    //                 ->whereNotNull('tickets.created_for');
+    //         });
+    // })
+    ->count();
+
+    $startOfCurrentMonth = Carbon::now()->startOfMonth()->format('Y-m-d H:i:s');
+$endOfCurrentMonth = Carbon::now()->endOfMonth()->format('Y-m-d H:i:s');
+
+$queryThisMonth = "
+    SELECT COUNT(*) as count 
+    FROM tickets 
+    WHERE status = 'Closed' 
+    AND closedat BETWEEN '$startOfCurrentMonth' AND '$endOfCurrentMonth' 
+    AND tickets.tasks_id Is not null
+";
+
+$resultThisMonth = DB::select($queryThisMonth);
+$projectticketsClosedThisMonth = $resultThisMonth[0]->count;
+
+
+$startOfLastMonth = Carbon::now()->subMonth()->startOfMonth()->format('Y-m-d H:i:s');
+$endOfLastMonth = Carbon::now()->subMonth()->endOfMonth()->format('Y-m-d H:i:s');
+
+$queryLastMonth = "
+    SELECT COUNT(*) as count 
+    FROM tickets 
+    WHERE status = 'Closed' 
+    AND closedat BETWEEN '$startOfLastMonth' AND '$endOfLastMonth' 
+    AND tickets.internal IN (1, 2)
+";
+
+$resultLastMonth = DB::select($queryLastMonth);
+$projectticketsClosedLastMonth = $resultLastMonth[0]->count;
+
+
+    return $data=[
+    'projOpenedTotal'=>$projTicketsTotal,
+    'projProcessingTotal'=>$projTicketsProcessingTotal,
+    'projectTicketsCompletedThisWeek'=>$projectTicketsCompletedThisWeek,    
+    'projectTicketsClosedThisWeek'=>$projectTicketsClosedThisWeek,  
+    'projectTicketsClosedLastWeek'=>$ticketsClosedLastWeek,    
+    'projectTicketsCompletedLastWeek'=>$projectticketsCompletedLastWeek,   
+    'projectTicketsCompletedLastMonth'=>$projectticketsCompletedLastMonth ,
+    'projectTicketsCompletedThisMonth'=>$projectticketsCompletedThisMonth ,
+    'projectTicketsClosedThisMonth'=>$projectticketsClosedThisMonth ,
+    'projectTicketsClosedLastMonth'=>$projectticketsClosedLastMonth 
+];
+}
 
 }

@@ -255,7 +255,7 @@ Route::post('assignToProject', [tickets::class, 'assignToProject'])->name('assig
 Route::post('changeStatus', [files::class, 'changeStatus'])->name('changeStatus');
 
 Route::post('getTicketsComparison', [home::class, 'getTicketsComparison'])->name('getTicketsComparison');
-
+Route::post('getProjOrAll', [home::class, 'getProjOrAll'])->name('getProjOrAll');
 
 
 Route::post('send-report-email', [Tickets::class, 'SendReportEmail'])->name('SendReportEmail');
