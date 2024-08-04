@@ -395,6 +395,61 @@ $(document).on('change', '#ticketsbreakdown', function () {
   if($(this).val()=='All'){
     location.reload()
   }
+  alert()
+  $.ajax({
+                                              type: "get",
+                                              url:"{{ route( 'getTicketsReport') }}",
+                                              data: {'duration' : duration,
+                                              'param':$(this).val()
+
+                                              },
+                                              timeout: 600000,
+                                              success: function(data) {
+
+                                                  //console.log(data)
+                                                  
+
+                                                  var label = data.labels;
+                                                  var values = data.values;
+                                                  var values2 = data.values2;
+                                                  var values3 = data.values3;
+                                                  var values4 = data.values4;
+                                                
+                                                $( label ).each(function(index) {
+                                    console.log(duration);
+                                                       myChart.data.labels[index] = label[index];
+                                                       myChart.data.datasets[0].data[index] = values[index];
+                                                       myChart.data.datasets[1].data[index] = values2[index];
+                                                       myChart.data.datasets[2].data[index] = values3[index];
+                                                       myChart.data.datasets[3].data[index] = values4[index];
+                                                       console.log(myChart.data.labels);
+                                                       if(duration=='This Week' || duration=='Last Week' ){
+                                                       console.log(myChart.data.labels.splice(6,(myChart.data.labels.length-7)));
+                                                      }
+                                                      if(duration=='This Month' ){
+                                                        var date = new Date();
+var firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
+var lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0); var dd = String(lastDay.getDate()).padStart(2, '0'); 
+                                                      console.log("s");
+                                                       console.log(myChart.data.labels.splice(dd,(myChart.data.labels.length)));
+                                                      }
+                                                      if(duration=='Last Month'){
+                                                        const date = new Date();
+var prevl=new Date(date.getFullYear(), date.getMonth(), 0);
+var dd1 = String(prevl.getDate()).padStart(2, '0');
+console.log(dd);
+console.log(myChart.data.labels.splice(dd1,(myChart.data.labels.length)));
+                                                      }
+                                                      $(".compthisweeklabel").text(`Tickets Completed ${duration}`)
+                                                      $(".closedthisweeklabel").text(`Tickets Closed ${duration}`)
+                                                       myChart.update();
+                                                })  
+                                                        
+
+                                              }
+                                             
+                                              
+                                          }) 
 
   $.ajaxSetup({
         headers: {
