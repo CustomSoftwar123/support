@@ -631,7 +631,7 @@ $d= Carbon::now()->startOfWeek()->format('Ymd');
         }elseif($role==4 ||$role==5){
             $ticketsThisWeek =  DB::table('tickets')
             ->where('tickets.status','Opened')
-            // ->where('tickets.tasks_id',NULL)
+            ->where('tickets.tasks_id',NULL)
 
             ->where('users.client',$cl)
                 ->leftjoin('users', 'tickets.username' ,"=",'users.email')
