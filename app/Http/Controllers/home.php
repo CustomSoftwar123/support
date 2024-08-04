@@ -985,11 +985,21 @@ $ticketsCompletedThisWeek =  DB::table('tickets')
                                                   ['status','Opened'] 
                                                   
                                                   ]) 
+                                                  ->when($param == 'Projects', function ($query) {
+                                                    $query->whereNotNull('tickets.tasks_id');
+                                                }, function ($query) {
+                                                    $query->whereNull('tickets.tasks_id');
+                                                })
                                                   ->whereIn('internal',[1,2])
                                                                       ->count();
                         
                                                 $values2[] =  DB::table('tickets')
                                                                       ->whereDate('created_at','like',$date.'%')
+                                                                      ->when($param == 'Projects', function ($query) {
+                                                                        $query->whereNotNull('tickets.tasks_id');
+                                                                    }, function ($query) {
+                                                                        $query->whereNull('tickets.tasks_id');
+                                                                    })
                                                                       ->where('status','Processing') 
                                                                       ->count();
                         
@@ -999,6 +1009,11 @@ $ticketsCompletedThisWeek =  DB::table('tickets')
                                                   ['status','Closed'] 
                                                   
                                                   ])
+                                                  ->when($param == 'Projects', function ($query) {
+                                                    $query->whereNotNull('tickets.tasks_id');
+                                                }, function ($query) {
+                                                    $query->whereNull('tickets.tasks_id');
+                                                })
                                                   ->whereIn('internal',[1,2])
 
                                                                       ->count();                                                                            
@@ -1009,6 +1024,11 @@ $ticketsCompletedThisWeek =  DB::table('tickets')
                                                                       ['status','Completed'] 
                                                                       
                                                                       ])
+                                                                      ->when($param == 'Projects', function ($query) {
+                                                                        $query->whereNotNull('tickets.tasks_id');
+                                                                    }, function ($query) {
+                                                                        $query->whereNull('tickets.tasks_id');
+                                                                    })
                                                                       ->count();                                                                            
                                                
                                               }
