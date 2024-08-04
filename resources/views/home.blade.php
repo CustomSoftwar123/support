@@ -395,7 +395,7 @@ $(document).on('change', '#ticketsbreakdown', function () {
   if($(this).val()=='All'){
     location.reload()
   }
-  alert()
+  // alert()
   $.ajax({
                                               type: "get",
                                               url:"{{ route( 'getTicketsReport') }}",
