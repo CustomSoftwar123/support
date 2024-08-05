@@ -683,6 +683,7 @@ $projticketsClosedLastWeek = $resultcc[0]->count;
         $projticketsThisWeek='';
         $projticketsProcessing='';
         $projticketsCompletedThisWeek='';
+        $projticketsClosedThisWeek='';
         if($role<=3){
 
            $ticketsThisWeek =  DB::table('tickets')
