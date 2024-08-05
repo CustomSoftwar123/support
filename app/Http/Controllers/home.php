@@ -1114,6 +1114,7 @@ public function getProjOrAll(Request $request){
                     ->whereNotNull('tickets.created_for');
             });
     })
+    ->where('tickets.status','Opened')
       ->when($param == 'Projects', function ($query) {
         $query->whereNotNull('tickets.tasks_id');
     }, function ($query) {
