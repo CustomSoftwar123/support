@@ -218,7 +218,7 @@
                     <h4>
                       Tickets Report
                       @if(Auth::user()->role<=3)
-                      <select class="form-control w-25 float-right ml-2" id="ticketsbreakdown">
+                      <select class="form-control w-25 float-right ml-2 d-none" id="ticketsbreakdown">
                         <option>All</option>
                         <option>Projects</option>
                   </select>
