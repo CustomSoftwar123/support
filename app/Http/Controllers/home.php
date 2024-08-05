@@ -65,6 +65,14 @@ class home extends Controller
       $role=auth()->user()->role;
       $cl=auth()->user()->client;
       $projticketsCompletedThisWeek='';
+      $projticketsCompletedLastWeek='';
+      $projticketsCompletedThis='';
+      $projticketsClosedThisWeek='';
+      $projticketsClosedLastWeek='';
+      $projticketsCompletedLastMonth='';
+      $projticketsCompletedThisMonth='';
+      $projticketsClosedLastMonth='';
+      $projticketsClosedThisMonth='';
       if($duration=='This Week'||$duration=='Last Week'){
         if($role<=3){
 
