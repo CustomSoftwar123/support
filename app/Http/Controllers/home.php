@@ -1102,7 +1102,18 @@ public function getProjOrAll(Request $request){
       $projTicketsTotal = DB::table('tickets')
  
     //   ->whereBetween('created_at', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])
-      ->whereIn('tickets.internal',[1,2])
+    //   ->whereIn('tickets.internal',[1,2])
+      ->leftJoin('users', function ($join) {
+        $join->on('tickets.username', '=', 'users.email')
+            ->whereNull('tickets.created_for');
+    })
+    ->where(function ($query) {
+        $query->whereIn('tickets.internal', [1, 2])
+            ->orWhere(function ($query) {
+                $query->whereNull('tickets.internal')
+                    ->whereNotNull('tickets.created_for');
+            });
+    })
       ->when($param == 'Projects', function ($query) {
         $query->whereNotNull('tickets.tasks_id');
     }, function ($query) {
