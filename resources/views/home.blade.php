@@ -100,6 +100,78 @@
                       <!-- /.widget-user -->
                     </a>
                     </div>
+                    @if(Auth::user()->email=='zain@ocmsoftware.ie')
+                    <br>
+
+                    <div class="row">
+                        
+                      <div class="col-md-3  mt-1">
+                        <!-- Widget: user widget style 2 -->
+                          <a id="Requests2" href="../tasks">
+                        <div class="card card-widget mb-0  widget-user-2 bg-primary counter-cards">
+                          <!-- Add the bg color to the header using any of the bg-* classes -->
+                          <div class="widget-user-header">
+                            <h2><i class="fas fa-file-medical float-right display-5"></i></h2>
+                            <h4 id="thisWeek2" class='projopenthisweekdata'>{{$data['projticketsThisWeek']}}</h4>
+                            <h5>Project Tickets Opened</h5>
+                          </div>
+                        </div>
+                        <!-- /.widget-user -->
+                      </a>
+                      </div>
+                      <!-- /.col -->
+  
+  
+  
+                      <div class="col-md-3  mt-1">
+                        <!-- Widget: user widget style 2 -->
+                          <a id="Requests2" href="../tasks">
+                        <div class="card card-widget mb-0  widget-user-2 bg-warning counter-cards">
+                          <!-- Add the bg color to the header using any of the bg-* classes -->
+                          <div class="widget-user-header">
+  
+                            <h2><i class="fas fa-file-medical float-right display-5"></i></h2>
+                            <h4 id="thisWeek2" class='projprocessingthisweekdata'>{{$data['projticketsProcessing']}}</h4>
+                            <h5>Project Tickets Processing</h5>
+                          </div>
+                        </div>
+                        <!-- /.widget-user -->
+                      </a>
+                      </div>
+                      <!-- /.col -->
+  
+  <div class="col-md-3  mt-1">
+                        <!-- Widget: user widget style 2 -->
+                          <a id="Requests2" href="../tasks" class="Requests2">
+                        <div class="card card-widget mb-0  widget-user-2 bg-info counter-cards">
+                          <!-- Add the bg color to the header using any of the bg-* classes -->
+                          <div class="widget-user-header">
+  
+                            <h2><i class="fas fa-file-medical float-right display-5"></i></h2>
+                            <h4 id="thisWeek" class="projcompthisweekdata">{{$data['projticketsCompletedThisWeek']}}</h4>
+                            <h5 class="projcompthisweeklabel">Project Tickets Completed This Week</h5>
+                          </div>
+                        </div>
+                        <!-- /.widget-user -->
+                      </a>
+                      </div>
+  
+                      <div class="col-md-3  mt-1">
+                        <!-- Widget: user widget style 2 -->
+                          <a id="Requests2" class="Requests"  href='../tasks'>
+                        <div class="card card-widget mb-0  widget-user-2 bg-success counter-cards">
+                          <!-- Add the bg color to the header using any of the bg-* classes -->
+                          <div class="widget-user-header">
+  
+                            <h2><i class="fas fa-file-medical float-right display-5"></i></h2>
+                            <h4 id="thisWeek" class="projclosedthisweekdata">{{$data['projticketsClosedThisWeek']}}</h4>
+                            <h5 class="projclosedthisweeklabel">Project Tickets Closed This Week</h5>
+                          </div>
+                        </div>
+                        <!-- /.widget-user -->
+                      </a>
+                      </div>
+                      @endif
                     <!-- /.col -->
                     
 <!-- resources/views/tickets/modal.blade.php -->
@@ -550,6 +622,8 @@ console.log(myChart.data.labels.splice(dd1,(myChart.data.labels.length)));
                                                       }
                                                       $(".compthisweeklabel").text(`Tickets Completed ${duration}`)
                                                       $(".closedthisweeklabel").text(`Tickets Closed ${duration}`)
+                                                      $(".projcompthisweeklabel").text(`Project Tickets Completed ${duration}`)
+                                                      $(".projclosedthisweeklabel").text(`Project Tickets Closed ${duration}`)
                                                        myChart.update();
                                                 })  
                                                         
@@ -584,6 +658,12 @@ console.log(myChart.data.labels.splice(dd1,(myChart.data.labels.length)));
       const ticketsOpenedLast = data.ticketsOpenedLast;
       const ticketsProcessingLast = data.ticketsProcessingLast;
       const ticketsCompletedLast = data.ticketsCompletedLast;
+      const projticketsCompletedThis = data.projticketsCompletedThis;
+      const projticketsCompletedLast = data.projticketsCompletedLast;
+      const projticketsClosedLast = data.projticketsClosedLast;
+      const projticketsClosedThis = data.projticketsClosedThis;
+      
+      
       console.log("Closed This",ticketsClosedThis)
       console.log("Closed Last",ticketsClosedLast)
       console.log(duration,"DURATIONNN")
@@ -591,12 +671,17 @@ console.log(myChart.data.labels.splice(dd1,(myChart.data.labels.length)));
         console.log("HERE NEEW")
 
         $('.compthisweekdata').text(ticketsCompletedThis)
+        $('.projcompthisweekdata').text(projticketsCompletedThis)
         // $('.openthisweekdata').text(ticketsCompletedThis)
         $('.closedthisweekdata').text(ticketsClosedThis)
+        $('.projclosedthisweekdata').text(projticketsClosedThis)
+        // $('.projclosedthisweekdata').text(ticketsClosedThis)
       }else {
         console.log("HERE")
         $('.compthisweekdata').text(ticketsCompletedLast)
+        $('.projcompthisweekdata').text(projticketsCompletedLast)
         $('.closedthisweekdata').text(ticketsClosedLast)
+        
       }
     }
   })
