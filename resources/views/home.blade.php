@@ -100,7 +100,7 @@
                       <!-- /.widget-user -->
                     </a>
                     </div>
-                    @if(Auth::user()->role<=3||Auth::user()->email='ken.gregg@hse.ie')
+                    @if(Auth::user()->role<=3)
                     <br>
 
                     <div class="row">
