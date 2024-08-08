@@ -40,8 +40,8 @@ class SendExpiredTasksEmail extends Command
             }
 
         // If there are any tickets, send the email
-        $emails=['customsoftware2022@gmail.com'];
-        $users=['Custom'];
+        $emails=['customsoftware2022@gmail.com','aqeel@ocmsoftware.ie'];
+    $users=['Custom','Aqeel'];
         $i=0;
         if ($data->isNotEmpty()) { // Replace with your email
             foreach($emails as $email){

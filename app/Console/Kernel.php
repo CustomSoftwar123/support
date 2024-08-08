@@ -29,7 +29,7 @@ class Kernel extends ConsoleKernel
         // $schedule->command('inspire')->hourly();
         // $schedule->command('send:ticket-notifications')->twiceDaily(0, 12);
         $schedule->command('tickets:check-response-expiry')->daily();
-        $schedule->command('send:expiredtasks')->dailyAt('7:39');
+        $schedule->command('send:expiredtasks')->dailyAt('7:30');
         // send:expiredtasks
         // $schedule->command('tickets:check-completion')->daily();
 
