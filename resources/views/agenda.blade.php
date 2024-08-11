@@ -94,6 +94,7 @@
       </div>
     </div>
 </div>    
+</div>    
 
 @extends('layouts.footer')
 
@@ -122,7 +123,7 @@
     });
 
         $(document).on('change','.done-check',function(){
-            alert()
+            // alert()
             $.ajax(
                 {
                     url:"{{route('agendaDone')}}",
