@@ -617,8 +617,8 @@ return response()->json(['status','true',$tid]);
         }
 
         DB::insert(
-            'insert into ticketmessages (ticketid, username, mid, message, user, created_at, created_by) values (?, ?, ?, ?, ?, ?, ?)',
-            [$request->tid, $email, $request->mid, $message, 'client', date('Y-m-d H:i:s'), $user]
+            'insert into ticketmessages (ticketid, username, mid, message, user, created_at, created_by,changes) values (?, ?, ?, ?, ?, ?, ?,?)',
+            [$request->tid, $email, $request->mid, $message, 'client', date('Y-m-d H:i:s'), $user,$changes]
         );
 
 

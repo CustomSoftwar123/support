@@ -255,11 +255,11 @@ pathinfo($ticketattachment->filename, PATHINFO_EXTENSION) == 'flv'
                                  {{$ticketmessage->message}} 
                                 </div>
 
-                                @if($loop->last)
-                                @if($data22['ticketinfo'][0]->changes)
+                                {{-- @if($loop->last) --}}
+                                @if($ticketmessage->changes)
                                 <p class="m-0 mt-1">Changes and Effects  </p>  
                                 <div class="jumbotron py-2 px-2 mb-0">
-                                 {{$data22['ticketinfo'][0]->changes}} 
+                                 {{$ticketmessage->changes}} 
                                 </div>
 
                                 <div class="form-group col-md-12 d-flex mr-2">
@@ -278,7 +278,7 @@ pathinfo($ticketattachment->filename, PATHINFO_EXTENSION) == 'flv'
                             
 
                              @endif
-                             @endif
+                             {{-- @endif --}}
                                     
                                   <?php 
 
