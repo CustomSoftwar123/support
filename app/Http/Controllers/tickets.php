@@ -633,7 +633,20 @@ return response()->json(['status','true',$tid]);
         );
 
 
-        DB::update("update tickets  set status = 'Completed',  timetaken='" . $ab . "',changes='".$changes."' ,version='".$ver."',exesentdate='".$esdate."' where ticketid = '" . $request->tid . "'");
+        // DB::update("update tickets  set status = 'Completed',  timetaken='" . $ab . "',changes='".$changes."' ,version='".$ver."',exesentdate='".$esdate."' where ticketid = '" . $request->tid . "'");
+        DB::update(
+            "UPDATE tickets 
+             SET status = ?, timetaken = ?, changes = ?, version = ?, exesentdate = ? 
+             WHERE ticketid = ?", 
+            [
+                'Completed',
+                $ab,
+                $changes,
+                $ver,
+                $esdate,
+                $request->tid
+            ]
+        );
         DB::update("update tickets  set priority = '$priority'  where ticketid = '" . $tid . "'");
         DB::update("update tickets  set completedat ='$date' where ticketid = '" . $request->tid . "'");
 
