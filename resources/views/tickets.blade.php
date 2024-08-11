@@ -275,6 +275,39 @@
                 </div> 
               
               
+                <div class="modal fade" id="agendaModal" tabindex="-1" aria-hidden="true">
+                  <div class="modal-dialog modal-md  modal-dialog">
+                      <div class="modal-content">
+                         <div class="modal-header bg-primary">
+                        
+                          
+                              <h5 class="modal-title text-white">Add Ticket to agenda <span id="requestText2"></span></h5>
+                              <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                              <span aria-hidden="true">&times;</span>
+                            </button>
+
+                          </div>
+                          <div class="modal-body">
+                                    
+                               
+
+                            <div class="col-md-12">
+                              
+                                  <input type="hidden" id="agendatid"> 
+                                 <input type="date" class="form-control" id="agendadate">
+
+                                </div>
+
+                              <button type="button" class="mt-2 btn btn-primary addToAgenda float-right">Add to agenda</button>
+                                      
+
+                          </div>     
+
+                         
+                         
+                      </div>
+                  </div>
+              </div> 
      
 <div class="row">
 
@@ -740,8 +773,42 @@ if(response > 0) {
 
 
 }
+$(document).on('click', '.agenda', function() {
+
+  $("#agendaModal").modal('show');
+  $("#agendatid").val($(this).attr('id'))
+  // alert($("#agendatid").val())
+   // alert($(this).attr('id'))
+  
+ 
+})
+$(document).on('click', '.addToAgenda', function() {
+
+  $("agendaModal").modal('hide')
+  // alert($("agendatid").val())
+  $.ajax({
+    url:"{{route('addToAgenda')}}",
+    method:'POST',
+    data:{
+      ticketId:$("#agendatid").val(),
+      agendaDate:$("#agendadate").val()
 
 
+    }
+  }).done(function(response){
+    console.log(response)
+    if(response==1){
+      Lobibox.notify('success', {
+                                pauseDelayOnHover: true,
+                                continueDelayOnInactiveTab: false,
+                                position: 'top right',
+                                msg: 'Ticket added to agenda succesfully',
+                                icon: 'bx bx-info-circle'
+                            });
+    }
+    location.reload()
+  })
+})
 $(document).on('click', '.assignTicketNowBtn', function() {
         
  

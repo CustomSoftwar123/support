@@ -260,9 +260,18 @@ Route::post('getProjOrAll', [home::class, 'getProjOrAll'])->name('getProjOrAll')
 
 Route::post('send-report-email', [Tickets::class, 'SendReportEmail'])->name('SendReportEmail');
 
+Route::post('dependencyEmail', [Tickets::class, 'dependencyEmail'])->name('dependencyEmail');
+
+
+
 Route::get('ticketstimeline', [Tickets::class, 'ticketstimeline'])->name('ticketstimeline');
 
 Route::post('ticketstimeline', [Tickets::class, 'ticketstimeline'])->name('ticketstimeline');
+
+Route::post('addToAgenda', [Tickets::class, 'addToAgenda'])->name('addToAgenda');
+Route::get('agenda', [Tickets::class, 'agenda'])->name('agenda');
+Route::post('getagenda', [Tickets::class, 'getagenda'])->name('getagenda');
+Route::post('agendaDone', [Tickets::class, 'agendaDone'])->name('agendaDone');
 
 Route::get('dailyreports', [tickets::class, 'dailyreports'])->name('dailyreports');
 Route::get('dailyreportsdata', [tickets::class, 'dailyreportsdata'])->name('dailyreportsdata');

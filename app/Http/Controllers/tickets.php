@@ -14,6 +14,7 @@ use App\Models\task;
 use DB;
 use App\Mail\SignUp;
 use App\Mail\TicketReplyMail;
+// use App\Mail\TicketDependencyNotification;
 use App\Mail\ProjectAssigned;
 use Mail;
 use App\Jobs\SendTicketsReport;
@@ -176,6 +177,15 @@ $ticketattachments=DB::table('ticketattachments')->where('mid', null)->where('ti
         $ticketinfo[0]->exesentdate = Carbon::parse($ticketinfo[0]->exesentdate)->format('Y-m-d');
         $projects = DB::table('tasks')->select('subject','id')->where('id','>',14)->get();
         $internal = DB::table('tickets')->where('id', $id)->pluck('internal');
+
+        $task_tickets = DB::table('tickets')->select('subject','id')
+        ->where('tasks_id','=',$ticketinfo[0]->tasks_id)
+        ->where('id','!=',$ticketinfo[0]->id)
+        ->where('status','!=','Closed')
+        ->where('status','!=','Completed')
+        ->get();
+
+
         $data22 = [
 
 
@@ -186,6 +196,7 @@ $ticketattachments=DB::table('ticketattachments')->where('mid', null)->where('ti
 'internal'=>$internal,
 'ticketTimeline'=>$ticketTimeline,
 'projects'=>$projects,
+'task_tickets'=>$task_tickets
 
 
         ];
@@ -627,7 +638,9 @@ return response()->json(['status','true',$tid]);
         DB::update("update tickets  set completedat ='$date' where ticketid = '" . $request->tid . "'");
 
         $tid = DB::table('tickets')->where('ticketid', $request->tid)->get();
-
+        if($tid[0]?->agenda==1 && $tid[0]?->agenda_done!=1){
+            DB::update("update tickets  set agenda_done=1 where ticketid = '" . $request->tid . "'");
+        }
         return $tid[0]->id;
 
 
@@ -1613,8 +1626,14 @@ where id = '" . $request->tid . "'"
                     $btn .= '<a href="' . route("TicketView", ["id" => $row->id]) . '" title="View Ticket" class="btn btn-info update">
 <i class="fas fa-eye"></i>
 </a>
-</div>
+
 ';
+if(auth()->user()->role<=3&&$row->agenda!=1){
+$btn .= '<button type="button" id="' . $row->ticketid . '" class="btn btn-primary agenda">
+<i class="fas fa-clipboard"></i>
+</button>
+</div>';
+}
 
 
                     return $btn;
@@ -1714,6 +1733,18 @@ return Datatables::of($data)
 return view('tickettimeline');
 }
 
+
+public function addToAgenda(Request $request){
+    // return $request;
+   $ticket= Ticket::where('ticketid',$request->ticketId)->first();
+   if($ticket){
+  return $ticket->update([
+    'agenda'=>1,
+    'agenda_dev'=>auth()->user()->name,
+    'agenda_created_at'=>$request->agendaDate
+   ]);
+}
+}
 public function tasks(Request $request){
 
 	// return DB::table('tasks')->get();
@@ -2041,6 +2072,58 @@ if($email!=$repliedBy){
 
     
     }
+    public function agendaDone(Request $request){
+        $ticket= Ticket::where('id',$request->tid)->first();
+        if($ticket){
+       return $ticket->update([
+         'agenda_done'=>1,
+        ]);
+     }
+    }
+    public function agenda(Request $request){
+
+        // if($request->ajax()){
+    
+            $data = DB::table('tickets')->where('agenda','=','1')->whereNull('agenda_done')->get();
+       
+       
+    //    return Datatables::of($data)
+       
+    //    ->setRowId('id')
+    //    ->rawColumns(['action'])
+    //    ->make(true);
+    //        }
+
+        return view('agenda')->with('agenda',$data);
+    }
+
+    // public function dependencyEmail(Request $request){
+    //     $dependencyTicketId = $request->dependencyTicketId;
+    //     $dependencyTicketSubject = $request->dependencyTicketSubject;
+    //     $thisTicketId = $request->thisTicketId;
+    //     $thisTicketSubject = $request->thisTicketSubject;
+    //     $taskId = $request->taskId;
+
+    //     $ticket = [
+    //         'id' => $thisTicketId,
+    //         'subject' => $thisTicketSubject
+    //     ];
+    
+    //     $dependencies = [
+    //         ['id' => $dependencyTicketId, 'subject' => $dependencyTicketSubject],
+          
+    //         // Add more dependencies as needed
+    //     ];
+    
+    //     $recipients = ['zaintahir0012@gmail.com'];
+    
+    //     Mail::to($recipients)->send(new TicketDependencyNotification($ticket, $dependencies));
+    
+    //     return "Notification sent!";
+
+    // }
+
+    
 }
 
 

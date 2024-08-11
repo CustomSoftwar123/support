@@ -354,6 +354,14 @@ thead th {
               </p>
             </a>
           </li>
+          <li class="nav-item">
+            <a href="{{ route('agenda') }}" class="nav-link {{ (request()->is('agenda')) ? 'active' : '' }}">
+            <i class="nav-icon fas fa-clipboard"></i>
+              <p>
+                Agenda
+              </p>
+            </a>
+          </li>
           @endif
           
           @if(Auth::user()->role==4 || Auth::user()->role==1)
