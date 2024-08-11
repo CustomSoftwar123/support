@@ -268,11 +268,11 @@ pathinfo($ticketattachment->filename, PATHINFO_EXTENSION) == 'flv'
                                   <label for="sentdate">Exe Sent Date</label>
                                   <input type="date" class="form-control f-one"  name="sentdate" id="sentdate" value="{{$data22['ticketinfo'][0]->exesentdate}}" readonly >
                                 </div>
-                              <div class="col-md-6">
+                                <div class="col-md-6">
                                   <label for="version">Version</label>
-                                  <input type="text" class="form-control f-one"  name="version" id="version" placeholder="Version" 
-                                  value="{{$data22['ticketinfo'][0]->version}}" readonly>
+                                  <input type="text" class="form-control f-one"  name="version" id="version" placeholder="Version" value="{{$data22['ticketinfo'][0]->version}}" readonly>
                                 </div>
+                                
                               </div>
                 
                             
@@ -437,6 +437,23 @@ pathinfo($attachment->filename, PATHINFO_EXTENSION) == 'flv'
             </div>
 
 
+            
+            <input type="hidden" class="form-control" value="{{$data22['ticketinfo'][0]->tasks_id}}"  name="taskId" id="taskId"  >
+
+            @if($data22['ticketinfo'][0]->tasks_id)
+            <div class="form-group col-md-3 d-none ">       
+              <label for="dependency">Dependency</label>
+              <select type="text" class="form-control"  name="dependency" id="dependency" placeholder="Dependency">
+                <option disabled hidden selected>Select a ticket</option>
+                @foreach ($data22['task_tickets'] as $ticket)
+                <option value="{{$ticket->id}}">{{$ticket->subject}}</option>
+                @endforeach
+
+              </select>
+            </div>
+            @endif
+
+
                 @if(Auth::user()->email == $data22['ticketinfo'][0]->assignedto && ($data22['ticketinfo'][0]->status == 'Opened' || $data22['ticketinfo'][0]->status == 'Processing' ))
                 <div class="form-group col-md-3">
                 <label for="duration">Duration</label>
@@ -499,6 +516,13 @@ pathinfo($attachment->filename, PATHINFO_EXTENSION) == 'flv'
               
 
                   <button type="button" class="btn btn-primary float-right ml-1 saveupdatebtn" value="Submit">Generate Ticket</button>
+                  @if(($data22['ticketTimeline'][0]['time2'] ?? null) == '0000-00-00 00:00:00' && count($data22['ticketTimeline'])!==0)
+                  <button type="button" class="btn btn-secondary float-right paused ml-1">Pause</button>
+                  @endif
+                  @if( ( ($data22['ticketTimeline'][0]['time1'] ?? null) && $data22['ticketTimeline'][0]['time2'] != '0000-00-00 00:00:00')||count($data22['ticketTimeline'])===0)
+
+                  <button type="button" class="btn btn-warning float-right started ml-1 ">Start</button>
+               @endif
 
                   @if(Auth::user()->role<=3)
                   <div class='col-md-2'>
@@ -512,13 +536,8 @@ pathinfo($attachment->filename, PATHINFO_EXTENSION) == 'flv'
                    </div>
                    @endif
 
-                  @if(($data22['ticketTimeline'][0]['time2'] ?? null) == '0000-00-00 00:00:00' && count($data22['ticketTimeline'])!==0)
-                  <button type="button" class="btn btn-secondary float-right paused ml-1">Pause</button>
-                  @endif
-                  @if( ( ($data22['ticketTimeline'][0]['time1'] ?? null) && $data22['ticketTimeline'][0]['time2'] != '0000-00-00 00:00:00')||count($data22['ticketTimeline'])===0)
-
-                  {{-- <button type="button" class="btn btn-warning float-right started ml-1 d-none">Start</button> --}}
-               @endif
+                
+                
                   <div id="result">
                   <img src="/images/Iphone-spinner-2.gif" alt="Loading..." id='loading-image' class='d-none'>
                   </div>
@@ -1236,6 +1255,35 @@ data.append('filename',filename);
                     })
 
                 });
+
+
+
+                $(document).on('change','#dependency',function(){
+
+                  const dependencyTicketId = $(this).val();
+                  const dependencyTicketSubject = $(this).find("option:selected").text();
+                  
+                  const url = window.location.href;
+                  const urlSegments = url.split('/');
+                  const thisTicketId = urlSegments[urlSegments.length-1];
+                  const thisTicketSubject = $("#subject").val();
+                  const taskId = $("#taskId").val();
+                
+                  $.ajax({
+                    type: 'POST',
+                    url: "{{route('dependencyEmail')}}",
+                    data: {
+                      dependencyTicketId:dependencyTicketId,
+                      dependencyTicketSubject:dependencyTicketSubject,
+                      thisTicketId:thisTicketId,
+                      thisTicketSubject:thisTicketSubject,
+                      taskId:taskId
+                    }
+                }).done(function(response){
+                  console.log(response);
+                })
+
+                })
 
 
     });
