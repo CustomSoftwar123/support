@@ -20,6 +20,15 @@
                 <td style="font-size: 13px;color: #000;">{{$messages}}</td>
            
               </tr>
+
+			  @if(isset($resolmsg)&&!empty($resolmsg))
+			  <tr>
+                <th style="text-align:left;color: #ea4f33;width:120px;font-size: 13px;"> Resolution Message</th>
+               
+                <td style="font-size: 13px;color: #000;">{{$resolmsg}}</td>
+           
+              </tr>
+			  @endif
               
               <tr>
                 <th style="text-align:left;color: #ea4f33;width:120px;font-size: 13px;"><a class="btn w-100 btn-warning" href="http://www.ocmsupport.com">View Ticket Here</a></th>

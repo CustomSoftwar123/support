@@ -928,7 +928,7 @@ if($role<=3){
 // $email=auth()->user()->email;
 //  $message=$request->message;
             $completedby = auth()->user()->name;
-            $completedmail = auth()->user()->email;
+             $completedmail = auth()->user()->email;
 
             $status = DB::table('tickets')->where('ticketid', $tid)->pluck('status');
             $email = DB::table('tickets')->where('ticketid', $tid)->pluck('username');
@@ -956,6 +956,9 @@ if($role<=3){
 
 
             $data = ['data' => $subject[0], 'name' => $raisedby[0], 'email' => $email[0], 'tid' => $tid, 'esubject' => $esubject, 'messages' => $messages[0], 'status' => $status[0], 'id' => $id[0]];
+            if (!empty($request->completionmessage)) {
+                $data['resolmsg'] = $request->completionmessage;
+            }
             foreach ($q as $admin) {
                 $user['to'] = $admin;
 

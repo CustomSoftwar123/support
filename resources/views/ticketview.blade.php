@@ -843,6 +843,7 @@ let myform=document.getElementById("form");
 let data=new FormData(myform);
 var messages= $('#message').val();
     data.append('messages',messages);
+    data.append('completionmessage',messages);
 
 
     var words = messages.trim().split(/\s+/);
@@ -947,7 +948,7 @@ Lobibox.notify('warning', {
           icon: 'bx bx-info-circle'           
 });
                 });
-        event.preventDefault();
+        // event.preventDefault();
 });
 
  $(".replyandclose").click(function(){
