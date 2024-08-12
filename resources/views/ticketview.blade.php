@@ -484,7 +484,7 @@ pathinfo($attachment->filename, PATHINFO_EXTENSION) == 'flv'
                     <input class="pnameraise d-none" value={{$data22['ticketinfo'][0]->patientname}}>
                     <input class="contactraise d-none" value={{$data22['ticketinfo'][0]->contact}}>
                     <input class="sampleidraise d-none" value={{$data22['ticketinfo'][0]->sampleid}}>
-                    <input type="hidden" name="tid" id="tid" value="<?=uniqid();?>">
+                    <input type="hidden" name="tid" id="tidraisehehe" value="<?=uniqid();?>">
                     <input class="clientraise d-none" value={{$data22['ticketinfo'][0]->ticket_client}}
                     >
                     <input class="tasksidraise d-none" value={{$data22['ticketinfo'][0]->tasks_id}}>
@@ -1017,7 +1017,7 @@ $(".raisenew").click(function(){
     department=$("#department").val()
     priority=$("#priority").val()
     message=$("#message").val()
-    tid=$("#tid").val()
+    tid=$("#tidraisehehe").val()
     client=$(".clientraise").val()
     taskId=$(".tasksidraise").val()
 
