@@ -1083,6 +1083,8 @@ $(".raisenew").click(function(){
     var timeline=$("#res_expiry").val()
     data.append('messages',messages);
     data.append('resExpiry',timeline);
+    data.delete('tid')
+    data.append('tid', $('#tid').val())
     $.ajax({
                     
             url: "../updateTicketInfo",
@@ -1292,6 +1294,7 @@ $(document).on('click', '.ff_fileupload_remove_file', function () {
 // alert(tid)
 let data=new FormData();
 data.append('tid',tid);
+
 data.append('filename',filename);
 
         $.ajax({
