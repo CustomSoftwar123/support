@@ -896,6 +896,8 @@ return false;
    data.append('changes',changes);
    data.append('esdate',esdate);
    data.append('ver',ver);
+   data.delete('tid')
+   data.append('tid', $('#tid').val())
 
     $('#loading-image').removeClass('d-none');
 
