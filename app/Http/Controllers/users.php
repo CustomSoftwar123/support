@@ -341,8 +341,8 @@ class users extends Controller
         $address = $request->input('address');
         $role = $request->input('role');
         $status = $request->input('InUse');
-        $supportfordays = $request->input('supportfordays');
-        $supportfordays = implode(",", $supportfordays);
+        // $supportfordays = $request->input('supportfordays');
+        // $supportfordays = implode(",", $supportfordays);
 
         $user = auth()->user();
         
@@ -362,7 +362,7 @@ class users extends Controller
         DB::update("
             update users 
             set 
-            name = '$name', email = '$email' , phone = '$phone' , role = '$role',  status = '$status', address = '$address', city = '$city', state = '$state', country = '$country', zip = '$zip', updated_at = '".date('Y-m-d H:i:s')."' , updated_by = '".$user['id']."', supportfordays = '$supportfordays'
+            name = '$name', email = '$email' , phone = '$phone' , role = '$role',  status = '$status', address = '$address', city = '$city', state = '$state', country = '$country', zip = '$zip', updated_at = '".date('Y-m-d H:i:s')."' , updated_by = '".$user['id']."'
             where id =  $uid 
             ");  
 
