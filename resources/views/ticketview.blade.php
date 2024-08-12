@@ -478,7 +478,7 @@ pathinfo($attachment->filename, PATHINFO_EXTENSION) == 'flv'
                   <input type="text" class="changes form-control">
                     <label class="form-label mt-1" for="textAreaExample2">Messages</label>
                     <textarea class="form-control" rows="9" name="message" id="message" placeholder="Reply" required></textarea>
-                    <button class="btn btn-primary mt-2 float-right raisenew" type="button">Raise a ticket for that action</button>
+                    <button class="btn btn-primary mt-2 float-right raisenew" type="button">Reply & Raise a ticket for that action</button>
                     <input class="pnameraise d-none" value={{$data22['ticketinfo'][0]->patientname}}>
                     <input class="contactraise d-none" value={{$data22['ticketinfo'][0]->contact}}>
                     <input class="sampleidraise d-none" value={{$data22['ticketinfo'][0]->sampleid}}>
