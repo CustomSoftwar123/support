@@ -478,6 +478,15 @@ pathinfo($attachment->filename, PATHINFO_EXTENSION) == 'flv'
                   <input type="text" class="changes form-control">
                     <label class="form-label mt-1" for="textAreaExample2">Messages</label>
                     <textarea class="form-control" rows="9" name="message" id="message" placeholder="Reply" required></textarea>
+                    <button class="btn btn-primary mt-2 float-right raisenew" type="button">Raise a ticket for that action</button>
+                    <input class="pnameraise d-none" value={{$data22['ticketinfo'][0]->patientname}}>
+                    <input class="contactraise d-none" value={{$data22['ticketinfo'][0]->contact}}>
+                    <input class="sampleidraise d-none" value={{$data22['ticketinfo'][0]->sampleid}}>
+                    <input type="hidden" name="tid" id="tid" value="<?=uniqid();?>">
+                    <input class="clientraise d-none" value={{$data22['ticketinfo'][0]->ticket_client}}
+                    >
+                    <input class="tasksidraise d-none" value={{$data22['ticketinfo'][0]->tasks_id}}>
+                    <input class="ticketidraisereply d-none" value={{$data22['ticketinfo'][0]->ticketid}}>
                 </div>
 
 
@@ -789,6 +798,7 @@ icon: 'bx bx-info-circle'
 
 
   });
+ 
   $('#patientname').select2({
         placeholder:'Choose a Patient'
     });
@@ -996,7 +1006,68 @@ console.log(d);
 // var v=0;
 
 
+$(".raisenew").click(function(){
+    patientname=$(".pnameraise").val()
+    contact=$(".contactraise").val()
+    sampleid=$(".sampleidraise").val()
+    department=$("#department").val()
+    priority=$("#priority").val()
+    message=$("#message").val()
+    tid=$("#tid").val()
+    client=$(".clientraise").val()
+    taskId=$(".tasksidraise").val()
 
+    
+  //   alert(priority);
+  // return false;
+    $.ajax({
+      url:"{{route('Ticket')}}",
+      method:"POST",
+      data:{
+        patientname:patientname,
+        contact:contact,
+        sampleid:sampleid,
+        department:department,
+        priority:priority,
+        message:message,
+        client:client,
+        tid:tid,
+        subject:message,
+        client:client,
+        taskId:taskId
+      }
+
+    }).done(function(response){
+      // location.reload()
+      let myform=document.getElementById("form");
+    let data=new FormData(myform);
+    var messages= $('#message').val();
+    var timeline=$("#res_expiry").val()
+    lpc=$(".ticketidraisereply").val()
+    data.append('messages',messages);
+    data.append('resExpiry',timeline);
+    data.delete('tid');
+    data.append('tid',lpc)
+    $.ajax({
+                    
+            url: "../updateTicketInfo",
+
+            data: data,    
+            cache: false,
+            processData: false,
+            contentType: false,
+            type: 'POST',
+            }).done(function (response) {
+
+                            if(response > 0) {
+                              location.reload()
+                              //   $("#result").html('Ticket has been generated successfully!')
+                              // const val=$(".cri").text()
+                              // console.log(val)
+                            }
+                            })
+    })
+  })
 
     $(".saveupdatebtn").click(function(){
       $(".saveupdatebtn").attr("disabled", true);
