@@ -63,7 +63,7 @@
                @endif
                @if(request()->segment(2)==='task')
                
-               <a class="btn btn-info btn-sm" href="{{route('Ticket')}}/task/{{request()->segment(3)}}"><i class="fas fa-plus"></i> Ticket </a>
+               <a class="btn btn-info btn-sm" href="{{route('Ticket')}}/task/{{request()->segment(3)}}"><i class="fas fa-plus"></i> Task </a>
              @else
              <a class="btn btn-info btn-sm" href="{{route('Ticket')}}"><i class="fas fa-plus"></i> Ticket </a>
 @endif
