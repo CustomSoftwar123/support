@@ -772,6 +772,8 @@ if(status==='Completed'){
    
       let myform=document.getElementById("form");
 let data=new FormData(myform);
+data.delete('tid')
+data.append('tid', $('#tid').val())
 $.ajax({
                 
         url: "../PauseTicket",
@@ -817,7 +819,10 @@ icon: 'bx bx-info-circle'
         $('.started').removeClass('d-block');
         $('.paused').addClass('d-block');
         let myform=document.getElementById("form");
+        
 let data=new FormData(myform);
+data.delete('tid')
+        data.append('tid', $('#tid').val())
 $.ajax({
                 
         url: "../StartTicket",
