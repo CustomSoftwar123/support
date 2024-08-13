@@ -50,9 +50,15 @@
       <div class="container-fluid">
         <div class="row mb-0">
           <div class="col-sm-6">
+            @if(strpos(Request::url(), 'task')===false)
             <h1 class="m-0">Ticket View
                <a class="btn btn-info btn-sm" onclick=history.back()><i class="fas fa-arrow-left"></i> Go Back </a>
              </h1>
+             @else
+             <h1 class="m-0">Task View
+              <a class="btn btn-info btn-sm" onclick=history.back()><i class="fas fa-arrow-left"></i> Go Back </a>
+            </h1>
+             @end
           </div><!-- /.col -->
           <div class="col-sm-6  d-none d-sm-none d-md-block ">
             <ol class="breadcrumb float-sm-right">
