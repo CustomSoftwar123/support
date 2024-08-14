@@ -980,8 +980,8 @@ Lobibox.notify('warning', {
   $(".replyandclose").attr("disabled", true);
   let myform=document.getElementById("form");
     let data1=new FormData(myform);
-    data.delete('tid')
-data.append('tid', $('#tid').val())
+    data1.delete('tid')
+data1.append('tid', $('#tid').val())
   $.ajax({
                     
                     url: "{{ route('CloseTicket') }}",
