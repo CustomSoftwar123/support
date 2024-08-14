@@ -980,6 +980,8 @@ Lobibox.notify('warning', {
   $(".replyandclose").attr("disabled", true);
   let myform=document.getElementById("form");
     let data1=new FormData(myform);
+    data.delete('tid')
+data.append('tid', $('#tid').val())
   $.ajax({
                     
                     url: "{{ route('CloseTicket') }}",
@@ -1195,6 +1197,8 @@ icon: 'bx bx-info-circle'
       $(".sendtoocm").attr("disabled", true);
     let myform=document.getElementById("form");
     let data=new FormData(myform);
+    data.delete('tid')
+data.append('tid', $('#tid').val())
     $.ajax({
                     
             url: "../sendTicketToOCM",
@@ -1235,6 +1239,8 @@ icon: 'bx bx-info-circle'
 
 let myform=document.getElementById("form");
 let data=new FormData(myform);
+data.delete('tid')
+data.append('tid', $('#tid').val())
 $.ajax({
                 
         url: "../sendTicketToNET",
