@@ -55,39 +55,13 @@
             </div>
         </div>
        
-        
-        @foreach ($agenda as $data)
-
-        <div class="row mt-3">
-            <div class="col-md-12">
-
-                <table class="table table-striped">
-                    {{-- <thead>
-                        <th class="topicth">Topic</th>
-                        <th class="desccolor">Description</th>
-                    </thead> --}}
-                    <tbody>
-                        <tr>
-                            <td class="colortd topicth">Action:</td>
-                            <td ><a style="color: black;" href="{{ route('TicketView', ['id' => $data->id]) }}">{{$data->subject}}</a></td>
-
-                        </tr>
-                        <tr>
-                            <td class="colortd topicth">Action By:</td>
-                            <td>{{$data->agenda_dev}}</td>
-                        </tr>
-                        <tr>
-                            <td class="colortd topicth done">Done:</td>
-                            <td><input id="done" class="done-check" data-id="{{$data->id}}" type="checkbox"></td>
-                        </tr>
-                    </tbody>
-                </table>
-        
-
+        <div class='d-flex align-items-center mt-2'>
+            <input type="date" class="agendadateget form-control w-25" value="<?php echo date('Y-m-d');?>">
+            <button type="button" class="bringagenda btn btn-primary ml-2">Submit</button>
         </div>
+      <div class="shinti">
       </div>
-      @endforeach
-
+      
 
 
       </div>
@@ -121,24 +95,63 @@
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
     });
+   
+    $(document).on('click', '#savenotes', function() {
+    // Get the closest input field in the same row
+    var input = $(this).closest('tr').find('input.form-control');
+    
+    // Retrieve the data-id and input value
+    var dataId = input.data('id');
+    var inputValue = input.val();
 
-        $(document).on('change','.done-check',function(){
-            // alert()
-            $.ajax(
-                {
-                    url:"{{route('agendaDone')}}",
-                    method:'Post',
-                    data:{
-                       tid:$(this).data('id')     
-                    }
-                }
-            ).done(function(response){
-                console.log(response)
-                if(response==1){
-                    location.reload()
-                }
-            })
+    // Output for testing (replace with your desired action)
+    console.log('Data ID:', dataId);
+    console.log('Input Value:', inputValue);
+
+    // Example: You can now send this data via AJAX or perform another action
+    $.ajax({
+        url:"{{route('saveAgendaNotes')}}",
+        method:"POST",
+        data:{
+            id:dataId,
+            notes:inputValue
+        }
+
+    }).done(function(response){
+        location.reload()
+    })
+});
+
+    $(".bringagenda").click(function(){
+        $.ajax({
+            url:"{{route('getAgendabyDate')}}",
+            method:'POST',
+            data:{
+                date:$(".agendadateget").val()
+            }
+        }).done(function(response){
+            console.log(response)
+            $(".shinti").html(response)
         })
+    })
+
+        // $(document).on('change','.done-check',function(){
+        //     // alert()
+        //     $.ajax(
+        //         {
+        //             url:"{{route('agendaDone')}}",
+        //             method:'Post',
+        //             data:{
+        //                tid:$(this).data('id')     
+        //             }
+        //         }
+        //     ).done(function(response){
+        //         console.log(response)
+        //         if(response==1){
+        //             location.reload()
+        //         }
+        //     })
+        // })
         
  var table = $('#table').DataTable({
 
@@ -223,7 +236,7 @@ dom: "Blfrtip",
 
 });
 
-
+$(".bringagenda").trigger('click')
 
     })
     </script>
