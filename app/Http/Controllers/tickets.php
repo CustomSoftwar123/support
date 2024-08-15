@@ -2117,6 +2117,7 @@ if($email!=$repliedBy){
                         ->whereNull('agenda_done'); // agenda_done is null
               });
     })
+    ->orderBy('agenda_created_at')
     ->get();
 
           return view('layouts.agendatable')->with('agenda',$data);
