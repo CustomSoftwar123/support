@@ -868,12 +868,12 @@ var messages= $('#message').val();
     data.append('messages',messages);
     data.append('completionmessage',messages);
 
-
+    var userRole = @json(Auth::user()->role);
     var words = messages.trim().split(/\s+/);
     
    
     var wordCount = words.length;
-    if (wordCount<50){
+    if (wordCount<50 && userRole<=3){
       Lobibox.notify('warning', {
           pauseDelayOnHover: true,
           continueDelayOnInactiveTab: false,
@@ -890,7 +890,7 @@ return false;
    const changeCount2=changeCount.length;
   //  alert(changeCount2)
   //  return false;
-   if(changeCount2<50){
+   if(changeCount2<50 && userRole<=3){
     Lobibox.notify('warning', {
           pauseDelayOnHover: true,
           continueDelayOnInactiveTab: false,
