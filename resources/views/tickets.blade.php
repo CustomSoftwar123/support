@@ -63,7 +63,7 @@
                @endif
                @if(request()->segment(2)==='task')
                
-               <a class="btn btn-info btn-sm" href="{{route('Ticket')}}/task/{{request()->segment(3)}}"><i class="fas fa-plus"></i> Ticket </a>
+               <a class="btn btn-info btn-sm" href="{{route('Ticket')}}/task/{{request()->segment(3)}}"><i class="fas fa-plus"></i> Task </a>
              @else
              <a class="btn btn-info btn-sm" href="{{route('Ticket')}}"><i class="fas fa-plus"></i> Ticket </a>
 @endif
@@ -515,7 +515,19 @@ function tickets() {
 // let task=
 var columns=[
     { "data": "id", "name": "id" },
-    { "data": "ticket_client", "name": "client" },
+    // { "data": "ticket_client", "name": "client" },
+    {
+                "data": "ticket_client",
+                "name": "client",
+                "render": function (data, type, row) {
+                    // Show ticket_client if created_for is null, otherwise show row_created_For
+                    if (row.created_for === null) {
+                        return row.ticket_client;
+                    } else {
+                        return row.created_for; // Adjust this to the correct field if it's named differently
+                    }
+                }
+            },
     { "data": "ticketid", "name": "ticketid" },
     { "data": "subject", "name": "subject" },
     { "data": "patientname", "name": "patientname" },

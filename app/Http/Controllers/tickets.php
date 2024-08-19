@@ -628,12 +628,25 @@ return response()->json(['status','true',$tid]);
         }
 
         DB::insert(
-            'insert into ticketmessages (ticketid, username, mid, message, user, created_at, created_by) values (?, ?, ?, ?, ?, ?, ?)',
-            [$request->tid, $email, $request->mid, $message, 'client', date('Y-m-d H:i:s'), $user]
+            'insert into ticketmessages (ticketid, username, mid, message, user, created_at, created_by,changes) values (?, ?, ?, ?, ?, ?, ?,?)',
+            [$request->tid, $email, $request->mid, $message, 'client', date('Y-m-d H:i:s'), $user,$changes]
         );
 
 
-        DB::update("update tickets  set status = 'Completed',  timetaken='" . $ab . "',changes='".$changes."' ,version='".$ver."',exesentdate='".$esdate."' where ticketid = '" . $request->tid . "'");
+        // DB::update("update tickets  set status = 'Completed',  timetaken='" . $ab . "',changes='".$changes."' ,version='".$ver."',exesentdate='".$esdate."' where ticketid = '" . $request->tid . "'");
+        DB::update(
+            "UPDATE tickets 
+             SET status = ?, timetaken = ?, changes = ?, version = ?, exesentdate = ? 
+             WHERE ticketid = ?", 
+            [
+                'Completed',
+                $ab,
+                $changes,
+                $ver,
+                $esdate,
+                $request->tid
+            ]
+        );
         DB::update("update tickets  set priority = '$priority'  where ticketid = '" . $tid . "'");
         DB::update("update tickets  set completedat ='$date' where ticketid = '" . $request->tid . "'");
 
@@ -915,7 +928,7 @@ if($role<=3){
 // $email=auth()->user()->email;
 //  $message=$request->message;
             $completedby = auth()->user()->name;
-            $completedmail = auth()->user()->email;
+             $completedmail = auth()->user()->email;
 
             $status = DB::table('tickets')->where('ticketid', $tid)->pluck('status');
             $email = DB::table('tickets')->where('ticketid', $tid)->pluck('username');
@@ -943,6 +956,9 @@ if($role<=3){
 
 
             $data = ['data' => $subject[0], 'name' => $raisedby[0], 'email' => $email[0], 'tid' => $tid, 'esubject' => $esubject, 'messages' => $messages[0], 'status' => $status[0], 'id' => $id[0]];
+            if (!empty($request->completionmessage)) {
+                $data['resolmsg'] = $request->completionmessage;
+            }
             foreach ($q as $admin) {
                 $user['to'] = $admin;
 
@@ -1737,6 +1753,8 @@ return view('tickettimeline');
 public function addToAgenda(Request $request){
     // return $request;
    $ticket= Ticket::where('ticketid',$request->ticketId)->first();
+//    return $request->agendaDate;
+
    if($ticket){
   return $ticket->update([
     'agenda'=>1,
@@ -2080,12 +2098,35 @@ if($email!=$repliedBy){
         ]);
      }
     }
+    public function saveAgendaNotes(Request $request){
+        $ticket= Ticket::where('id',$request->id)->first();
+        if($ticket){
+       return $ticket->update([
+         'agenda_notes'=>$request->notes,
+        ]);
+     }
+    }
+     public function getAgendabyDate(Request $request){
+        // $data = DB::table('tickets')->where('agenda','=','1')->where('agenda_created_at',$request->date)->get();
+        $data = DB::table('tickets')
+    ->where('agenda', '=', '1')
+    ->where(function($query) use ($request) {
+        $query->where('agenda_created_at', $request->date) // Today's tickets
+              ->orWhere(function($query) {
+                  $query->where('agenda_created_at', '<', now()->toDateString()) // Tickets before today
+                        ->whereNull('agenda_done'); // agenda_done is null
+              });
+    })
+    ->orderBy('agenda_created_at')
+    ->get();
+
+          return view('layouts.agendatable')->with('agenda',$data);
+     }
     public function agenda(Request $request){
 
         // if($request->ajax()){
-    
-            $data = DB::table('tickets')->where('agenda','=','1')->whereNull('agenda_done')->get();
-       
+           
+            
        
     //    return Datatables::of($data)
        
@@ -2094,7 +2135,7 @@ if($email!=$repliedBy){
     //    ->make(true);
     //        }
 
-        return view('agenda')->with('agenda',$data);
+        return view('agenda');
     }
 
     // public function dependencyEmail(Request $request){

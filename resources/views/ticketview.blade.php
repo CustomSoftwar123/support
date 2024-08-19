@@ -50,9 +50,15 @@
       <div class="container-fluid">
         <div class="row mb-0">
           <div class="col-sm-6">
+            @if(strpos(Request::url(), 'task')===false)
             <h1 class="m-0">Ticket View
                <a class="btn btn-info btn-sm" onclick=history.back()><i class="fas fa-arrow-left"></i> Go Back </a>
              </h1>
+             @else
+             <h1 class="m-0">Task View
+              <a class="btn btn-info btn-sm" onclick=history.back()><i class="fas fa-arrow-left"></i> Go Back </a>
+            </h1>
+             @endif
           </div><!-- /.col -->
           <div class="col-sm-6  d-none d-sm-none d-md-block ">
             <ol class="breadcrumb float-sm-right">
@@ -255,11 +261,11 @@ pathinfo($ticketattachment->filename, PATHINFO_EXTENSION) == 'flv'
                                  {{$ticketmessage->message}} 
                                 </div>
 
-                                @if($loop->last)
-                                @if($data22['ticketinfo'][0]->changes)
+                                {{-- @if($loop->last) --}}
+                                @if($ticketmessage->changes)
                                 <p class="m-0 mt-1">Changes and Effects  </p>  
                                 <div class="jumbotron py-2 px-2 mb-0">
-                                 {{$data22['ticketinfo'][0]->changes}} 
+                                 {{$ticketmessage->changes}} 
                                 </div>
 
                                 <div class="form-group col-md-12 d-flex mr-2">
@@ -278,7 +284,7 @@ pathinfo($ticketattachment->filename, PATHINFO_EXTENSION) == 'flv'
                             
 
                              @endif
-                             @endif
+                             {{-- @endif --}}
                                     
                                   <?php 
 
@@ -478,6 +484,17 @@ pathinfo($attachment->filename, PATHINFO_EXTENSION) == 'flv'
                   <input type="text" class="changes form-control">
                     <label class="form-label mt-1" for="textAreaExample2">Messages</label>
                     <textarea class="form-control" rows="9" name="message" id="message" placeholder="Reply" required></textarea>
+                    @if($data22['ticketinfo'][0]->tasks_id)
+                    <button class="btn btn-primary mt-2 float-right raisenew" type="button">Reply & Raise a ticket for that action</button>
+                    @endif
+                    <input class="pnameraise d-none" value={{$data22['ticketinfo'][0]->patientname}}>
+                    <input class="contactraise d-none" value={{$data22['ticketinfo'][0]->contact}}>
+                    <input class="sampleidraise d-none" value={{$data22['ticketinfo'][0]->sampleid}}>
+                    <input type="hidden" name="tid" id="tidraisehehe" value="<?=uniqid();?>">
+                    <input class="clientraise d-none" value={{$data22['ticketinfo'][0]->ticket_client}}
+                    >
+                    <input class="tasksidraise d-none" value={{$data22['ticketinfo'][0]->tasks_id}}>
+                    <input class="ticketidraisereply d-none" value={{$data22['ticketinfo'][0]->ticketid}}>
                 </div>
 
 
@@ -755,6 +772,8 @@ if(status==='Completed'){
    
       let myform=document.getElementById("form");
 let data=new FormData(myform);
+data.delete('tid')
+data.append('tid', $('#tid').val())
 $.ajax({
                 
         url: "../PauseTicket",
@@ -789,6 +808,7 @@ icon: 'bx bx-info-circle'
 
 
   });
+ 
   $('#patientname').select2({
         placeholder:'Choose a Patient'
     });
@@ -799,7 +819,10 @@ icon: 'bx bx-info-circle'
         $('.started').removeClass('d-block');
         $('.paused').addClass('d-block');
         let myform=document.getElementById("form");
+        
 let data=new FormData(myform);
+data.delete('tid')
+        data.append('tid', $('#tid').val())
 $.ajax({
                 
         url: "../StartTicket",
@@ -843,13 +866,14 @@ let myform=document.getElementById("form");
 let data=new FormData(myform);
 var messages= $('#message').val();
     data.append('messages',messages);
+    data.append('completionmessage',messages);
 
-
+    var userRole = @json(Auth::user()->role);
     var words = messages.trim().split(/\s+/);
     
    
     var wordCount = words.length;
-    if (wordCount<50){
+    if (wordCount<50 && userRole<=3){
       Lobibox.notify('warning', {
           pauseDelayOnHover: true,
           continueDelayOnInactiveTab: false,
@@ -866,7 +890,7 @@ return false;
    const changeCount2=changeCount.length;
   //  alert(changeCount2)
   //  return false;
-   if(changeCount2<50){
+   if(changeCount2<50 && userRole<=3){
     Lobibox.notify('warning', {
           pauseDelayOnHover: true,
           continueDelayOnInactiveTab: false,
@@ -883,6 +907,8 @@ return false;
    data.append('changes',changes);
    data.append('esdate',esdate);
    data.append('ver',ver);
+   data.delete('tid')
+   data.append('tid', $('#tid').val())
 
     $('#loading-image').removeClass('d-none');
 
@@ -947,13 +973,15 @@ Lobibox.notify('warning', {
           icon: 'bx bx-info-circle'           
 });
                 });
-        event.preventDefault();
+        // event.preventDefault();
 });
 
  $(".replyandclose").click(function(){
   $(".replyandclose").attr("disabled", true);
   let myform=document.getElementById("form");
     let data1=new FormData(myform);
+    data1.delete('tid')
+data1.append('tid', $('#tid').val())
   $.ajax({
                     
                     url: "{{ route('CloseTicket') }}",
@@ -995,7 +1023,68 @@ console.log(d);
 // var v=0;
 
 
+$(".raisenew").click(function(){
+    patientname=$(".pnameraise").val()
+    contact=$(".contactraise").val()
+    sampleid=$(".sampleidraise").val()
+    department=$("#department").val()
+    priority=$("#priority").val()
+    message=$("#message").val()
+    tid=$("#tidraisehehe").val()
+    client=$(".clientraise").val()
+    taskId=$(".tasksidraise").val()
 
+    
+  //   alert(priority);
+  // return false;
+    $.ajax({
+      url:"{{route('Ticket')}}",
+      method:"POST",
+      data:{
+        patientname:patientname,
+        contact:contact,
+        sampleid:sampleid,
+        department:department,
+        priority:priority,
+        message:message,
+        client:client,
+        tid:tid,
+        subject:message,
+        client:client,
+        taskId:taskId
+      }
+
+    }).done(function(response){
+      // location.reload()
+      let myform=document.getElementById("form");
+    let data=new FormData(myform);
+    var messages= $('#message').val();
+    var timeline=$("#res_expiry").val()
+    lpc=$(".ticketidraisereply").val()
+    data.append('messages',messages);
+    data.append('resExpiry',timeline);
+    data.delete('tid');
+    data.append('tid',lpc)
+    $.ajax({
+                    
+            url: "../updateTicketInfo",
+
+            data: data,    
+            cache: false,
+            processData: false,
+            contentType: false,
+            type: 'POST',
+            }).done(function (response) {
+
+                            if(response > 0) {
+                              location.reload()
+                              //   $("#result").html('Ticket has been generated successfully!')
+                              // const val=$(".cri").text()
+                              // console.log(val)
+                            }
+                            })
+    })
+  })
 
     $(".saveupdatebtn").click(function(){
       $(".saveupdatebtn").attr("disabled", true);
@@ -1007,6 +1096,8 @@ console.log(d);
     var timeline=$("#res_expiry").val()
     data.append('messages',messages);
     data.append('resExpiry',timeline);
+    data.delete('tid')
+    data.append('tid', $('#tid').val())
     $.ajax({
                     
             url: "../updateTicketInfo",
@@ -1106,6 +1197,8 @@ icon: 'bx bx-info-circle'
       $(".sendtoocm").attr("disabled", true);
     let myform=document.getElementById("form");
     let data=new FormData(myform);
+    data.delete('tid')
+data.append('tid', $('#tid').val())
     $.ajax({
                     
             url: "../sendTicketToOCM",
@@ -1146,6 +1239,8 @@ icon: 'bx bx-info-circle'
 
 let myform=document.getElementById("form");
 let data=new FormData(myform);
+data.delete('tid')
+data.append('tid', $('#tid').val())
 $.ajax({
                 
         url: "../sendTicketToNET",
@@ -1216,6 +1311,7 @@ $(document).on('click', '.ff_fileupload_remove_file', function () {
 // alert(tid)
 let data=new FormData();
 data.append('tid',tid);
+
 data.append('filename',filename);
 
         $.ajax({

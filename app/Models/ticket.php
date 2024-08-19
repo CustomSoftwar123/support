@@ -22,6 +22,8 @@ class ticket extends Model
         'agenda',
         'agenda_dev',
         'agenda_done',
+        'agenda_created_at',
+        'agenda_notes'
 
     ];
 }

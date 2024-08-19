@@ -80,6 +80,13 @@ Route::get('syncUsersData', [users::class, 'syncUsersData'])->name('syncUsersDat
 	Route::post('assignTicketNow', [tickets::class, 'assignTicketNow'])->name('assignTicketNow');
 	Route::get('Client', [tickets::class, 'client'])->name('Client');
 	
+	Route::post('getAgendabyDate', [tickets::class, 'getAgendabyDate'])->name('getAgendabyDate');
+
+	
+	Route::post('saveAgendaNotes', [tickets::class, 'saveAgendaNotes'])->name('saveAgendaNotes');
+
+	
+	
 	Route::get('ScanSample', [tickets::class, 'ScanSample'])->name('ScanSample');
 	Route::post('ScanSample', [tickets::class, 'ScanSample'])->name('ScanSample');
 
