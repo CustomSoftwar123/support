@@ -336,7 +336,7 @@ thead th {
           </li>
           @endif
 
-          @if(Auth::user()->role<=4 )
+          @if(Auth::user()->role<=3 )
 
           {{-- <li class="nav-item">
             <a href="{{ route('dailyreports') }}" class="nav-link {{ (request()->is('dailyreports')) ? 'active' : '' }}">
