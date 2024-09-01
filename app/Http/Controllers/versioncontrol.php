@@ -21,6 +21,11 @@ class versioncontrol extends Controller
                 $btn = '<div class="btn-group" role="group">
                 <button id="'.$data->id.'" title="Edit" class="edit btn btn-primary update ">
                     <i class="bx bx-edit"></i>
+                    </button>
+                     <a href="'.route('versionlist', ['project' => urlencode($data->application)]).'" title="Action" class="btn btn-info">
+                <i class="fas fa-eye"></i>
+            </a>
+                    
                    
                     </div>';
     
@@ -80,6 +85,35 @@ class versioncontrol extends Controller
             return "Error Updating Data";
             // return "UPDATE members set membername = '$name', email = '$email',password = '$password', confirmpass='$repeatpass' where id = '$id'";
         }
+    }
+
+    public function versionlist(Request $request, $project=null){
+        if($request->ajax()){
+            // return $request->tasks_id;
+        //    $project= str_replace("%20"," ",$project);
+        $decodedProject = urldecode($project);
+      $data = DB::table('tickets')->select('ticketid', 'changes', 'id','version','completedat')->where('project',$decodedProject);
+
+            return Datatables::of($data)
+            ->addIndexColumn() 
+    //         ->addColumn('action', function($data){
+                                
+    //             $btn = '<div class="btn-group" role="group">
+    //             <button id="'.$data->id.'" title="Edit" class="edit btn btn-primary update ">
+    //                 <i class="bx bx-edit"></i>
+                   
+    //                 </div>';
+    
+    //            return $btn;
+    //    }) 
+            ->setRowId('id')
+            ->rawColumns(['action','InUse'])
+            ->make(true);
+
+        }
+      
+        
+        return view('versionlist');
     }
 }
 

@@ -113,8 +113,16 @@
                     <label for="sampleid">Sample ID (Optional)</label>
                     <input type="text" class="form-control f-one" name="sampleid" id="sampleid" placeholder="Sample ID" required>
                 </div>
-
-         
+                <div class="form-group col-md-3 form-inline">
+                   
+                  <input type="checkbox" class="" name="criticalrisk" id="criticalrisk"  required>
+                    <label for="criticalrisk" class="ml-2 ">Clinical Risk</label>
+                </div>
+                <div class="form-group col-md-3 d-flex align-items-center ">
+                  {{-- <label for="criticalriskreason" class="mb-0"> Reason</label> --}}
+                  <input type="text" class="form-control d-none" name="criticalriskreason" id="criticalriskreason" placeholder="Reason">
+              </div>
+              
 
                 <!-- Message Area -->
                 <div class="form-outline my-2 col-md-12">
@@ -195,6 +203,11 @@
              $('#myid').val(data.ticketinfo.id);
              $('.saveupdatebtn').text('Update Ticket Info');
 
+// $("#criticalrisk").change(function(){
+//   if($(this).is(":checked")){
+//     alert()
+//   }
+// })
  $('.saveupdatebtn').click(function(){
      let formmy=document.getElementById("form");
      let formd=new FormData(formmy);
@@ -344,6 +357,16 @@ this.find('.ff_fileupload_actions button.ff_fileupload_remove_file').val(filenam
     
 }
 });
+$(document).on('change','#criticalrisk',function() {
+        if($(this).is(":checked")){
+            // Code to run if the checkbox is checked
+            $("#criticalriskreason").removeClass('d-none')
+            // alert("Checkbox is checked!");
+        }
+        else{
+          $("#criticalriskreason").addClass('d-none')
+        }
+    });
 $(document).on('click', '.ff_fileupload_remove_file', function () {  
         // console.log($(this).id)
 
