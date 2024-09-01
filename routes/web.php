@@ -285,12 +285,15 @@ Route::get('dailyreportsdata', [tickets::class, 'dailyreportsdata'])->name('dail
 });
 
 
+Route::get('timeline_audit/{tasks_id?}',[tickets::class, 'timeline_audit'])->name('timeline_audit');
 
 
 Route::get('/uploadGPFiles', [FileUploadController::class, 'showUploadForm']);
 Route::post('/uploadGPFiles', [FileUploadController::class, 'uploadGPFiles']);
 
 Route::get('versioncontrol',[versioncontrol::class, 'versioncontrol'])->name('versioncontrol');
+Route::get('versionlist/{project?}',[versioncontrol::class, 'versionlist'])->name('versionlist');
+
 Route::post('versioncontrolsubmit',[versioncontrol::class, 'versioncontrolsubmit'])->name('versioncontrolsubmit');
 Route::post('versioncontrolupdate',[versioncontrol::class, 'versioncontrolupdate'])->name('versioncontrolupdate');
 

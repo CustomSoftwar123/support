@@ -14,7 +14,7 @@ use App\Models\task;
 use DB;
 use App\Mail\SignUp;
 use App\Mail\TicketReplyMail;
-// use App\Mail\TicketDependencyNotification;
+use App\Mail\TicketDependencyNotification;
 use App\Mail\ProjectAssigned;
 use Mail;
 use App\Jobs\SendTicketsReport;
@@ -174,6 +174,9 @@ $ticketattachments=DB::table('ticketattachments')->where('mid', null)->where('ti
         // $maxid=DB::table('timeline')->where('ticketid','=',$ticketinfo[0]->ticketid)->max('id');
 
         //  $status=DB::table('timeline')->select('status')->where('id','=',$maxid)->get(); 
+
+        $versions=DB::table('version_control')->pluck('application');
+
         $ticketinfo[0]->exesentdate = Carbon::parse($ticketinfo[0]->exesentdate)->format('Y-m-d');
         $projects = DB::table('tasks')->select('subject','id')->where('id','>',14)->get();
         $internal = DB::table('tickets')->where('id', $id)->pluck('internal');
@@ -196,7 +199,8 @@ $ticketattachments=DB::table('ticketattachments')->where('mid', null)->where('ti
 'internal'=>$internal,
 'ticketTimeline'=>$ticketTimeline,
 'projects'=>$projects,
-'task_tickets'=>$task_tickets
+'task_tickets'=>$task_tickets,
+'versions'=>$versions
 
 
         ];
@@ -246,6 +250,7 @@ $priority = $request->priority;
 $message = $request->message;
 $tid = $request->tid;
 $client=$request->client;
+$crReason=$request->criticalriskreason;
 // if(!$client){
 //     $client=auth()->user()->client;
 // // return $client.'sad';
@@ -278,24 +283,24 @@ $taskid=$request->taskId;
 // {
 //     return response()->json(['status'=>0,'errors'=>$validator->errors()[0]]);
 // }
-if($priority=='Critical'){
-    $futureDateTime = Carbon::now()->addDay(3);
-}
-else if($priority=='High'){
-    $futureDateTime = Carbon::now()->addDay(7);
-}
-elseif($priority=='Medium'){
-    $futureDateTime = Carbon::now()->addDay(10);
-}
-elseif($priority=='Low'){
-    $futureDateTime = Carbon::now()->addDay(15);
-}
+// if($priority=='Critical'){
+//     $futureDateTime = Carbon::now()->addDay(3);
+// }
+// else if($priority=='High'){
+//     $futureDateTime = Carbon::now()->addDay(7);
+// }
+// elseif($priority=='Medium'){
+//     $futureDateTime = Carbon::now()->addDay(10);
+// }
+// elseif($priority=='Low'){
+//     $futureDateTime = Carbon::now()->addDay(15);
+// }
 
 if($taskid){
-DB::insert('insert into tickets (patientname, username, contact,sampleid,subject,department,priority,message,created_at,created_by,ticketid,status,mailed,created_for,tasks_id,response_expiry,ticket_client) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)', [$patientname,$email,$contact,$sampleid,$subject,$department,$priority,$message,$date,$id,$tid,'Opened',0,$client,$taskid,$futureDateTime,$ticket_client]);
+DB::insert('insert into tickets (patientname, username, contact,sampleid,subject,department,priority,message,created_at,created_by,ticketid,status,mailed,created_for,tasks_id,ticket_client,critical_risk_reason) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)', [$patientname,$email,$contact,$sampleid,$subject,$department,$priority,$message,$date,$id,$tid,'Opened',0,$client,$taskid,$ticket_client,$crReason]);
 }else{
 	
-DB::insert('insert into tickets (patientname, username, contact,sampleid,subject,department,priority,message,created_at,created_by,ticketid,status,mailed,created_for,response_expiry,ticket_client) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)', [$patientname,$email,$contact,$sampleid,$subject,$department,$priority,$message,$date,$id,$tid,'Opened',0,$client,$futureDateTime,$ticket_client]);
+DB::insert('insert into tickets (patientname, username, contact,sampleid,subject,department,priority,message,created_at,created_by,ticketid,status,mailed,created_for,ticket_client,critical_risk_reason) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)', [$patientname,$email,$contact,$sampleid,$subject,$department,$priority,$message,$date,$id,$tid,'Opened',0,$client,$ticket_client,$crReason]);
 }
 return response()->json(['status','true',$tid]);
 
@@ -323,13 +328,14 @@ return response()->json(['status','true',$tid]);
         $message = $request->message;
         $tid = $request->tid;
         $mid = $request->mid;
-        $resExpiry = $request->resExpiry;
+         $resExpiry = $request->resExpiry;
 
         $user = auth()->user()->id;
         $email = auth()->user()->email;
         $date = Carbon::now();
 
-
+// $resExpiry =$resExpiry??null;
+$resExpiry = !empty($resExpiry) ? $resExpiry : null;
         $validator = $request->validate([
             'tid' => 'required',
             'mid' => 'required',
@@ -345,12 +351,19 @@ return response()->json(['status','true',$tid]);
 //     return response()->json(['status'=>0,'errors'=>$validator->errors()->first()]);
 // }
 
+        $timelineCheck = DB::table('tickets')->where('ticketid', $request->tid)->get();
+        // return $timelineCheck[0]->response_expiry .' ss'. $resExpiry;
 
         DB::insert(
             'insert into ticketmessages (ticketid, mid, username, message, user, created_at, created_by) values (?, ?, ?, ?, ?, ?, ?)',
             [$request->tid, $request->mid, $email, $message, 'client', date('Y-m-d H:i:s'), $user]
         );
+        if($resExpiry){
         DB::update("update tickets  set priority = '$priority',response_expiry='$resExpiry'  where ticketid = '" . $tid . "'");
+        }
+        else{
+            DB::update("update tickets  set priority = '$priority'  where ticketid = '" . $tid . "'");  
+        }
         // DB::table('tickets')
 // ->where('ticketid', $request->tid)
 // ->update(['priority' => $priority]);
@@ -365,8 +378,30 @@ return response()->json(['status','true',$tid]);
 
 
         }
+        $loggedInUser=auth()->user()->name;
 
         $tid = DB::table('tickets')->where('ticketid', $request->tid)->get();
+        $existingTimeline=$timelineCheck[0]->response_expiry;
+
+        if($tid[0]->tasks_id){
+        if(!$timelineCheck[0]->response_expiry && $resExpiry){
+
+            DB::insert( 'insert into timeline_audit (ticketid, activity, tasks_id) values (?, ?, ?)',
+            [$tid[0]->ticketid, "Ticket timeline set to $resExpiry by $loggedInUser",$tid[0]?->tasks_id ]
+        );
+        }else{
+            $dateTime = new DateTime($existingTimeline);
+
+// Format to only show the date (YYYY-MM-DD)
+$formattedDate = $dateTime->format('Y-m-d');
+            // return 1;
+            if($existingTimeline!=$resExpiry){
+            DB::insert( 'insert into timeline_audit (ticketid, activity, tasks_id) values (?, ?, ?)',
+            [$tid[0]->ticketid, "Ticket timeline changed from $formattedDate to $resExpiry by $loggedInUser",$tid[0]?->tasks_id ]
+        );
+    }
+        }
+    }
         return $tid[0]->id;
 
 
@@ -556,6 +591,7 @@ return response()->json(['status','true',$tid]);
         $changes = $request->changes;
         $esdate = $request->esdate;
         $ver = $request->ver;
+        $proj=$request->project;
 
         $user = auth()->user()->id;
         $email = auth()->user()->email;
@@ -636,7 +672,7 @@ return response()->json(['status','true',$tid]);
         // DB::update("update tickets  set status = 'Completed',  timetaken='" . $ab . "',changes='".$changes."' ,version='".$ver."',exesentdate='".$esdate."' where ticketid = '" . $request->tid . "'");
         DB::update(
             "UPDATE tickets 
-             SET status = ?, timetaken = ?, changes = ?, version = ?, exesentdate = ? 
+             SET status = ?, timetaken = ?, changes = ?, version = ?, exesentdate = ? ,project=?
              WHERE ticketid = ?", 
             [
                 'Completed',
@@ -644,12 +680,15 @@ return response()->json(['status','true',$tid]);
                 $changes,
                 $ver,
                 $esdate,
+                $proj,
                 $request->tid
             ]
         );
         DB::update("update tickets  set priority = '$priority'  where ticketid = '" . $tid . "'");
         DB::update("update tickets  set completedat ='$date' where ticketid = '" . $request->tid . "'");
-
+        if($proj&&$ver){
+        DB::update("update version_control  set newversion ='$ver' where application = '" . $proj . "'");
+        }    
         $tid = DB::table('tickets')->where('ticketid', $request->tid)->get();
         if($tid[0]?->agenda==1 && $tid[0]?->agenda_done!=1){
             DB::update("update tickets  set agenda_done=1 where ticketid = '" . $request->tid . "'");
@@ -1796,6 +1835,7 @@ public function tasks(Request $request){
                 <div class="btn-group" role="group" aria-label="Basic example">
                 <button class="btn btn-info edit" id="' . $row->id . '"  >Edit </button>
                 <button class="btn btn-success viewTickets" id="' . $row->id . '"> View </button>
+                <button class="btn btn-dark viewLogs" id="' . $row->id . '"> Timeline </button>
                 </div>
                 ';
             } else {
@@ -2138,33 +2178,61 @@ if($email!=$repliedBy){
         return view('agenda');
     }
 
-    // public function dependencyEmail(Request $request){
-    //     $dependencyTicketId = $request->dependencyTicketId;
-    //     $dependencyTicketSubject = $request->dependencyTicketSubject;
-    //     $thisTicketId = $request->thisTicketId;
-    //     $thisTicketSubject = $request->thisTicketSubject;
-    //     $taskId = $request->taskId;
+    public function dependencyEmail(Request $request){
+        $dependencyTicketId = $request->dependencyTicketId;
+        $dependencyTicketSubject = $request->dependencyTicketSubject;
+        $thisTicketId = $request->thisTicketId;
+        $thisTicketSubject = $request->thisTicketSubject;
+        $taskId = $request->taskId;
 
-    //     $ticket = [
-    //         'id' => $thisTicketId,
-    //         'subject' => $thisTicketSubject
-    //     ];
+        $ticket = [
+            'id' => $thisTicketId,
+            'subject' => $thisTicketSubject
+        ];
     
-    //     $dependencies = [
-    //         ['id' => $dependencyTicketId, 'subject' => $dependencyTicketSubject],
+        $dependencies = [
+            ['id' => $dependencyTicketId, 'subject' => $dependencyTicketSubject],
           
-    //         // Add more dependencies as needed
-    //     ];
+            // Add more dependencies as needed
+        ];
     
-    //     $recipients = ['zaintahir0012@gmail.com'];
+        $recipients = ['zaintahir0012@gmail.com','aqeel@ocmsoftware.ie'];
     
-    //     Mail::to($recipients)->send(new TicketDependencyNotification($ticket, $dependencies));
+        Mail::to($recipients)->send(new TicketDependencyNotification($ticket, $dependencies));
     
-    //     return "Notification sent!";
+        return "Notification sent!";
 
-    // }
+    }
 
+    public function timeline_audit(Request $request,$tasks_id = null){
+        // return true;
+        
+        if($request->ajax()){
+            // return $request->tasks_id;
+     $data = DB::table('timeline_audit')->select('ticketid', 'activity', 'id')->where('tasks_id',$tasks_id);
+
+            return Datatables::of($data)
+            ->addIndexColumn() 
+    //         ->addColumn('action', function($data){
+                                
+    //             $btn = '<div class="btn-group" role="group">
+    //             <button id="'.$data->id.'" title="Edit" class="edit btn btn-primary update ">
+    //                 <i class="bx bx-edit"></i>
+                   
+    //                 </div>';
     
+    //            return $btn;
+    //    }) 
+            ->setRowId('id')
+            ->rawColumns(['action','InUse'])
+            ->make(true);
+
+        }
+      
+        
+        return view('timeline_audit');
+    }
+
 }
 
 

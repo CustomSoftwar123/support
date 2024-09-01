@@ -270,14 +270,19 @@ pathinfo($ticketattachment->filename, PATHINFO_EXTENSION) == 'flv'
 
                                 <div class="form-group col-md-12 d-flex mr-2">
                                   
-                                  <div class="col-md-6">
+                                  <div class="col-md-4">
                                   <label for="sentdate">Exe Sent Date</label>
                                   <input type="date" class="form-control f-one"  name="sentdate" id="sentdate" value="{{$data22['ticketinfo'][0]->exesentdate}}" readonly >
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-4">
                                   <label for="version">Version</label>
                                   <input type="text" class="form-control f-one"  name="version" id="version" placeholder="Version" value="{{$data22['ticketinfo'][0]->version}}" readonly>
                                 </div>
+                                <div class="col-md-4">
+                                  <label for="project">Project</label>
+                                  <input type="text" class="form-control f-one"  name="project" id="project" placeholder="Project" value="{{$data22['ticketinfo'][0]->project}}" readonly>
+                                </div>
+                              
                                 
                               </div>
                 
@@ -391,7 +396,7 @@ pathinfo($attachment->filename, PATHINFO_EXTENSION) == 'flv'
                       <option>Technical Department</option>
                     </select>
                   </div>
-                  <div class="col-md-2">
+                  <div class="col-md-3">
                     <label class="form-label">Priority</label>
                     <select class="form-select form-control" name="priority" required id="priority">
                       <option value="">Choose an option</option>
@@ -428,6 +433,12 @@ pathinfo($attachment->filename, PATHINFO_EXTENSION) == 'flv'
                     <label for="sampleid">Sample ID</label>
                     <input type="text" class="form-control f-one" readonly name="sampleid" id="sampleid" placeholder="Sample ID" >
                 </div>
+                  @if($data22['ticketinfo'][0]->critical_risk_reason)
+                  <div class="col-md-3">
+                    <label for="version">Critical Risk Reason</label>
+                    <input type="text" class="form-control f-one"  name="criticalrr" id="criticalrr" placeholder="" value="{{$data22['ticketinfo'][0]->critical_risk_reason}}" readonly>
+                  </div>
+                  @endif
 
                 <div class="form-group col-md-3 ">
                    
@@ -442,12 +453,24 @@ pathinfo($attachment->filename, PATHINFO_EXTENSION) == 'flv'
                >
             </div>
 
+            <div class="form-group col-md-3 ">
+                   
+              <label for="project">Project</label>
+              <select type="text" class="form-control f-one"  name="project" id="project" placeholder="project" 
+             >
+             <option value="">Choose project</option>
+             @foreach($data22['versions'] as $versions)
+             <option value="{{$versions}}">{{$versions}}</option>
+             @endforeach
+            </select>
+          </div>
+
 
             
             <input type="hidden" class="form-control" value="{{$data22['ticketinfo'][0]->tasks_id}}"  name="taskId" id="taskId"  >
 
             @if($data22['ticketinfo'][0]->tasks_id)
-            <div class="form-group col-md-3 d-none ">       
+            <div class="form-group col-md-3  ">       
               <label for="dependency">Dependency</label>
               <select type="text" class="form-control"  name="dependency" id="dependency" placeholder="Dependency">
                 <option disabled hidden selected>Select a ticket</option>
@@ -904,8 +927,10 @@ return false;
    }
   const esdate= $("#sentdate").val()
   const ver= $("#version").val()
+  const project= $("#project").val()
    data.append('changes',changes);
    data.append('esdate',esdate);
+   data.append('project',project);
    data.append('ver',ver);
    data.delete('tid')
    data.append('tid', $('#tid').val())

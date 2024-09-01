@@ -434,6 +434,10 @@ table.on('click', '.viewTickets', function() {
 
 })
 
+table.on('click', '.viewLogs', function() {
+    const id = $(this).attr('id');
+    window.location.href = `/timeline_audit/${id}`;
+})
 table.on('click', '.edit', function() {
 
 
