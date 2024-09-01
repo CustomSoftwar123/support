@@ -278,12 +278,11 @@ pathinfo($ticketattachment->filename, PATHINFO_EXTENSION) == 'flv'
                                   <label for="version">Version</label>
                                   <input type="text" class="form-control f-one"  name="version" id="version" placeholder="Version" value="{{$data22['ticketinfo'][0]->version}}" readonly>
                                 </div>
-                                @if(Auth::user()->role<=3)
                                 <div class="col-md-4">
                                   <label for="project">Project</label>
                                   <input type="text" class="form-control f-one"  name="project" id="project" placeholder="Project" value="{{$data22['ticketinfo'][0]->project}}" readonly>
                                 </div>
-                                @endif
+                              
                               
                                 
                               </div>
@@ -454,6 +453,7 @@ pathinfo($attachment->filename, PATHINFO_EXTENSION) == 'flv'
                 <input type="text" class="form-control f-one"  name="version" id="version" placeholder="Version" 
                >
             </div>
+            @if(Auth::user()->role<=3)
 
             <div class="form-group col-md-3 ">
                    
@@ -466,6 +466,7 @@ pathinfo($attachment->filename, PATHINFO_EXTENSION) == 'flv'
              @endforeach
             </select>
           </div>
+          @endif
 
 
             
