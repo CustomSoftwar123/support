@@ -278,10 +278,12 @@ pathinfo($ticketattachment->filename, PATHINFO_EXTENSION) == 'flv'
                                   <label for="version">Version</label>
                                   <input type="text" class="form-control f-one"  name="version" id="version" placeholder="Version" value="{{$data22['ticketinfo'][0]->version}}" readonly>
                                 </div>
+                                @if(Auth::user()->role<=3)
                                 <div class="col-md-4">
                                   <label for="project">Project</label>
                                   <input type="text" class="form-control f-one"  name="project" id="project" placeholder="Project" value="{{$data22['ticketinfo'][0]->project}}" readonly>
                                 </div>
+                                @endif
                               
                                 
                               </div>
