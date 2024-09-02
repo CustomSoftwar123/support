@@ -92,7 +92,7 @@ class versioncontrol extends Controller
             // return $request->tasks_id;
         //    $project= str_replace("%20"," ",$project);
         $decodedProject = urldecode($project);
-      $data = DB::table('tickets')->select('ticketid', 'changes', 'id','version','completedat')->where('project',$decodedProject);
+      $data = DB::table('tickets')->select('ticketid', 'changes', 'id','version','completedat','current_version')->where('project',$decodedProject);
 
             return Datatables::of($data)
             ->addIndexColumn() 
