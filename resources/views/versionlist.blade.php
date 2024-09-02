@@ -40,9 +40,9 @@
                       <tr>
                         <th scope="col">Ticket</th>
                         <th scope="col">Change</th>
+                        <th scope="col">Current Version</th>
 
                         <th scope="col">Change to Version</th>
-                        <th scope="col">Current Version</th>
                         <th>Ticket Completed At</th>
 
                       </tr>
@@ -104,8 +104,9 @@ $('#table').DataTable({
         columns: [
             { data: 'ticketid', name: 'ticketid' },
             { data: 'changes', name: 'changes' },
-            { data: 'version', name: 'version' },
             { data: 'current_version', name: 'current_version' },
+
+            { data: 'version', name: 'version' },
             { data: 'completedat', name: 'completedat' },
         ],
         order: [[1, 'asc']],
