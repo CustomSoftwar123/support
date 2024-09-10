@@ -40,8 +40,10 @@
     color: #c59b08;
 }
 
+
 /* Modified from: https://github.com/mukulkant/Star-rating-using-pure-css */
   </style>
+ 
     <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
 
@@ -392,10 +394,12 @@ pathinfo($attachment->filename, PATHINFO_EXTENSION) == 'flv'
    
                   <div class="col-md-2">
                     <label class="form-label">Department</label>
-                    <select class="form-select form-control" name="department" readonly required id="department">
+                    {{-- <select class="form-select form-control" name="department" readonly required id="department">
                       <option value="0">Choose an option</option>
+
                       <option>Technical Department</option>
-                    </select>
+                    </select> --}}
+                    <input type="text" class="form-control" id="department" readonly name="department" placeholder="Department" required value={{$data22['ticketinfo'][0]->department}}>
                   </div>
                   <div class="col-md-3">
                     <label class="form-label">Priority</label>
@@ -473,14 +477,14 @@ pathinfo($attachment->filename, PATHINFO_EXTENSION) == 'flv'
             <input type="hidden" class="form-control" value="{{$data22['ticketinfo'][0]->tasks_id}}"  name="taskId" id="taskId"  >
 
             @if($data22['ticketinfo'][0]->tasks_id)
+
             <div class="form-group col-md-3  ">       
               <label for="dependency">Dependency</label>
-              <select type="text" class="form-control"  name="dependency" id="dependency" placeholder="Dependency">
-                <option disabled hidden selected>Select a ticket</option>
-                @foreach ($data22['task_tickets'] as $ticket)
-                <option value="{{$ticket->id}}">{{$ticket->subject}}</option>
-                @endforeach
 
+              <select type="text" name="dependency[]" id="dependency" multiple="multiple">
+                @foreach ($data22['task_tickets'] as $ticket)
+                <option value="{{$ticket->subject}}">{{$ticket->subject}}</option>
+                @endforeach
               </select>
             </div>
             @endif
@@ -702,6 +706,8 @@ pathinfo($attachment->filename, PATHINFO_EXTENSION) == 'flv'
 <script src="{{ asset('plugins/fancy-file-uploader/jquery.fileupload.js') }}"></script>
 <script src="{{ asset('plugins/fancy-file-uploader/jquery.iframe-transport.js') }}"></script>
 <script src="{{ asset('plugins/fancy-file-uploader/jquery.fancy-fileupload.js') }}"></script>
+
+
 <script></script>
 
 <script type="text/javascript">
@@ -714,6 +720,47 @@ pathinfo($attachment->filename, PATHINFO_EXTENSION) == 'flv'
 
 
     $(document).ready(function(){
+
+
+     
+
+
+               $('#dependency').select2({
+                    placeholder: 'Select tasks',
+                    allowClear: true
+                });
+
+                const ticketInfo = @json($data22['ticketinfo'][0]->dependencytickets);
+                const dependencyTicketArray = ticketInfo?.split(',');
+                $("#dependency").val(dependencyTicketArray).trigger('change');
+
+
+                $(document).on('change','#dependency',function(){
+                  const dependencyTicketSubjects = $(this).val();
+
+                  
+                  const url = window.location.href;
+                  const urlSegments = url.split('/');
+                  const thisTicketId = urlSegments[urlSegments.length-1];
+                  const thisTicketSubject = $("#subject").val();
+                  const taskId = $("#taskId").val();
+                
+                  $.ajax({
+                    type: 'POST',
+                    url: "{{route('dependencyEmail')}}",
+                    data: {
+                    
+                      dependencyTicketSubjects:dependencyTicketSubjects,
+                      thisTicketId:thisTicketId,
+                      thisTicketSubject:thisTicketSubject,
+                      taskId:taskId,
+
+                    }
+                }).done(function(response){
+                  console.log(response);
+                })
+
+                })
       
 const status=$("#completed").html();
 if(status==='Completed'){
@@ -1328,6 +1375,8 @@ this.find('.ff_fileupload_actions button.ff_fileupload_remove_file').val(filenam
     
 }
 });
+
+
 $(document).on('click', '.ff_fileupload_remove_file', function () {  
         // console.log($(this).id)
 
@@ -1381,33 +1430,10 @@ data.append('filename',filename);
                 });
 
 
-
-                $(document).on('change','#dependency',function(){
-
-                  const dependencyTicketId = $(this).val();
-                  const dependencyTicketSubject = $(this).find("option:selected").text();
-                  
-                  const url = window.location.href;
-                  const urlSegments = url.split('/');
-                  const thisTicketId = urlSegments[urlSegments.length-1];
-                  const thisTicketSubject = $("#subject").val();
-                  const taskId = $("#taskId").val();
                 
-                  $.ajax({
-                    type: 'POST',
-                    url: "{{route('dependencyEmail')}}",
-                    data: {
-                      dependencyTicketId:dependencyTicketId,
-                      dependencyTicketSubject:dependencyTicketSubject,
-                      thisTicketId:thisTicketId,
-                      thisTicketSubject:thisTicketSubject,
-                      taskId:taskId
-                    }
-                }).done(function(response){
-                  console.log(response);
-                })
+                
 
-                })
+     
 
 
     });

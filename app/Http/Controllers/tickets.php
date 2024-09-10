@@ -105,6 +105,7 @@ class tickets extends Controller
 
         } else {
             $client = DB::table("users")->select('client')->groupBy('client')->get();
+             $dep = DB::table("tickets_departments")->pluck('name');
 
 
 
@@ -112,7 +113,8 @@ class tickets extends Controller
                 'ticketinfo' => '',
                 'ticketattachments' => '',
                 'patients' => $patients,
-                'client' => $client
+                'client' => $client,
+                'dep' => $dep
 
 
             ];
@@ -136,6 +138,8 @@ class tickets extends Controller
 
         $id = $request->id;
         $ticketinfo = DB::table('tickets')->where('id', $id)->get();
+        $dep = DB::table("tickets_departments")->pluck('name');
+        // $ticketD = DB::table('tickets_departments')->get();
 
 
         $userclient = DB::table('users')->where('email', $ticketinfo[0]->username)->get();
@@ -200,7 +204,8 @@ $ticketattachments=DB::table('ticketattachments')->where('mid', null)->where('ti
 'ticketTimeline'=>$ticketTimeline,
 'projects'=>$projects,
 'task_tickets'=>$task_tickets,
-'versions'=>$versions
+'versions'=>$versions,
+'departments'=>$dep
 
 
         ];
@@ -687,8 +692,11 @@ $formattedDate = $dateTime->format('Y-m-d');
         DB::update("update tickets  set priority = '$priority'  where ticketid = '" . $tid . "'");
         DB::update("update tickets  set completedat ='$date' where ticketid = '" . $request->tid . "'");
         if($proj&&$ver){
+            $curver = DB::table('version_control')->where('application', $proj)->pluck('currentversion');
+            $verrr=$curver[0];
         DB::update("update version_control  set newversion ='$ver' where application = '" . $proj . "'");
         }    
+        DB::update("update tickets  set current_version = '$verrr' where ticketid = '" . $request->tid . "'");
         $tid = DB::table('tickets')->where('ticketid', $request->tid)->get();
         if($tid[0]?->agenda==1 && $tid[0]?->agenda_done!=1){
             DB::update("update tickets  set agenda_done=1 where ticketid = '" . $request->tid . "'");
@@ -2179,28 +2187,40 @@ if($email!=$repliedBy){
     }
 
     public function dependencyEmail(Request $request){
-        $dependencyTicketId = $request->dependencyTicketId;
-        $dependencyTicketSubject = $request->dependencyTicketSubject;
+
+        $dependencyTicketSubjects = $request->dependencyTicketSubjects;
+        
         $thisTicketId = $request->thisTicketId;
         $thisTicketSubject = $request->thisTicketSubject;
         $taskId = $request->taskId;
 
-        $ticket = [
-            'id' => $thisTicketId,
-            'subject' => $thisTicketSubject
-        ];
+        
+        $dependencyTicketSubjects = implode(',', $dependencyTicketSubjects);
+        
+
+        // $ticket = [
+        //     'id' => $thisTicketId,
+        //     'subject' => $thisTicketSubject
+        // ];
+
+           
+            
+            $update = DB::table('tickets')
+            ->where('id', $thisTicketId)
+            ->update(['dependencytickets' => $dependencyTicketSubjects]);
+
+            if($update){
+                return response()->json(["success"=>"Dependency Updated"]);
+            }else{
+                return response()->json(["Error"=>"Error Updating Dependency"]);
+            }
+        
     
-        $dependencies = [
-            ['id' => $dependencyTicketId, 'subject' => $dependencyTicketSubject],
-          
-            // Add more dependencies as needed
-        ];
+        // $recipients = ['zaintahir0012@gmail.com','aqeel@ocmsoftware.ie'];
     
-        $recipients = ['zaintahir0012@gmail.com','aqeel@ocmsoftware.ie'];
+        // Mail::to($recipients)->send(new TicketDependencyNotification($ticket, $dependencies));
     
-        Mail::to($recipients)->send(new TicketDependencyNotification($ticket, $dependencies));
-    
-        return "Notification sent!";
+        // return "Notification sent!";
 
     }
 
