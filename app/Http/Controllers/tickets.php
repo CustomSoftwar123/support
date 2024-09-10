@@ -695,8 +695,9 @@ $formattedDate = $dateTime->format('Y-m-d');
             $curver = DB::table('version_control')->where('application', $proj)->pluck('currentversion');
             $verrr=$curver[0];
         DB::update("update version_control  set newversion ='$ver' where application = '" . $proj . "'");
-        }    
         DB::update("update tickets  set current_version = '$verrr' where ticketid = '" . $request->tid . "'");
+
+        }    
         $tid = DB::table('tickets')->where('ticketid', $request->tid)->get();
         if($tid[0]?->agenda==1 && $tid[0]?->agenda_done!=1){
             DB::update("update tickets  set agenda_done=1 where ticketid = '" . $request->tid . "'");
