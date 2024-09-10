@@ -1985,15 +1985,15 @@ public function edittask(Request $request){
 public function updatetask(Request $request){
 
 	 
-	$validator=$request->validate([
-	'subject' => 'required',
-	'department' => 'required',
-	'description'=> 'required',
-	'status' => 'required',
-	'timeline' => 'required',
-	'ptimeline' => 'required',
+	// $validator=$request->validate([
+	// 'subject' => 'required',
+	// 'department' => 'required',
+	// 'description'=> 'required',
+	// 'status' => 'required',
+	// 'timeline' => 'required',
+	// 'ptimeline' => 'required',
 
-	]);
+	// ]);
  $request;    
 	$id = $request->id;
 	$subject = $request->subject;
@@ -2017,7 +2017,7 @@ public function updatetask(Request $request){
         'esubject'=>'New Project',
         'messages'=>'You have been added to a new project.'
     ];
-    Mail::to($assignedToEmails[$i])->send(new ProjectAssigned($emailData));
+    // Mail::to($assignedToEmails[$i])->send(new ProjectAssigned($emailData));
    }
     }
 	// if($test){

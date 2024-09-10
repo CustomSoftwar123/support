@@ -281,7 +281,7 @@ pathinfo($ticketattachment->filename, PATHINFO_EXTENSION) == 'flv'
                                   <input type="text" class="form-control f-one"  name="version" id="version" placeholder="Version" value="{{$data22['ticketinfo'][0]->version}}" readonly>
                                 </div>
                                 <div class="col-md-4">
-                                  <label for="project">Project</label>
+                                  <label for="project">Application</label>
                                   <input type="text" class="form-control f-one"  name="project" id="project" placeholder="Project" value="{{$data22['ticketinfo'][0]->project}}" readonly>
                                 </div>
                               
@@ -461,10 +461,10 @@ pathinfo($attachment->filename, PATHINFO_EXTENSION) == 'flv'
 
             <div class="form-group col-md-3 ">
                    
-              <label for="project">Project</label>
-              <select type="text" class="form-control f-one"  name="project" id="project" placeholder="project" 
+              <label for="project">Application</label>
+              <select type="text" class="form-control f-one"  name="project" id="project" placeholder="application" 
              >
-             <option value="">Choose project</option>
+             <option value="">Choose Application</option>
              @foreach($data22['versions'] as $versions)
              <option value="{{$versions}}">{{$versions}}</option>
              @endforeach
