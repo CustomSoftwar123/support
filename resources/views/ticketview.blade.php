@@ -477,7 +477,7 @@ pathinfo($attachment->filename, PATHINFO_EXTENSION) == 'flv'
             <input type="hidden" class="form-control" value="{{$data22['ticketinfo'][0]->tasks_id}}"  name="taskId" id="taskId"  >
 
             @if($data22['ticketinfo'][0]->tasks_id)
-
+            @if(Auth::user()->role<3)
             <div class="form-group col-md-3  ">       
               <label for="dependency">Dependency</label>
 
@@ -487,6 +487,7 @@ pathinfo($attachment->filename, PATHINFO_EXTENSION) == 'flv'
                 @endforeach
               </select>
             </div>
+            @endif
             @endif
 
 
@@ -738,11 +739,12 @@ pathinfo($attachment->filename, PATHINFO_EXTENSION) == 'flv'
                 $(document).on('change','#dependency',function(){
                   const dependencyTicketSubjects = $(this).val();
 
-                  
+                  console.log(dependencyTicketSubjects,"sss")
                   const url = window.location.href;
                   const urlSegments = url.split('/');
                   const thisTicketId = urlSegments[urlSegments.length-1];
                   const thisTicketSubject = $("#subject").val();
+                
                   const taskId = $("#taskId").val();
                 
                   $.ajax({
@@ -757,7 +759,7 @@ pathinfo($attachment->filename, PATHINFO_EXTENSION) == 'flv'
 
                     }
                 }).done(function(response){
-                  console.log(response);
+                  // console.log(response);
                 })
 
                 })
