@@ -2189,15 +2189,18 @@ if($email!=$repliedBy){
 
     public function dependencyEmail(Request $request){
 
-        $dependencyTicketSubjects = $request->dependencyTicketSubjects;
+        // return $request;
+         $dependencyTicketSubjects = $request->dependencyTicketSubjects;
         
         $thisTicketId = $request->thisTicketId;
         $thisTicketSubject = $request->thisTicketSubject;
         $taskId = $request->taskId;
 
-        
-        $dependencyTicketSubjects = implode(',', $dependencyTicketSubjects);
-        
+        if($dependencyTicketSubjects){
+     $dependencyTicketSubjects = implode(',', $dependencyTicketSubjects);
+        }else{
+            $dependencyTicketSubjects=null;
+        }
 
         // $ticket = [
         //     'id' => $thisTicketId,
