@@ -948,12 +948,12 @@ var messages= $('#message').val();
     
    
     var wordCount = words.length;
-    if (wordCount<50 && userRole<=3){
+    if (wordCount<20 && userRole<=3){
       Lobibox.notify('warning', {
           pauseDelayOnHover: true,
           continueDelayOnInactiveTab: false,
           position: 'top right',
-          msg: 'The resolution message can nott be less than  50 words',
+          msg: 'The resolution message can not be less than  25 words',
           icon: 'bx bx-info-circle'           
 });
 $(".replyandcomplete").attr("disabled", false);
@@ -965,12 +965,12 @@ return false;
    const changeCount2=changeCount.length;
   //  alert(changeCount2)
   //  return false;
-   if(changeCount2<50 && userRole<=3){
+   if(changeCount2<20 && userRole<=3){
     Lobibox.notify('warning', {
           pauseDelayOnHover: true,
           continueDelayOnInactiveTab: false,
           position: 'top right',
-          msg: 'The Changes and affects message can not be less than 50 words',
+          msg: 'The Changes and affects message can not be less than 25 words',
           icon: 'bx bx-info-circle'           
 });
 $(".replyandcomplete").attr("disabled", false);
