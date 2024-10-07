@@ -160,7 +160,8 @@ td {
                                                  </select>
                                              </div>
 
-                                
+                                             <div class="form-group col-md-3">
+                                             </div>
 
                                              
                                         
@@ -210,6 +211,7 @@ td {
 
 <script type="text/javascript">
     $(document).ready(function () {
+
 
           $.ajaxSetup({
                 headers: {
@@ -310,6 +312,11 @@ td {
             $('#subdepartment').val(user[0].subdepartment).trigger('change');
             $('#InUse').val(user[0].status).trigger('change');
             $('#address').val(user[0].address);
+            // const supportfordays = user[0].supportfordays;
+            const supportfordays2 = '';
+            
+            
+
 
             
 
@@ -379,6 +386,7 @@ td {
                         timeout: 600000,
                         success: function(data) {
                             //console.log(data);
+                           
                                 if ($.isEmptyObject(data.error)){
                                      Lobibox.notify('success', {
                                             pauseDelayOnHover: true,

@@ -19,5 +19,11 @@ class ticket extends Model
         'priority',
         'message',
         'ticketid',
+        'agenda',
+        'agenda_dev',
+        'agenda_done',
+        'agenda_created_at',
+        'agenda_notes'
+
     ];
 }

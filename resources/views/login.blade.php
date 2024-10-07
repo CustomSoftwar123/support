@@ -82,6 +82,17 @@
     white-space: nowrap;
 }
 
+@font-face {
+  font-family: 'password';
+  font-style: normal;
+  font-weight: 400;
+  src: url(https://jsbin-user-assets.s3.amazonaws.com/rafaelcastrocouto/password.ttf);
+}
+
+#password {
+  font-family: 'password';
+  /* width: 100px; height: 16px;   */
+}
   </style>
 
 </head>
@@ -94,79 +105,42 @@ window.location="home";
 
 
 </script>
-<body class="hold-transition login-page">
+<!-- <body class="hold-transition login-page"> -->
 
-
-<div class="login-box" style="max-width:90%;">
-  <!-- /.login-logo -->
-  <div class="card card-outline card-secondary m-2">
-    <div class="card-header text-center px-5 pb-2">
-      <img id="logo" style="filter: grayscale(100%);" src="{{ asset('images/' . \App\Http\Controllers\business::businessinfo()[0]->file) }}" alt="{{ config('app.name') }}" class="mx-auto w-50 d-block brand-image" style="opacity:1">
-      <a href="{{ route('login') }}" class="h1"><b>{{ \App\Http\Controllers\business::businessinfo()[0]->name }}</b></a>
+<div class="container-fluid">
+    <div class="row mh-100vh"> 
+   <div class="col-10 col-sm-8 col-md-6 col-lg-6 offset-1 offset-sm-2 offset-md-3 offset-lg-0 align-self-center d-lg-flex align-items-lg-center align-self-lg-stretch bg-white p-5 rounded rounded-lg-0 my-5 my-lg-0" id="login-block" style="">
+        <div class="m-auto w-lg-75 w-md-75">
+          <img class="img-fluid d-block mx-auto" src="{{asset('/images/6398865d68122.jpg')}}" width="30%">
+          <div class=""> <h3 class=" "  style="color:#01313F; width: 100%; " >
+          </i> <b>OCM Support </b></h3></div>
+         <br>
+         <form id="form" autocomplete ="off">
+          {{csrf_field()}}
+    <div class="form-group mb-3">
+        <label class="form-label text-secondary">Email</label>
+        <input class="form-control" type="email" name="email" id="email" required="" autocomplete="off">
     </div>
-    <div class="card-body">
-      <p class="login-box-msg">Sign in to start your session</p>
-
-      <form id="form" autocomplete="off">
-
-        <div class="hidden">
-        <input type="password" />
-      </div>
-
-      <style type="text/css">
-        .hidden {display:none;}
-      </style>
-            {{ csrf_field() }}
-        <div class="input-group mb-3">
-           <select class="form-control" name="email" id="email">
-              <option value="" disabled selected>Enter your email *</option>
-              @foreach ($data as $user)
-              <option value="{{$user->email}}">{{$user->email}}</option>    
-               @endforeach
-              </select>
-          <div class="input-group-append">
-            <div class="input-group-text">
-              <span class="fas fa-envelope"></span>
-            </div>
-          </div>
-        </div>
-        <div class="input-group mb-3">
-          <input type="text" class="form-control" id="password" name="password" placeholder="Password" autocomplete="off"  
-    onfocus="" >
-          <div class="input-group-append">
-            <div class="input-group-text">
-              <span class="fas fa-lock"></span>
-            </div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-8">
-            <div class="icheck-primary">
-              <input type="checkbox" id="remember">
-              <label for="remember">
-                Remember Me
-              </label>
-            </div>
-          </div>
-          <!-- /.col -->
-          <div class="col-4">
-            <button type="button" class="btn btn-secondary btn-block" id="submit">Sign In</button>
-          </div>
-          <!-- /.col -->
-        </div>
-      </form>
-
-      
-      <p class="mb-1">
-        <a class="text-secondary " href="{{ route('Signup') }}">New User?</a>
-      </p>
-
-   
-    </div>
-    <!-- /.card-body -->
-  </div>
-  <!-- /.card -->
+    <div style="display: none;">
+ <input type="text" id="PreventChromeAutocomplete" 
+  name="PreventChromeAutocomplete" autocomplete="address-level4" />
 </div>
+    <div class="form-group mb-3">
+        <label class="form-label text-secondary">Password</label>
+       
+        <input class="form-control" type="search" required="" id="password" name="password" autocomplete="current-password">
+    </div>
+    <button class="btn mt-2 text-light" style="background-color:#01313F;" type="button" id="submit">Login</button>
+</form>
+
+          <p class="mt-3 mb-0"><a class="text-PRIMAEY small" href="#">Forgot your email or password?</a></p>
+        </div>
+      </div>
+      <div class="col-lg-6 d-flex align-items-end" id="bg-block" style=".jpg?h=6f710c555d3760316048f4d8794f11de&quot;);background-size:cover;background-position:center center;">
+        <dotlottie-player src="https://lottie.host/143513f7-0484-4e9d-8956-0eeae49d0e9b/sZXyl5NJyx.lottie" background="transparent" speed="1" style="width: 100%; height: 100%;" loop="" autoplay=""></dotlottie-player>
+      </div>
+    </div>
+  </div>
 <!-- /.login-box -->
 
 
@@ -185,6 +159,8 @@ window.location="home";
 <!-- Select2 -->
 <script src="{{ asset('plugins/select2/js/select2.full.min.js') }}"></script>
 <script type="text/javascript" src="https://andreivictor.ro/select2-searchInputPlaceholder.js"></script>
+<script src="https://unpkg.com/@dotlottie/player-component@latest/dist/dotlottie-player.mjs" type="module"></script>
+  <script src="https://unpkg.com/@dotlottie/player-component@latest/dist/dotlottie-player.mjs" type="module"></script>
 
 
     <script>
@@ -196,28 +172,33 @@ window.location="home";
 
  $(document).ready(function () {
 
-   $('#email').select2({
-      minimumInputLength:3
-   });
+  // document.getElementById('email').setAttribute('autocomplete', 'off');
+  // document.getElementById('password').setAttribute('autocomplete', 'off');
 
-  $(document).on('select2:select', '#email', function () { 
+  //  $('#email').select2({
+  //     minimumInputLength:3
+  //  });
+
+  // $(document).on('select2:select', '#email', function () { 
 
       
       loadInfo()
       $('#password').focus();
 
-      })
+  //     })
 
-    $(document).on('select2:open', '#email', function () { 
+  //   $(document).on('select2:open', '#email', function () { 
 
-                    $(".select2-search__field")[0].focus();
-               })
+  //                   $(".select2-search__field")[0].focus();
+  //              })
 
 
   $("#password").keyup(function(e) {
           
-              $("#password").attr('type','password')
+              // $("#password").attr('type','password')
         });
+
+      
  
 
    function loadInfo() { 
@@ -238,23 +219,23 @@ window.location="home";
           dataType: 'json',                   
           success: function(response){
 
-              if ($.isEmptyObject(response.error)){
+              // if ($.isEmptyObject(response.error)){
                        
-                      //  console.log(response);
+              //         //  console.log(response);
                        
-                       $("body").get(0).style.setProperty("--main-color",'#'+response.data[0].colorscheme);
+              //          $("body").get(0).style.setProperty("--main-color",'#'+response.data[0].colorscheme);
 
-                       $("#submit").css('background','#'+response.data[0].colorscheme);
-                       $("#submit").css('border-color','#'+response.data[0].colorscheme);
-                       $(".forgotPassword").attr('style','color:#'+response.data[0].colorscheme+' !important;');
-                       $('.card-outline').attr('style','border-top:3px solid #'+response.data[0].colorscheme+' !important;');
-                       $('body').css('font-weight',response.data[0].font_weight);
-                       $('body').css('font-family',response.data[0].font);
-                       $("body").get(0).style.setProperty("--main-color", '#'+response.data[0].colorscheme+' !important;');
-                       $('#currentLink').attr('href',response.data[0].font_link);
-                      $('#logo').attr('style', '');    
+              //          $("#submit").css('background','#'+response.data[0].colorscheme);
+              //          $("#submit").css('border-color','#'+response.data[0].colorscheme);
+              //          $(".forgotPassword").attr('style','color:#'+response.data[0].colorscheme+' !important;');
+              //          $('.card-outline').attr('style','border-top:3px solid #'+response.data[0].colorscheme+' !important;');
+              //          $('body').css('font-weight',response.data[0].font_weight);
+              //          $('body').css('font-family',response.data[0].font);
+              //          $("body").get(0).style.setProperty("--main-color", '#'+response.data[0].colorscheme+' !important;');
+              //          $('#currentLink').attr('href',response.data[0].font_link);
+              //         $('#logo').attr('style', '');    
                          
-                    }
+              //       }
 
            }
          })  
@@ -268,16 +249,25 @@ window.location="home";
 
    })
    function login(){
+
+//     $.ajaxSetup({
+//     headers: {
+//         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+//     }
+// });
         event.preventDefault();
 
         // Get form
-        var form = $('#form')[0];
+        // var data = $('#form').serialize();
 
         // Create an FormData object
-        var data = new FormData(form);
+        // var data = new FormData(form);
 
         //$("#login").prop("disabled", true);
-
+        // data.append('_token', $('meta[name="csrf-token"]').attr('content'));
+        var form = $('#form')[0];
+        var data =new FormData(form)
+        console.log(data)
         $.ajax({
             type: "POST",
             enctype: 'multipart/form-data',
@@ -288,6 +278,7 @@ window.location="home";
             cache: false,
             timeout: 600000,
             success: function(data) {
+              // console.log(data)
                     if ($.isEmptyObject(data.error)){
                          Lobibox.notify('success', {
                                 pauseDelayOnHover: true,
@@ -300,7 +291,7 @@ window.location="home";
 
                          if(data.new == 1) {
 
-                          window.location.replace("{{route('MyProfile')}}");
+                         window.location.replace("{{route('MyProfile')}}");
 
                          } else {
 

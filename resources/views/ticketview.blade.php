@@ -40,8 +40,10 @@
     color: #c59b08;
 }
 
+
 /* Modified from: https://github.com/mukulkant/Star-rating-using-pure-css */
   </style>
+ 
     <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
 
@@ -50,9 +52,15 @@
       <div class="container-fluid">
         <div class="row mb-0">
           <div class="col-sm-6">
+            @if(strpos(Request::url(), 'task')===false)
             <h1 class="m-0">Ticket View
                <a class="btn btn-info btn-sm" onclick=history.back()><i class="fas fa-arrow-left"></i> Go Back </a>
              </h1>
+             @else
+             <h1 class="m-0">Task View
+              <a class="btn btn-info btn-sm" onclick=history.back()><i class="fas fa-arrow-left"></i> Go Back </a>
+            </h1>
+             @endif
           </div><!-- /.col -->
           <div class="col-sm-6  d-none d-sm-none d-md-block ">
             <ol class="breadcrumb float-sm-right">
@@ -75,7 +83,7 @@
                          <div class="card card-primary card-outline pb-0">
                             <div class="card-body row">  
                               <div class="col-md-12">
-                                <h3 class="mb-3" >
+                                <h3 class="mb-3 crih" >
                                   Ticket #{{$data22['ticketinfo'][0]->ticketid}} by {{$data22['ticketinfo'][0]->username}}
                                   
 
@@ -105,7 +113,7 @@
                                     elseif($data22['ticketinfo'][0]->priority == 'Critical') {
 
                                         ?>
-                                        <button class="btn btn-danger float-right">{{$data22['ticketinfo'][0]->priority}}</button>
+                                        <button class="btn btn-danger float-right cri">{{$data22['ticketinfo'][0]->priority}}</button>
                                         <?php
 
                                     } 
@@ -145,7 +153,7 @@
                                     elseif($data22['ticketinfo'][0]->status == 'Completed') {
 
                                       ?>
-                                      <button class="btn btn-info float-right mr-1">{{$data22['ticketinfo'][0]->status}}</button>
+                                      <button class="btn btn-info float-right mr-1 " id="completed">{{$data22['ticketinfo'][0]->status}}</button>
                                       <?php
 
                                   } 
@@ -173,7 +181,7 @@
                                   @endif
                                    </b></p>
                                 
-                                <p class="m-0">Message <button class="btn btn-dark float-right mr-1">{{$data22['ticketinfo'][0]->created_at}}</button> </p>  
+                                <p class="m-0">Message <button class="btn btn-dark float-right mr-1">{{ \App\Http\Controllers\tickets::DateTime($data22['ticketinfo'][0]->created_at)}}</button> </p>  
                                 <div class="jumbotron py-2 px-2 mb-0">
                                   {{$data22['ticketinfo'][0]->message}}
                                 </div>
@@ -250,13 +258,41 @@ pathinfo($ticketattachment->filename, PATHINFO_EXTENSION) == 'flv'
                                 </h3>
                              
                                   
-                               <p class="m-0">Message <button class="btn btn-dark float-right mr-1">{{$ticketmessage->created_at}}</button> </p>  
+                               <p class="m-0">Messages <button class="btn btn-dark float-right mr-1">{{\App\Http\Controllers\tickets::DateTime($ticketmessage->created_at)}}</button> </p>  
                                 <div class="jumbotron py-2 px-2 mb-0">
-                                 {{$ticketmessage->message}}
+                                 {{$ticketmessage->message}} 
                                 </div>
 
+                                {{-- @if($loop->last) --}}
+                                @if($ticketmessage->changes)
+                                <p class="m-0 mt-1">Changes and Effects  </p>  
+                                <div class="jumbotron py-2 px-2 mb-0">
+                                 {{$ticketmessage->changes}} 
+                                </div>
 
+                                <div class="form-group col-md-12 d-flex mr-2">
+                                  
+                                  <div class="col-md-4">
+                                  <label for="sentdate">Exe Sent Date</label>
+                                  <input type="date" class="form-control f-one"  name="sentdate" id="sentdate" value="{{$data22['ticketinfo'][0]->exesentdate}}" readonly >
+                                </div>
+                                <div class="col-md-4">
+                                  <label for="version">Version</label>
+                                  <input type="text" class="form-control f-one"  name="version" id="version" placeholder="Version" value="{{$data22['ticketinfo'][0]->version}}" readonly>
+                                </div>
+                                <div class="col-md-4">
+                                  <label for="project">Application</label>
+                                  <input type="text" class="form-control f-one"  name="project" id="project" placeholder="Project" value="{{$data22['ticketinfo'][0]->project}}" readonly>
+                                </div>
+                              
+                              
+                                
+                              </div>
+                
+                            
 
+                             @endif
+                             {{-- @endif --}}
                                     
                                   <?php 
 
@@ -338,7 +374,8 @@ pathinfo($attachment->filename, PATHINFO_EXTENSION) == 'flv'
                           </div>
                           @endforeach
 
-
+                         
+                          
                   <form id="form">
                                        {{ csrf_field() }}
                                                   
@@ -355,12 +392,14 @@ pathinfo($attachment->filename, PATHINFO_EXTENSION) == 'flv'
                 </div>
 
    
-                  <div class="col-md-3">
+                  <div class="col-md-2">
                     <label class="form-label">Department</label>
-                    <select class="form-select form-control" name="department" readonly required id="department">
+                    {{-- <select class="form-select form-control" name="department" readonly required id="department">
                       <option value="0">Choose an option</option>
+
                       <option>Technical Department</option>
-                    </select>
+                    </select> --}}
+                    <input type="text" class="form-control" id="department" readonly name="department" placeholder="Department" required value={{$data22['ticketinfo'][0]->department}}>
                   </div>
                   <div class="col-md-3">
                     <label class="form-label">Priority</label>
@@ -372,7 +411,12 @@ pathinfo($attachment->filename, PATHINFO_EXTENSION) == 'flv'
                       <option>Critical</option>
                     </select>
                   </div>
-
+                  @if($data22['ticketinfo'][0]->tasks_id)
+                  <div class="col-md-2">
+                    <label class="form-label">Timeline</label>
+                  <input type="date" class="form-control"name= "timeline" id="res_expiry" value={{ $data22['ticketinfo'][0]->response_expiry}}>
+                  </div>
+                  @endif
 
                    <div class="form-group col-md-6 patientInfo">
                     <label for="patientName">Patient Name</label>
@@ -392,16 +436,96 @@ pathinfo($attachment->filename, PATHINFO_EXTENSION) == 'flv'
                 <div class="form-group col-md-3 sampleInfo">
                    
                     <label for="sampleid">Sample ID</label>
-                    <input type="text" class="form-control f-one" readonly name="sampleid" id="sampleid" placeholder="Sample ID" required>
+                    <input type="text" class="form-control f-one" readonly name="sampleid" id="sampleid" placeholder="Sample ID" >
                 </div>
+                  @if($data22['ticketinfo'][0]->critical_risk_reason)
+                  <div class="col-md-3">
+                    <label for="version">Critical Risk Reason</label>
+                    <input type="text" class="form-control f-one"  name="criticalrr" id="criticalrr" placeholder="" value="{{$data22['ticketinfo'][0]->critical_risk_reason}}" readonly>
+                  </div>
+                  @endif
+
+                <div class="form-group col-md-3 ">
+                   
+                  <label for="sentdate">Exe Sent Date</label>
+                  <input type="date" class="form-control f-one"  name="sentdate" id="sentdate"  >
+              </div>
+
+              <div class="form-group col-md-3 ">
+                   
+                <label for="version">Version</label>
+                <input type="text" class="form-control f-one"  name="version" id="version" placeholder="Version" 
+               >
+            </div>
+            @if(Auth::user()->role<=3)
+
+            <div class="form-group col-md-3 ">
+                   
+              <label for="project">Application</label>
+              <select type="text" class="form-control f-one"  name="project" id="project" placeholder="application" 
+             >
+             <option value="">Choose Application</option>
+             @foreach($data22['versions'] as $versions)
+             <option value="{{$versions}}">{{$versions}}</option>
+             @endforeach
+            </select>
+          </div>
+          @endif
 
 
-         
+            
+            <input type="hidden" class="form-control" value="{{$data22['ticketinfo'][0]->tasks_id}}"  name="taskId" id="taskId"  >
+
+            @if($data22['ticketinfo'][0]->tasks_id)
+            @if(Auth::user()->role<3)
+            <div class="form-group col-md-3  ">       
+              <label for="dependency">Dependency</label>
+
+              <select type="text" name="dependency[]" id="dependency" multiple="multiple">
+                @foreach ($data22['task_tickets'] as $ticket)
+                <option value="{{$ticket->subject}}">{{$ticket->subject}}</option>
+                @endforeach
+              </select>
+            </div>
+            @endif
+            @endif
+
+
+                @if(Auth::user()->email == $data22['ticketinfo'][0]->assignedto && ($data22['ticketinfo'][0]->status == 'Opened' || $data22['ticketinfo'][0]->status == 'Processing' ))
+                <div class="form-group col-md-3">
+                <label for="duration">Duration</label>
+                  <select  class="form-control" name="duration" id="duration" placeholder="Add Duration" required>
+                  <option value="1">1 day</option>
+                  <option value="2">2 days</option>
+                  <option value="3">3 days</option>
+                  <option value="4">4 days</option>
+                  <option value="5">5 days</option>
+                  <option value="6">6 days</option>
+                  <option value="7">7 days</option>
+                  <option value="8">8 days</option>
+                  <option value="9">9 days</option>
+                  <option value="10">10 days</option>
+                  </select>
+               </div>
+              @endif
 
                 <!-- Message Area -->
                 <div class="form-outline my-2 col-md-12">
-                    <label class="form-label" for="textAreaExample2">Message</label>
+                  <label for="">Changes And Effects</label>
+                  <input type="text" class="changes form-control">
+                    <label class="form-label mt-1" for="textAreaExample2">Messages</label>
                     <textarea class="form-control" rows="9" name="message" id="message" placeholder="Reply" required></textarea>
+                    @if($data22['ticketinfo'][0]->tasks_id)
+                    <button class="btn btn-primary mt-2 float-right raisenew" type="button">Reply & Raise a ticket for that action</button>
+                    @endif
+                    <input class="pnameraise d-none" value={{$data22['ticketinfo'][0]->patientname}}>
+                    <input class="contactraise d-none" value={{$data22['ticketinfo'][0]->contact}}>
+                    <input class="sampleidraise d-none" value={{$data22['ticketinfo'][0]->sampleid}}>
+                    <input type="hidden" name="tid" id="tidraisehehe" value="<?=uniqid();?>">
+                    <input class="clientraise d-none" value={{$data22['ticketinfo'][0]->ticket_client}}
+                    >
+                    <input class="tasksidraise d-none" value={{$data22['ticketinfo'][0]->tasks_id}}>
+                    <input class="ticketidraisereply d-none" value={{$data22['ticketinfo'][0]->ticketid}}>
                 </div>
 
 
@@ -416,12 +540,15 @@ pathinfo($attachment->filename, PATHINFO_EXTENSION) == 'flv'
               
                 <div class="col-md-12 mt-2">
 
+                
 
-                 
-
-                  @if(Auth::user()->role==4)
+                  @if(Auth::user()->role==4||(Auth::user()->role<3&&$data22['ticketinfo'][0]->tasks_id))
                
                <button type="button" class="btn btn-warning float-right ml-1 replyandclose mr-1" value="Submit">Reply & Close Ticket</button>
+               @endif
+               @if(Auth::user()->role==4||Auth::user()->role==1)
+
+               
                <button type="button" class="btn btn-danger float-right sendtoocm" value="Submit">Send to OCM Support</button>
 
                   
@@ -436,8 +563,29 @@ pathinfo($attachment->filename, PATHINFO_EXTENSION) == 'flv'
                   <button type="button" class="btn btn-success float-right ml-1 replyandcomplete" value="Submit">Reply & Complete Ticket</button>
               
 
-                  <button type="button" class="btn btn-primary float-right saveupdatebtn" value="Submit">Generate Ticket</button>
-               
+                  <button type="button" class="btn btn-primary float-right ml-1 saveupdatebtn" value="Submit">Generate Ticket</button>
+                  @if(($data22['ticketTimeline'][0]['time2'] ?? null) == '0000-00-00 00:00:00' && count($data22['ticketTimeline'])!==0)
+                  <button type="button" class="btn btn-secondary float-right paused ml-1">Pause</button>
+                  @endif
+                  @if( ( ($data22['ticketTimeline'][0]['time1'] ?? null) && $data22['ticketTimeline'][0]['time2'] != '0000-00-00 00:00:00')||count($data22['ticketTimeline'])===0)
+
+                  <button type="button" class="btn btn-warning float-right started ml-1 ">Start</button>
+               @endif
+
+                  @if(Auth::user()->role<=3)
+                  <div class='col-md-2'>
+                    <select name="assignToProject" id="assignToProject" class="form-control">
+                     <option hidden selected disabled>Select a Project</option>
+                    
+                     @foreach($data22['projects'] as $project)
+                     <option value="{{$project->id}}">{{$project->subject}}</option>
+                      @endforeach
+                    </select>
+                   </div>
+                   @endif
+
+                
+                
                   <div id="result">
                   <img src="/images/Iphone-spinner-2.gif" alt="Loading..." id='loading-image' class='d-none'>
                   </div>
@@ -559,6 +707,8 @@ pathinfo($attachment->filename, PATHINFO_EXTENSION) == 'flv'
 <script src="{{ asset('plugins/fancy-file-uploader/jquery.fileupload.js') }}"></script>
 <script src="{{ asset('plugins/fancy-file-uploader/jquery.iframe-transport.js') }}"></script>
 <script src="{{ asset('plugins/fancy-file-uploader/jquery.fancy-fileupload.js') }}"></script>
+
+
 <script></script>
 
 <script type="text/javascript">
@@ -571,8 +721,56 @@ pathinfo($attachment->filename, PATHINFO_EXTENSION) == 'flv'
 
 
     $(document).ready(function(){
-      
 
+
+     
+
+
+               $('#dependency').select2({
+                    placeholder: 'Select tasks',
+                    allowClear: true
+                });
+
+                const ticketInfo = @json($data22['ticketinfo'][0]->dependencytickets);
+                const dependencyTicketArray = ticketInfo?.split(',');
+                $("#dependency").val(dependencyTicketArray).trigger('change');
+
+
+                $(document).on('change','#dependency',function(){
+                  const dependencyTicketSubjects = $(this).val();
+
+                  console.log(dependencyTicketSubjects,"sss")
+                  const url = window.location.href;
+                  const urlSegments = url.split('/');
+                  const thisTicketId = urlSegments[urlSegments.length-1];
+                  const thisTicketSubject = $("#subject").val();
+                
+                  const taskId = $("#taskId").val();
+                
+                  $.ajax({
+                    type: 'POST',
+                    url: "{{route('dependencyEmail')}}",
+                    data: {
+                    
+                      dependencyTicketSubjects:dependencyTicketSubjects,
+                      thisTicketId:thisTicketId,
+                      thisTicketSubject:thisTicketSubject,
+                      taskId:taskId,
+
+                    }
+                }).done(function(response){
+                  // console.log(response);
+                })
+
+                })
+      
+const status=$("#completed").html();
+if(status==='Completed'){
+  $(".replyandcomplete").addClass('d-none')
+  $('.paused').addClass('d-none')
+      $('.started').addClass('d-none')
+      
+}
         var data = @json($data22);
         var d = @json($data22);
         // console.log(data22.internal[0])
@@ -642,13 +840,15 @@ pathinfo($attachment->filename, PATHINFO_EXTENSION) == 'flv'
  
     $(".paused").click(function(){
       
-      // $('.paused').addClass('d-none');
+      $('.paused').addClass('d-none');
       
-      // $('.paused').removeClass('d-block');
-      // $('.started').addClass('d-block');
+      $('.paused').removeClass('d-block');
+      $('.started').addClass('d-block');
    
       let myform=document.getElementById("form");
 let data=new FormData(myform);
+data.delete('tid')
+data.append('tid', $('#tid').val())
 $.ajax({
                 
         url: "../PauseTicket",
@@ -661,7 +861,7 @@ $.ajax({
 
                         if(response > 0) {
 
-                            $("#result").html('Ticket has been completed successfully!')
+                            $("#result").html('Ticket time has been paused!')
 
                          window.location=''
 
@@ -683,17 +883,21 @@ icon: 'bx bx-info-circle'
 
 
   });
+ 
   $('#patientname').select2({
         placeholder:'Choose a Patient'
     });
 
     $(".started").click(function(){
       
-        // $('.started').addClass('d-none');
-        // $('.started').removeClass('d-block');
-        // $('.paused').addClass('d-block');
+        $('.started').addClass('d-none');
+        $('.started').removeClass('d-block');
+        $('.paused').addClass('d-block');
         let myform=document.getElementById("form");
+        
 let data=new FormData(myform);
+data.delete('tid')
+        data.append('tid', $('#tid').val())
 $.ajax({
                 
         url: "../StartTicket",
@@ -705,7 +909,7 @@ $.ajax({
         }).done(function (response) {
 console.log(response);
 
-                            $("#result").html('Ticket has been completed successfully!')
+                            $("#result").html('Ticket time has been started')
 
                          window.location="../TicketView/"+response;
 
@@ -733,15 +937,62 @@ icon: 'bx bx-info-circle'
   $(".replyandcomplete").attr("disabled", true);
 // console.log(tid);
 // return true;
-      $('#loading-image').removeClass('d-none');
 let myform=document.getElementById("form");
 let data=new FormData(myform);
 var messages= $('#message').val();
     data.append('messages',messages);
+    data.append('completionmessage',messages);
+
+    var userRole = @json(Auth::user()->role);
+    var words = messages.trim().split(/\s+/);
+    
+   
+    var wordCount = words.length;
+    if (wordCount<20 && userRole<=3){
+      Lobibox.notify('warning', {
+          pauseDelayOnHover: true,
+          continueDelayOnInactiveTab: false,
+          position: 'top right',
+          msg: 'The resolution message can not be less than  25 words',
+          icon: 'bx bx-info-circle'           
+});
+$(".replyandcomplete").attr("disabled", false);
+
+return false;
+    }
+   const changes= $(".changes").val();
+   const changeCount= changes.trim().split(/\s+/);
+   const changeCount2=changeCount.length;
+  //  alert(changeCount2)
+  //  return false;
+   if(changeCount2<20 && userRole<=3){
+    Lobibox.notify('warning', {
+          pauseDelayOnHover: true,
+          continueDelayOnInactiveTab: false,
+          position: 'top right',
+          msg: 'The Changes and affects message can not be less than 25 words',
+          icon: 'bx bx-info-circle'           
+});
+$(".replyandcomplete").attr("disabled", false);
+
+return false;
+   }
+  const esdate= $("#sentdate").val()
+  const ver= $("#version").val()
+  const project= $("#project").val()
+   data.append('changes',changes);
+   data.append('esdate',esdate);
+   data.append('project',project);
+   data.append('ver',ver);
+   data.delete('tid')
+   data.append('tid', $('#tid').val())
+
+    $('#loading-image').removeClass('d-none');
+
     // data.append('me',messages);
 $.ajax({
                 
-        url: "../CompleteTicket",
+        url: "{{route('CompleteTicket')}}",
         data: data,    
         cache: false,
         processData: false,
@@ -750,7 +1001,7 @@ $.ajax({
         }).done(function (response) {
 
                         if(response > 0) {
-                                 //  window.location="../TicketView/"+response;
+                                  window.location="{{route('TicketView')}}/"+response;
                                  $.ajax({
                               
                               url: "../sendMail",
@@ -799,13 +1050,15 @@ Lobibox.notify('warning', {
           icon: 'bx bx-info-circle'           
 });
                 });
-        event.preventDefault();
+        // event.preventDefault();
 });
 
  $(".replyandclose").click(function(){
   $(".replyandclose").attr("disabled", true);
   let myform=document.getElementById("form");
     let data1=new FormData(myform);
+    data1.delete('tid')
+data1.append('tid', $('#tid').val())
   $.ajax({
                     
                     url: "{{ route('CloseTicket') }}",
@@ -847,18 +1100,85 @@ console.log(d);
 // var v=0;
 
 
+$(".raisenew").click(function(){
+    patientname=$(".pnameraise").val()
+    contact=$(".contactraise").val()
+    sampleid=$(".sampleidraise").val()
+    department=$("#department").val()
+    priority=$("#priority").val()
+    message=$("#message").val()
+    tid=$("#tidraisehehe").val()
+    client=$(".clientraise").val()
+    taskId=$(".tasksidraise").val()
 
+    
+  //   alert(priority);
+  // return false;
+    $.ajax({
+      url:"{{route('Ticket')}}",
+      method:"POST",
+      data:{
+        patientname:patientname,
+        contact:contact,
+        sampleid:sampleid,
+        department:department,
+        priority:priority,
+        message:message,
+        client:client,
+        tid:tid,
+        subject:message,
+        client:client,
+        taskId:taskId
+      }
+
+    }).done(function(response){
+      // location.reload()
+      let myform=document.getElementById("form");
+    let data=new FormData(myform);
+    var messages= $('#message').val();
+    var timeline=$("#res_expiry").val()
+    lpc=$(".ticketidraisereply").val()
+    data.append('messages',messages);
+    data.append('resExpiry',timeline);
+    data.delete('tid');
+    data.append('tid',lpc)
+    $.ajax({
+                    
+            url: "../updateTicketInfo",
+
+            data: data,    
+            cache: false,
+            processData: false,
+            contentType: false,
+            type: 'POST',
+            }).done(function (response) {
+
+                            if(response > 0) {
+                              location.reload()
+                              //   $("#result").html('Ticket has been generated successfully!')
+                              // const val=$(".cri").text()
+                              // console.log(val)
+                            }
+                            })
+    })
+  })
 
     $(".saveupdatebtn").click(function(){
       $(".saveupdatebtn").attr("disabled", true);
       $('#loading-image').removeClass('d-none');
+      
     let myform=document.getElementById("form");
     let data=new FormData(myform);
     var messages= $('#message').val();
+    var timeline=$("#res_expiry").val()
     data.append('messages',messages);
+    data.append('resExpiry',timeline);
+    data.delete('tid')
+    data.append('tid', $('#tid').val())
     $.ajax({
                     
             url: "../updateTicketInfo",
+
             data: data,    
             cache: false,
             processData: false,
@@ -869,8 +1189,58 @@ console.log(d);
                             if(response > 0) {
 
                                 $("#result").html('Ticket has been generated successfully!')
+                              const val=$(".cri").text()
+                              console.log(val)
+                              if(val=='Critical'){
+                                // alert()
+                                // const h3Element = document.querySelector('h3');
+        
+        // Get the text content of the h3 element
+        const h3Element =$(".crih")
+        var textContent = h3Element.contents().filter(function() {
+                return this.nodeType === 3; // Node type 3 is a text node
+            }).text().trim();
+// console.log("tc",textContent)
+        // Find the posicontion of the word "by"
+        const byIndex = textContent.indexOf('by');
+        
+        // Extract the email after the word "by"
+        // const email = textContent.substring(byIndex + 3).trim();
+        // console.log (email)
+        var regex = /Ticket #(\w+) by (\S+)/;
+            var matches = textContent.match(regex);
 
-                             window.location="../../TicketView/"+response;
+            if (matches) {
+                var ticketNumber = matches[1];
+                var email = matches[2];
+
+                // Log the extracted values to the console
+                console.log('Ticket Number:', ticketNumber);
+                console.log('Email:', data);
+                $.ajax({
+                            url: '/send-reply',
+                            method: 'POST',
+                            data: {
+                                email: email,
+                                ticketNumber: ticketNumber,
+                                messages:messages,
+                                subject:data.get('subject')
+                            },
+                            headers: {
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                            },
+                            success: function(response) {
+                                // alert('Reply sent successfully!');
+                            },
+                            error: function(xhr) {
+                                // alert('An error occurred while sending the reply.');
+                            }
+                        });
+            } else {
+                console.log('No match found');
+            }
+                              }
+                             //window.location="../../TicketView/"+response;
                              // $("#result").html('Ticket has been generated successfully!')
 
                              $(".saveupdatebtn").removeAttr("disabled");
@@ -904,6 +1274,8 @@ icon: 'bx bx-info-circle'
       $(".sendtoocm").attr("disabled", true);
     let myform=document.getElementById("form");
     let data=new FormData(myform);
+    data.delete('tid')
+data.append('tid', $('#tid').val())
     $.ajax({
                     
             url: "../sendTicketToOCM",
@@ -944,6 +1316,8 @@ icon: 'bx bx-info-circle'
 
 let myform=document.getElementById("form");
 let data=new FormData(myform);
+data.delete('tid')
+data.append('tid', $('#tid').val())
 $.ajax({
                 
         url: "../sendTicketToNET",
@@ -1003,6 +1377,8 @@ this.find('.ff_fileupload_actions button.ff_fileupload_remove_file').val(filenam
     
 }
 });
+
+
 $(document).on('click', '.ff_fileupload_remove_file', function () {  
         // console.log($(this).id)
 
@@ -1014,6 +1390,7 @@ $(document).on('click', '.ff_fileupload_remove_file', function () {
 // alert(tid)
 let data=new FormData();
 data.append('tid',tid);
+
 data.append('filename',filename);
 
         $.ajax({
@@ -1027,6 +1404,38 @@ data.append('filename',filename);
                     })
         
                 })
+
+
+                $(document).on('change','#assignToProject',function(){
+                  const projectid = $(this).val();
+                  const currentUrl = window.location.href;
+                  const urlSegments = currentUrl.split('/');
+                  const lastSegment = urlSegments[urlSegments.length - 1];
+                  console.log(lastSegment);
+                  console.log(projectid);
+
+                  
+                    $.ajax({
+                    type: 'POST',
+                    url: "{{route('assignToProject')}}",
+                    data: {
+                      projectid:projectid,
+                      ticketid:lastSegment
+                    }
+
+                    }).done(function(response){
+                      if(response == 1){
+                        window.location = "";
+                      }
+                    })
+
+                });
+
+
+                
+                
+
+     
 
 
     });

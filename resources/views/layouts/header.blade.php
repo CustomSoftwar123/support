@@ -10,6 +10,12 @@
     height: auto;
     width: 3rem;
 }
+
+
+thead th {
+  color: white;
+  background-color : #0a4454;
+}
   </style>
   
   <!-- CSRF Token -->
@@ -79,6 +85,10 @@
         font-weight: var(--main-font_weight) !important;
   
       }
+      .nav-pills .nav-link {
+    color: #FDFEFE;
+}
+
 
 </style>
 <script type="text/javascript">
@@ -95,11 +105,11 @@
   * sidebar-collapse
   * sidebar-mini
 -->
-<body class="sidebar-mini layout-fixed text-sm">
+<body class="sidebar-mini layout-fixed text-sm" >
 
 <div class="wrapper">
   <!-- Navbar -->
-  <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+  <nav class="main-header navbar navbar-expand">
     <!-- Left navbar links -->
     <ul class="navbar-nav">
       <li class="nav-item">
@@ -127,11 +137,11 @@
   </nav>
   <!-- /.navbar -->
   <!-- Main Sidebar Container -->
-  <aside class="main-sidebar sidebar-light-primary elevation-4">
+  <aside class="main-sidebar elevation-4"  style="background-color:#01313F;color:white">
   
 
     <!-- Sidebar -->
-    <div class="sidebar">
+    <div class="sidebar" >
       <!-- Sidebar user panel (optional) -->
       <div class="user-panel mt-3 pb-3 mb-3 d-flex">
         <div class="image">
@@ -172,9 +182,9 @@
 
 
       <!-- Sidebar Menu -->
-      <nav class="mt-2">
+      <nav class="mt-2 ">
         
-        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+        <ul class="nav nav-pills nav-sidebar flex-column " data-widget="treeview" role="menu" data-accordion="false">
           <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
          
@@ -255,28 +265,29 @@
 
 
 
-     <li class="nav-item {{ ( request()->is('Tickets/*') ) ? 'menu-open' : '' }} admin">
+     
 
-             <a href="#" class="nav-link {{ ( request()->is('tasks/*') ) ? 'active' : '' }}">
-              <i class="nav-icon fas fa-envelope-open-text"></i>
+              <li class="nav-item">
+            <a href="{{ route('tasks') }}" class="nav-link {{ (request()->is('tasks')) ? 'active' : '' }}">
+            <i class="nav-icon fas fa-file-invoice"></i>
               <p>
-                Tasks
-                <i class="fas fa-angle-left  right"></i>
+                Projects 
               </p>
             </a>
-
-            <ul class="nav nav-treeview">
-
-            <li class="nav-item">
-                <a href="{{ route('tasks') }}" class="nav-link {{ ( request()->is('tasks') ) ? 'active' : '' }}">
-                  <i class="far fa-circle nav-icon"></i><p class="ml-0">All</p>
-                </a>
-              </li>
+          </li>
   
-            </ul>
-              
-    </li>
 
+
+    @if(Auth::user()->role==1387)
+<li class="nav-item">
+            <a href="{{ route('ticketstimeline') }}" class="nav-link {{ (request()->is('ticketstimeline')) ? 'active' : '' }}">
+            <i class="nav-icon fas fa-file-invoice"></i>
+              <p>
+                Timeline 
+              </p>
+            </a>
+          </li>
+          @endif
           @if(\App\Http\Controllers\users::roleCheck()=='yes')
     <li class="nav-item {{ ( request()->is('Users/*')|| request()->is('User/*') || request()->is('User') ) ? 'menu-open' : '' }} admin">
           <!--     <li class="nav-item">-->
@@ -324,6 +335,34 @@
             </a>
           </li>
           @endif
+
+          @if(Auth::user()->role<=3 )
+
+          {{-- <li class="nav-item">
+            <a href="{{ route('dailyreports') }}" class="nav-link {{ (request()->is('dailyreports')) ? 'active' : '' }}">
+            <i class="nav-icon fas fa-file-invoice"></i>
+              <p>
+               Daily Reports 
+              </p>
+            </a>
+          </li> --}}
+          <li class="nav-item">
+            <a href="{{ route('versioncontrol') }}" class="nav-link {{ (request()->is('versioncontrol')) ? 'active' : '' }}">
+            <i class="nav-icon fas fa-file-invoice"></i>
+              <p>
+               Version Control 
+              </p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="{{ route('agenda') }}" class="nav-link {{ (request()->is('agenda')) ? 'active' : '' }}">
+            <i class="nav-icon fas fa-clipboard"></i>
+              <p>
+                Agenda
+              </p>
+            </a>
+          </li>
+          @endif
           
           @if(Auth::user()->role==4 || Auth::user()->role==1)
           
@@ -365,7 +404,7 @@
     </div>
     <!-- /.sidebar -->
   </aside>
-  <script>
+  <!-- <script>
       window.localStorage.setItem('openOnePage', Date.now());
  var onLocalStorageEvent = function(e){
     
@@ -383,7 +422,7 @@
     
     };     
         window.addEventListener('storage', onLocalStorageEvent, false);
-  </script>
+  </script> -->
 
 
 

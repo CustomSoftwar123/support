@@ -49,11 +49,21 @@
       <div class="container-fluid">
         <div class="row mb-0">
           <div class="col-sm-6">
-            <h1 class="m-0">Tickets
+            <h1 class="m-0">
+              
+              @if (strpos(Request::url(), 'task')===false)
+              Tickets
+
                <a class="btn btn-info btn-sm" href="{{(request()->segment(2))}}"><i class="fas fa-sync"></i></a>
+               @else
+               
+            
+               {{$result = \App\Http\Controllers\Tickets::getTaskTitleByID(request()->segment(3));
+    }}
+               @endif
                @if(request()->segment(2)==='task')
                
-               <a class="btn btn-info btn-sm" href="{{route('Ticket')}}/task/{{request()->segment(3)}}"><i class="fas fa-plus"></i> Ticket </a>
+               <a class="btn btn-info btn-sm" href="{{route('Ticket')}}/task/{{request()->segment(3)}}"><i class="fas fa-plus"></i> Task </a>
              @else
              <a class="btn btn-info btn-sm" href="{{route('Ticket')}}"><i class="fas fa-plus"></i> Ticket </a>
 @endif
@@ -85,20 +95,43 @@
                                         <input type="text" class="form-control" id="ticketid">
                                     </div>
 
-                                    <div class="col-sm-3">
+                                    <div class="col-sm-2">
                                         <label>Subject</label>
                                         <input type="text" class="form-control" id="subject">
                                     </div>
 
 
-                                    <div class="col-sm-2">
+                                    <div class="col-sm-1">
                                         <label>Raised By</label>
                                         <input type="text" class="form-control" id="raisedby">
                                     </div>
 
+                                    <div class="col-sm-2">
+                                        <label>From</label>
+                                        <input class="form-control" type="date" name='todate' id="fromdate">
 
+                                    </div>
 
                                     <div class="col-sm-2">
+                                        <label>To</label>
+                                        <input type="date" class="form-control" id="todate">
+                                    </div>
+                                    @if(auth::user()->role<=4)
+
+                                    <div class="col-sm-2">
+                                        <label>Client</label>
+                                        <select class="form-select form-control" name="client" id="client">
+                      <option value="" disabled selected>Choose an option</option>
+                      <option value="CAVAN">Cavan</option>
+                      <option value="TULLAMORE">Tullamore</option>
+                      <option value="St.Lukes">St.Lukes</option>
+                      <option value="Portlaoise">Portlaoise</option>
+                      
+                    </select>
+                                    </div>
+@endif
+
+                                    <div class="col-sm-1">
                                         <label>Priority</label>
                                         <select type="text" class="form-control" id="priority">
                                             <option>All</option>
@@ -175,8 +208,10 @@
               <th>System</th>
               <th>Time</th>
               <th>Timetaken</th>
-            
-              
+          
+              @if (strpos(Request::url(), 'task') !== false)
+              <th>Time line</th>
+            @endif
 
               <th>Actions</th>
 
@@ -240,6 +275,39 @@
                 </div> 
               
               
+                <div class="modal fade" id="agendaModal" tabindex="-1" aria-hidden="true">
+                  <div class="modal-dialog modal-md  modal-dialog">
+                      <div class="modal-content">
+                         <div class="modal-header bg-primary">
+                        
+                          
+                              <h5 class="modal-title text-white">Add Ticket to agenda <span id="requestText2"></span></h5>
+                              <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                              <span aria-hidden="true">&times;</span>
+                            </button>
+
+                          </div>
+                          <div class="modal-body">
+                                    
+                               
+
+                            <div class="col-md-12">
+                              
+                                  <input type="hidden" id="agendatid"> 
+                                 <input type="date" class="form-control" id="agendadate">
+
+                                </div>
+
+                              <button type="button" class="mt-2 btn btn-primary addToAgenda float-right">Add to agenda</button>
+                                      
+
+                          </div>     
+
+                         
+                         
+                      </div>
+                  </div>
+              </div> 
      
 <div class="row">
 
@@ -396,10 +464,7 @@ console.log(a)
 
 
 
-$('#user').select2({
 
-    placeholder:'select a user'
-});
    
 $.ajaxSetup({
         headers: {
@@ -409,6 +474,7 @@ $.ajaxSetup({
 
  
 
+   
   var role = {!! json_encode((array)auth()->user()->role) !!}
   // alert(role);
   // console.log(role)
@@ -443,32 +509,25 @@ $(document).ready(function () {
 
 function tickets() {
 
+  // alert( $("#client").val())
 
 // alert($("#task").val());
 // let task=
-
-var table = $('#table').DataTable({
-  "paging": true,
-  "processing": true,
-  "serverSide": true,
-  "ajax": {
-    "url": "{{ route('Tickets') }}",
-    "type": "POST",
-    "data": {
-     
-      "status": $("#status").val()==='task'?'':$("#status").val(),
-      "ticketid": $("#ticketid").val(),
-      "subject": $("#subject").val(),
-      "priority": $("#priority").val(),
-      "raisedby": $("#raisedby").val(),
-      "task":Number($("#task").val())?Number($("#task").val()):''
-
-    }
-  },
-  "stateSave": true,
-  "columns": [
+var columns=[
     { "data": "id", "name": "id" },
-    { "data": "client", "name": "users.name" },
+    // { "data": "ticket_client", "name": "client" },
+    {
+                "data": "ticket_client",
+                "name": "client",
+                "render": function (data, type, row) {
+                    // Show ticket_client if created_for is null, otherwise show row_created_For
+                    if (row.created_for === null) {
+                        return row.ticket_client;
+                    } else {
+                        return row.created_for; // Adjust this to the correct field if it's named differently
+                    }
+                }
+            },
     { "data": "ticketid", "name": "ticketid" },
     { "data": "subject", "name": "subject" },
     { "data": "patientname", "name": "patientname" },
@@ -486,7 +545,7 @@ var table = $('#table').DataTable({
     "render": function (data, type, row) {
         if (type === 'display' || type === 'filter') {
             // Format the date and time in DD-MM-YY HH:mm:ss format
-            return moment(data).format('DD-MM-YY HH:mm');
+            return moment(data).format('DD-MM-YYYY ');
         } else {
             // If not displaying or filtering, return the original data
             return data;
@@ -500,7 +559,50 @@ var table = $('#table').DataTable({
       "orderable": false,
       "searchable": false
     }
-  ],
+  ]
+  var url = window.location.href;
+  if (url.includes('task')) {
+    // Find the index of the 'action' column
+    var actionIndex = columns.findIndex(function(column) {
+      return column.data === 'action';
+    });
+
+    // Insert the new column before the 'action' column
+    columns.splice(actionIndex, 0, { 
+      "data": "response_expiry", 
+      "name": "response_expiry",
+      "render": function (data, type, row) {
+        if (data) {
+          return moment(data).format('DD-MM-YYYY');
+        } else {
+          return '';
+        }
+      }
+    });
+  }
+var table = $('#table').DataTable({
+  "paging": true,
+  "processing": true,
+  "serverSide": true,
+  "ajax": {
+    "url": "{{ route('Tickets') }}",
+    "type": "POST",
+    "data": {
+     
+      "status": $("#status").val()==='task'?'':$("#status").val(),
+      "ticketid": $("#ticketid").val(),
+      "subject": $("#subject").val(),
+      "priority": $("#priority").val(),
+      "raisedby": $("#raisedby").val(),
+      "fromdate": $("#fromdate").val(),
+      "todate": $("#todate").val(),
+      "client": $("#client").val(),
+      "task":Number($("#task").val())?Number($("#task").val()):''
+
+    }
+  },
+  // "stateSave": true,
+  "columns": columns,
   "order": [[14, 'desc']],
   "dom": "Blfrtip",
   "buttons": [
@@ -600,7 +702,11 @@ table.on('click', '.assign', function () {
     $('#tid').val(id);
 
     $('#selectUsers').on('shown.bs.modal', function () {
-        $('#user').select2();
+        // $('#user').select2();
+      $('#user').select2({
+         dropdownParent: $("#selectUsers")
+      });
+
     });
 
     $('#selectUsers').modal('show');  
@@ -673,13 +779,48 @@ if(response > 0) {
 
 });
 
-}
-
-
 
 }
 
 
+
+}
+$(document).on('click', '.agenda', function() {
+
+  $("#agendaModal").modal('show');
+  $("#agendatid").val($(this).attr('id'))
+  // alert($("#agendatid").val())
+   // alert($(this).attr('id'))
+  
+ 
+})
+$(document).on('click', '.addToAgenda', function() {
+
+  $("agendaModal").modal('hide')
+  // alert($("agendatid").val())
+  $.ajax({
+    url:"{{route('addToAgenda')}}",
+    method:'POST',
+    data:{
+      ticketId:$("#agendatid").val(),
+      agendaDate:$("#agendadate").val()
+
+
+    }
+  }).done(function(response){
+    console.log(response)
+    if(response==1){
+      Lobibox.notify('success', {
+                                pauseDelayOnHover: true,
+                                continueDelayOnInactiveTab: false,
+                                position: 'top right',
+                                msg: 'Ticket added to agenda succesfully',
+                                icon: 'bx bx-info-circle'
+                            });
+    }
+    location.reload()
+  })
+})
 $(document).on('click', '.assignTicketNowBtn', function() {
         
  
@@ -752,13 +893,130 @@ if (segment3 !== '') {
     type: 'GET'
   });
 }
+function getLastWeekStartDate() {
+            var currentDate = new Date();
+            var lastWeekStartDate = new Date(currentDate);
+            lastWeekStartDate.setDate(lastWeekStartDate.getDate() - 7); // Subtract 7 days
+            var dayOfWeek = lastWeekStartDate.getDay(); // Get the day of the week (0 for Sunday, 1 for Monday, etc.)
+            var mondayOffset = (dayOfWeek === 0) ? -6 : 1; // If Sunday, go back 6 days, else go back to Monday
+            lastWeekStartDate.setDate(lastWeekStartDate.getDate() - (dayOfWeek - mondayOffset)); // Adjust to Monday
+            return lastWeekStartDate.toISOString().slice(0,10); // Format the date as YYYY-MM-DD
+        }
 
+        function getLastWeekEndDate() {
+            var currentDate = new Date();
+            var lastWeekStartDate = new Date(currentDate);
+            lastWeekStartDate.setDate(lastWeekStartDate.getDate() - 7); // Subtract 7 days for start date of last week
+            var dayOfWeek = lastWeekStartDate.getDay(); // Get the day of the week (0 for Sunday, 1 for Monday, etc.)
+            var mondayOffset = (dayOfWeek === 0) ? -6 : 1; // If Sunday, go back 6 days, else go back to Monday
+            lastWeekStartDate.setDate(lastWeekStartDate.getDate() - (dayOfWeek - mondayOffset)); // Adjust to Monday
 
+            var lastWeekEndDate = new Date(lastWeekStartDate);
+            lastWeekEndDate.setDate(lastWeekEndDate.getDate() + 6); // Add 6 days to get end date of last week
+            return lastWeekEndDate.toISOString().slice(0,10); // Format the date as YYYY-MM-DD
+        }
+
+        function getLastMonthStartDate() {
+    var currentDate = new Date(); // Get current date
+    var firstDayOfCurrentMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1); // Set the date to the first day of the current month
+    firstDayOfCurrentMonth.setDate(1); // Ensure it's the first day of the current month
+    firstDayOfCurrentMonth.setMonth(firstDayOfCurrentMonth.getMonth() - 1); // Subtract one month to get to the previous month
+    return firstDayOfCurrentMonth.toISOString().slice(0,10); // Format the date as YYYY-MM-DD
+}
+        function getLastMonthEndDate() {
+            var currentDate = new Date(); // Get current date
+            var firstDayOfCurrentMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1); // Set the date to the first day of the current month
+            firstDayOfCurrentMonth.setDate(firstDayOfCurrentMonth.getDate() - 1); // Move to the last day of the previous month
+            return firstDayOfCurrentMonth.toISOString().slice(0,10); // Format the date as YYYY-MM-DD
+        }
      
-    
+        // function getLastDay
+var fullUrl = window.location.href;
+    var segments = fullUrl.split('/');
+    var lastSegment = decodeURIComponent(segments[segments.length - 1]); 
+
+    if(lastSegment =='This Week'){
+    var currentDate = new Date();
+            
+    var startOfWeek = new Date(currentDate);
+            var dayOfWeek = currentDate.getDay(); 
+            var mondayOffset = (dayOfWeek === 0) ? -6 : 1;
+            startOfWeek.setDate(startOfWeek.getDate() - (dayOfWeek - mondayOffset)); 
+            
+            var formattedStartDate = startOfWeek.toISOString().slice(0,10);
+            var formattedEndDate = currentDate.toISOString().slice(0,10);
+console.log(formattedStartDate)
+      $("#fromdate").val(formattedStartDate);
+     $("#todate").val(formattedEndDate);
+    //  $()
+    }
+    else if(lastSegment =='Last Week'){
+
+
+      $("#fromdate").val(getLastWeekStartDate());
+     $("#todate").val(getLastWeekEndDate());
+    //  $()
+    }
+
+    else if(lastSegment =='Last Month'){
+      var currentDate = new Date();
+
+// Calculate the first day of last month
+var firstDayOfLastMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1);
+// Adjust for cases where the current month is January
+if (currentDate.getMonth() === 0) {
+    firstDayOfLastMonth.setFullYear(currentDate.getFullYear() - 1);
+    firstDayOfLastMonth.setMonth(11); // December
+}
+
+// Calculate the last day of last month
+var lastDayOfLastMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 0);
+
+// Output the first and last day of last month
+console.log("First day of last month:", firstDayOfLastMonth);
+console.log("Last day of last month:", lastDayOfLastMonth);
+
+// Format the date for display in the date field
+var formattedFirstDay = formatDate(firstDayOfLastMonth);
+var lastDayOfLastMonth = formatDate(lastDayOfLastMonth);
+console.log("Formatted first day:", formattedFirstDay);
+
+function formatDate(date) {
+    var year = date.getFullYear();
+    var month = date.getMonth() + 1; // Months are zero-based
+    var day = date.getDate();
+    return year + '-' + (month < 10 ? '0' : '') + month + '-' + (day < 10 ? '0' : '') + day;
+
+}
+      // var firstDayOfLastMonth = moment().subtract(1, 'months').startOf('month')
+$("#fromdate").val(formattedFirstDay);
+$("#todate").val(lastDayOfLastMonth);
+//  $()
+}
+else if(lastSegment =='This Month'){
+ var currentDate = new Date();
+
+// Calculate the first day of the current month
+var firstDayOfCurrentMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+
+// Format the first day of the current month for display in the date field
+var formattedFirstDayOfCurrentMonth = formatDate(firstDayOfCurrentMonth);
+console.log("Formatted first day of current month:", formattedFirstDayOfCurrentMonth);
+
+function formatDate(date) {
+    var year = date.getFullYear();
+    var month = date.getMonth() + 1; // Months are zero-based
+    var day = date.getDate();
+    return year + '-' + (month < 10 ? '0' : '') + month + '-' + (day < 10 ? '0' : '') + day;
+}
+
+var formattedEndDate = currentDate.toISOString().slice(0,10);
 
 
 
+  $("#fromdate").val(formattedFirstDayOfCurrentMonth);
+$("#todate").val(formattedEndDate);
+}
 
    
 

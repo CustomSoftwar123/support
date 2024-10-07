@@ -12,14 +12,14 @@
           <div class="col-lg-6">
             
 
-            <h1 class="m-0" style="width:2rem; display:flex">Tasks
+            <h1 class="m-0" style="width:2rem; display:flex">Projects
          
          </h1>
          
           </div><!-- /.col -->
           <div class="col-sm-6  d-none d-sm-none d-md-block ">
             <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item active">Tasks</li>
+              <li class="breadcrumb-item active">Projects</li>
             </ol>
           </div><!-- /.col -->
         </div><!-- /.row -->
@@ -33,12 +33,12 @@
       <div class="container-fluid">
 
     <div class="card card-primary card-outline">
-    <div class="card-body table-responsive">     
+    <div class="card-body table-responsive"> 
 
     <form id="myform">
         <input type="hidden" name="id" id="id">
      <div class="row">
-            <div class="col-md-12"><h4>Add New Task</h4></div>
+            <div class="col-md-12"><h4>Create A New Project</h4></div>
             <div class="col-md-12 form-group ">
             <label  class="col-form-label" for="subject">Subject <span>*</span></label>
                  <input type="text" class="form-control" id="subject" name="subject" />
@@ -47,12 +47,16 @@
 
     <div class="row mb-2">
             
-            <div class="col-md-6">
-            <label  class="form-label" for="department">Department <span>*</span></label>
-                 <input type="text" class="form-control" id="department" name="department"  />
-             </div> 
+        <div class="col-md-4">
+            <label class="form-label" for="department">Department <span>*</span></label>
+            <select class="form-control" id="department" name="department">
+                @foreach($departments as $department)
+                    <option value="{{ $department }}">{{ $department }}</option>
+                @endforeach
+            </select>
+        </div>
 
-             <div class="col-md-6">
+             <div class="col-md-4">
             <label class="form-label">Status <span>*</span></label>
                  <select class="form-control" id="status" name="status">
                      <option>Active</option>
@@ -60,7 +64,34 @@
                      <option>Pending</option>
                  </select>
              </div>
+
+             <div class="col-md-4">
+            <label class="form-label" for="assignto">Assign To <span>*</span></label>
+                 <select class="form-control" id="assignto" name="assignto[]" multiple="multiple">
+                    
+                    @foreach($users as $test)
+                     <option value="{{$test->id}}">{{$test->email}}</option>
+                     @endforeach
+                 </select>
+             </div>
+
+             <div class="col-md-6">
+                <label class="form-label" for="timeline">Timeline <span>*</span></label>
+                <input class="form-control" name="timeline" type="date" id="timeline">
+             </div>
+
+             <div class="col-md-6">
+                <label class="form-label" for="ptimeline">Projected Timeline <span>*</span></label>
+                <input class="form-control" name="ptimeline" type="date" id="ptimeline">
+             </div>
+
+           
     </div>
+    
+
+  
+
+   
 
     <div class="row mb-3">
         <div class="col-md-12">
@@ -69,11 +100,12 @@
                  <textarea class="form-control" rows="4" id="description" name="description"></textarea>
 
              </div>
-             <button class="btn btn-primary m-2" type="button" id="addtask">Add Task </button>
-             <button class="btn btn-primary m-2 d-none" type="button" id="updatetask">Update Task </button>
+             <button class="btn btn-primary m-2" type="button" id="addtask">Add Project </button>
+             <button class="btn btn-primary m-2 d-none" type="button" id="updatetask">Update Project </button>
 
     </div>
     </form>
+    
 
 
 
@@ -88,24 +120,15 @@
                                       <th>Department</th>
                                       <th>Status</th>
                                       <th  name="created_at">Created</th>
+                                      <th>Timeline</th>
+                                      <th>Projected Timeline</th>
                                       <th name="action">Action</th>
                                       
                                    
                                     </tr>
                                   </thead> 
 
-                                  <tfoot>
-                                    <tr>
-                                  
-                                      <th>ID</th>
-                                      <th>Subject</th>
-                                      <th>Description</th>
-                                      <th>Department</th>
-                                      <th>Status</th>
-                                      <th>Created</th>
-                                    
-                                    </tr>
-                                  </tfoot> 
+                               
 
 
                                 </table>                 
@@ -143,6 +166,11 @@
 <script type="text/javascript">
     $(document).ready(function () {
 
+        $("#assignto").select2({
+            placeholder: "Select Users",
+            multiple: true
+        });
+
   $.ajaxSetup({
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -169,10 +197,31 @@
             {data: 'description', name: 'Description'},
             {data: 'department', name: 'Department'},
             {data: 'status', name: 'Status'},
+            {data: 'created_at', name: 'created_at',render: function (data, type, row) {
+                if(data){
+            return moment(data).format('DD-MM-YYYY');}else{
+                return '';
+            }
+        }},
+            {data: 'timeline', name: 'timeline',render: function (data, type, row) {
+                if(data){
 
-            {data: 'created_at', name: 'Created'},
+            return moment(data).format('DD-MM-YYYY');}else{
+                return '';
+            }
 
+            
+        }},
 
+        {data: 'projected_timeline', name: 'projected_timeline',render: function (data, type, row) {
+                if(data){
+
+            return moment(data).format('DD-MM-YYYY');}else{
+                return '';
+            }
+
+            
+        }},
 
             {data: 'action', name: 'Action', orderable: false, searchable: false},
         ],
@@ -313,9 +362,14 @@
 
 $("#addtask").click(function(){
 
+    var selectedTexts = $('#assignto option:selected').map(function() {
+            return $(this).text();
+        }).get();
+        assignedToEmails=JSON.stringify(selectedTexts)
     let myform = $("#myform")[0];
     let data = new FormData(myform);
-
+    data.append('assignedToEmails',assignedToEmails)
+console.log(data)
     $.ajax({
         url:"{{route('addtask')}}",
         type:"POST",
@@ -326,32 +380,29 @@ $("#addtask").click(function(){
 
     }).done(function(response){
 
-         if ($.isEmptyObject(response.error)){
-                     Lobibox.notify('success', {
-                            pauseDelayOnHover: true,
-                            continueDelayOnInactiveTab: false,
-                            position: 'top right',
-                            msg: response.success,
-                            icon: 'bx bx-check-circle'
-                        });
-                      table.ajax.reload( null, false );
-                      
-                      $('#myform')[0].reset();
+        //   if ($.isEmptyObject(response.error)){
+                     
+                    
+                     
 
                       
-        }
-        else{
-               Lobibox.notify('error', {
-                            pauseDelayOnHover: true,
-                            continueDelayOnInactiveTab: false,
-                            position: 'top right',
-                            msg: response.error,
-                            icon: 'bx bx-check-circle'
-                        });
-        }
+        //  }
+        //  else{
+        //         Lobibox.notify('error', {
+        //                      pauseDelayOnHover: true,
+        //                      continueDelayOnInactiveTab: false,
+        //                      position: 'top right',
+        //                      msg: response.error,
+        //                      icon: 'bx bx-check-circle'
+        //                  });
+        //  }
 
     });
 
+    $('#myform')[0].reset();
+                       $("#assignto").val(null).trigger('change');
+                        
+                    //    window.location.reload()
     event.preventDefault();
 });
 
@@ -360,7 +411,7 @@ $("#addtask").click(function(){
 table.on('click', '.viewTickets', function() {
 
     const id = $(this).attr('id');
-    window.location="http://localhost:8000/Tickets/task/"+id;
+    window.location="{{route('Tickets')}}/task/"+id;
   
     $.ajax({
             url:"{{route('Tickets')}}",
@@ -387,6 +438,10 @@ table.on('click', '.viewTickets', function() {
 
 })
 
+table.on('click', '.viewLogs', function() {
+    const id = $(this).attr('id');
+    window.location.href = `/timeline_audit/${id}`;
+})
 table.on('click', '.edit', function() {
 
 
@@ -401,15 +456,55 @@ table.on('click', '.edit', function() {
         }).done(function(response){
 
                 if(response){
-                    $("#subject").val(response.row[0]['subject']);
-                    $("#department").val(response.row[0]['department']);
-                    $("#description").val(response.row[0]['description']);
-                    $("#status").val(response.row[0]['status']);
-                    $("#id").val(response.row[0]['id']);
+                    $("#subject").val(response.row['subject']);
+                    $("#department").val(response.row['department']);
+                    $("#description").val(response.row['description']);
+                    $("#status").val(response.row['status']);
+                    $("#id").val(response.row['id']);
+                    $("#timeline").val(response.row['timeline']);
+                    $("#ptimeline").val(response.row['projected_timeline']);
 
 
                     $("#addtask").addClass('d-none');
                     $("#updatetask").removeClass('d-none');
+                    var emails = response.users;
+                    // console.log(response[1])
+console.log(emails)
+var $select = $('#assignto')
+
+// $.each(emails, function(index, email) {
+//     // console.log(email.id,email.email)
+//     var $option = $('<option>', {
+//         value: email.id,
+//         text: email.email,
+//         selected: 'selected' // Add selected attribute to all options
+//     });
+
+//     // Append the option to the select element
+//     $select.append($option);
+// });
+// // $select.val(emails);
+
+// // // Set the select element as selected
+// // $select.attr('selected', 'selected');
+// // $("#assignto").trigger('change');
+var selectedIds=[];
+$.each(emails, function(index, email) {
+selectedIds.push(email.id)
+    var $option = $('<option>', {
+        value: email.id,
+        text: email.email
+    });
+
+    // Append the option to the select element
+    // $select.append($option);
+});
+console.log(selectedIds)
+
+$select.val(selectedIds);
+// Trigger change event to update Select2
+$select.trigger('change');
+
 
                 }
 
@@ -424,6 +519,7 @@ $(document).on('click','#updatetask' ,function(){
 
     let myform = $("#myform")[0];
     let data = new FormData(myform);
+
 
     $.ajax({
         url:"{{route('updatetask')}}",
@@ -446,6 +542,7 @@ $(document).on('click','#updatetask' ,function(){
                       table.ajax.reload( null, false );
                       
                       $('#myform')[0].reset();
+                      $("#assignto").val(null).trigger('change');
                       
         }
         else{

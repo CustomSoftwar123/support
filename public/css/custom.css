@@ -125,7 +125,7 @@ td:first-child, td:last-child {
 .ff_fileupload_wrap .ff_fileupload_dropzone {
     opacity: 1;
     background-color: rgb(255 255 255 / 0.18);
-    border-color: #157EFB;
+    border-color: #34715F;
 }
 #table td:last-child, #table th:last-child {
     text-align: right;
@@ -208,11 +208,11 @@ table.dataTable tbody tr.selected {
     height: 70px;
 }
 .sideMenu i {
-        color: #f4f6f9;
+        color: #000;
 }
 #pageTitle {
-
-       color: #f4f6f9; 
+       font-size: large; 
+       color: #000; 
 }
 .navbar-light .navbar-nav .nav-link {
     color: rgb(244 246 249);
@@ -248,20 +248,21 @@ link.active, .sidebar-light-primary .nav-sidebar>.nav-item>.nav-link.active {
 
 .btn-primary, .btn-primary:hover {
     color: #fff;
-    background-color: var(--main-color);
+    background-color: #121B29;
     border-color: var(--main-color);
     box-shadow: none;
 }
 
 
 a {
-    color: var(--main-color);
+    color: #FDFEFE;
     text-decoration: none;
     background-color: transparent;
 }
 
 .card-primary.card-outline {
-    border-top: 3px solid var(--main-color);
+    border-top: 3px solid #34715F;
+    color:#000
 }
 
 .h5, h5 {
@@ -475,7 +476,7 @@ a {
     border: 0;
     width: 2%;
 }
-nput::-webkit-outer-spin-button,
+input::-webkit-outer-spin-button,
 .qty__ input::-webkit-inner-spin-button {
     -webkit-appearance: none;
     margin: 0;
@@ -501,6 +502,14 @@ nput::-webkit-outer-spin-button,
 .main-sidebar {
     height: auto !important;
 }
+
+.btn-danger, .btn-danger:hover {
+    color: #000 ;
+    background-color: #f86e66;
+    border-color: var(--main-color);
+    box-shadow: none;
+}
+
 
 .lobibox-notify.lobibox-notify-success, .lobibox-notify.lobibox-notify-success:hover {
     border-color: var(--main-color);
@@ -618,7 +627,7 @@ table.dataTable>thead .sorting:after, table.dataTable>thead .sorting_asc:after, 
 
 .rightsideBtn {
 
-        color:white !important;
+        color:#000 !important;
          cursor: pointer;
 }
 .table th, .table td {

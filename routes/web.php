@@ -9,8 +9,13 @@ use App\Http\Controllers\business;
 use App\Http\Controllers\home;
 use App\Http\Controllers\tickets;
 use App\Http\Controllers\AppController;
+use App\Http\Controllers\reportsController;
+
 use App\Http\Controllers\versions;
 use App\Http\Controllers\patienthistorybt;
+use App\Http\Controllers\FileUploadController;
+use App\Http\Controllers\versioncontrol;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -75,6 +80,13 @@ Route::get('syncUsersData', [users::class, 'syncUsersData'])->name('syncUsersDat
 	Route::post('assignTicketNow', [tickets::class, 'assignTicketNow'])->name('assignTicketNow');
 	Route::get('Client', [tickets::class, 'client'])->name('Client');
 	
+	Route::post('getAgendabyDate', [tickets::class, 'getAgendabyDate'])->name('getAgendabyDate');
+
+	
+	Route::post('saveAgendaNotes', [tickets::class, 'saveAgendaNotes'])->name('saveAgendaNotes');
+
+	
+	
 	Route::get('ScanSample', [tickets::class, 'ScanSample'])->name('ScanSample');
 	Route::post('ScanSample', [tickets::class, 'ScanSample'])->name('ScanSample');
 
@@ -99,6 +111,7 @@ Route::get('Users', [tickets::class, 'usert'])->name('Users');
 Route::get('Userdelete/{id}', [tickets::class, 'userd']);
 
 Route::get('sendMail/{tid?}', [tickets::class, 'sendMail'])->name('sendMail');
+Route::post('/send-reply', [tickets::class, 'sendReply'])->name('sendReply');
 
 Route::post('sendMail', [tickets::class, 'sendMail']);
 Route::post('rateNow', [tickets::class, 'rateNow'])->name('rateNow');
@@ -232,17 +245,55 @@ Route::post('updatetask',[tickets::class,'updatetask'])->name('updatetask');
 Route::post('deletetask',[tickets::class,'deletetask'])->name('deletetask');
 
 
+// routes/web.php
 
 
 
 
 
+
+
+
+
+
+Route::post('assignToProject', [tickets::class, 'assignToProject'])->name('assignToProject');
 
 
 Route::post('changeStatus', [files::class, 'changeStatus'])->name('changeStatus');
+
+Route::post('getTicketsComparison', [home::class, 'getTicketsComparison'])->name('getTicketsComparison');
+Route::post('getProjOrAll', [home::class, 'getProjOrAll'])->name('getProjOrAll');
+
+
+Route::post('send-report-email', [Tickets::class, 'SendReportEmail'])->name('SendReportEmail');
+
+Route::post('dependencyEmail', [Tickets::class, 'dependencyEmail'])->name('dependencyEmail');
+
+
+
+Route::get('ticketstimeline', [Tickets::class, 'ticketstimeline'])->name('ticketstimeline');
+
+Route::post('ticketstimeline', [Tickets::class, 'ticketstimeline'])->name('ticketstimeline');
+
+Route::post('addToAgenda', [Tickets::class, 'addToAgenda'])->name('addToAgenda');
+Route::get('agenda', [Tickets::class, 'agenda'])->name('agenda');
+Route::post('getagenda', [Tickets::class, 'getagenda'])->name('getagenda');
+Route::post('agendaDone', [Tickets::class, 'agendaDone'])->name('agendaDone');
+
+Route::get('dailyreports', [tickets::class, 'dailyreports'])->name('dailyreports');
+Route::get('dailyreportsdata', [tickets::class, 'dailyreportsdata'])->name('dailyreportsdata');
 });
 
 
+Route::get('timeline_audit/{tasks_id?}',[tickets::class, 'timeline_audit'])->name('timeline_audit');
 
 
+Route::get('/uploadGPFiles', [FileUploadController::class, 'showUploadForm']);
+Route::post('/uploadGPFiles', [FileUploadController::class, 'uploadGPFiles']);
+
+Route::get('versioncontrol',[versioncontrol::class, 'versioncontrol'])->name('versioncontrol');
+Route::get('versionlist/{project?}',[versioncontrol::class, 'versionlist'])->name('versionlist');
+
+Route::post('versioncontrolsubmit',[versioncontrol::class, 'versioncontrolsubmit'])->name('versioncontrolsubmit');
+Route::post('versioncontrolupdate',[versioncontrol::class, 'versioncontrolupdate'])->name('versioncontrolupdate');
 

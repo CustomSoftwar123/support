@@ -1,0 +1,103 @@
+<ORU_R01>
+  <MSH>
+    <MSH.1>|</MSH.1>
+    <MSH.2>^~\&amp;</MSH.2>
+    <MSH.3>
+      <HD.1>NetAcquire.Healthlink.10</HD.1>
+    </MSH.3>
+    <MSH.4>
+      <HD.1>Cavan</HD.1>
+      <HD.2>402</HD.2>
+      <HD.3>HIPEHOS</HD.3>
+    </MSH.4>
+    <MSH.6>
+      <HD.1>Dr T est</HD.1>
+      <HD.2>998877.5012</HD.2>
+      <HD.3>MCN.HLPracticeID</HD.3>
+    </MSH.6>
+    <MSH.7>
+      <TS.1>202309271902</TS.1> 
+    </MSH.7>
+    <MSH.9>
+      <MSG.1>ORU</MSG.1>
+      <MSG.2>R01</MSG.2>
+    </MSH.9>
+    <MSH.10>07529D4644FD4E00BBFA792AFC6F5C76</MSH.10>
+    <MSH.11>
+      <PT.1>P</PT.1>
+    </MSH.11>
+    <MSH.12>
+      <VID.1>2.4</VID.1>
+    </MSH.12>
+  </MSH>   
+<ORU_R01.PATIENT_RESULT>
+<ORU_R01.PATIENT>
+  <PID>
+    <PID.3>
+      <CX.1>COA924777312709231902456</CX.1>
+      <CX.4>
+        <HD.1>Cavan</HD.1>
+      </CX.4>
+      <CX.5>OTH</CX.5>
+    </PID.3>
+    <PID.5>
+      <XPN.1>
+        <FN.1>TEST4</FN.1>
+      </XPN.1>
+      <XPN.2>PAT</XPN.2>
+    </PID.5>
+    <PID.7>
+      <TS.1>19751015</TS.1>
+    </PID.7>
+    <PID.8>M</PID.8>
+    <PID.11>
+      <XAD.1>
+        <SAD.1>.</SAD.1>
+      </XAD.1>
+      <XAD.2>.</XAD.2>
+    </PID.11>
+  </PID><ORU_R01.PATIENT_VISIT>
+  <PV1>
+    <PV1.2>O</PV1.2>
+  </PV1>
+</ORU_R01.PATIENT_VISIT>
+</ORU_R01.PATIENT>
+<ORU_R01.ORDER_OBSERVATION>
+<OBR><OBR.1>1</OBR.1>
+<OBR.3><EI.1>92477731</EI.1></OBR.3>
+<OBR.4><CE.1>COAG</CE.1><CE.2>Coagulation Tests</CE.2><CE.3>L</CE.3></OBR.4>
+<OBR.7><TS.1>202309271126</TS.1></OBR.7>
+<OBR.14><TS.1>202309271159</TS.1></OBR.14>
+<OBR.15><SPS.1><CE.1>P</CE.1><CE.2>Sodium Citrated Plasma </CE.2><CE.3>L</CE.3></SPS.1></OBR.15>
+<OBR.16><XCN.1>998877</XCN.1><XCN.2><FN.1>T</FN.1></XCN.2><XCN.3>est</XCN.3><XCN.6>Dr</XCN.6></OBR.16>
+<OBR.24>HM</OBR.24>
+<OBR.25>F</OBR.25>
+</OBR>
+<NTE>
+  <NTE.1>1</NTE.1>
+  <NTE.3>INR therapeutic guidelines are referenced in CGH Laboratory User Manual
+An INAB accredited medical testing laboratory, Reg. No. 231MT.
+<escape V=".br"/>An INAB accredited medical testing laboratory, Reg. No. 231MT</NTE.3>
+</NTE>
+<ORU_R01.OBSERVATION>
+  <OBX>
+    <OBX.1>1</OBX.1>
+    <OBX.2>NM</OBX.2>
+    <OBX.3>
+      <CE.1>044</CE.1>
+      <CE.2>INR</CE.2>
+      <CE.3>L</CE.3>
+    </OBX.3>
+    <OBX.5>3.60</OBX.5>
+    <OBX.6>
+      <CE.1>Ratio</CE.1>
+      <CE.2>Ratio</CE.2>
+    </OBX.6>
+    <OBX.7>0 - 4	</OBX.7>
+    <OBX.8>N</OBX.8>
+    <OBX.11>F</OBX.11>
+  </OBX>
+</ORU_R01.OBSERVATION>
+</ORU_R01.ORDER_OBSERVATION>
+</ORU_R01.PATIENT_RESULT>
+</ORU_R01>

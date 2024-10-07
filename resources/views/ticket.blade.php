@@ -8,9 +8,15 @@
       <div class="container-fluid">
         <div class="row mb-0">
           <div class="col-sm-6">
+            @if(strpos(Request::url(), 'task')===false)
             <h1 class="m-0">Ticket Info
+              <a class="btn btn-info btn-sm" onclick=history.back()><i class="fas fa-arrow-left"></i> Go Back </a>
+            </h1>
+            @else
+            <h1 class="m-0">Task Info
                <a class="btn btn-info btn-sm" onclick=history.back()><i class="fas fa-arrow-left"></i> Go Back </a>
              </h1>
+             @endif
           </div><!-- /.col -->
           <div class="col-sm-6  d-none d-sm-none d-md-block ">
             <ol class="breadcrumb float-sm-right">
@@ -107,8 +113,16 @@
                     <label for="sampleid">Sample ID (Optional)</label>
                     <input type="text" class="form-control f-one" name="sampleid" id="sampleid" placeholder="Sample ID" required>
                 </div>
-
-         
+                <div class="form-group col-md-3 form-inline">
+                   
+                  <input type="checkbox" class="" name="criticalrisk" id="criticalrisk"  required>
+                    <label for="criticalrisk" class="ml-2 ">Clinical Risk</label>
+                </div>
+                <div class="form-group col-md-3 d-flex align-items-center ">
+                  {{-- <label for="criticalriskreason" class="mb-0"> Reason</label> --}}
+                  <input type="text" class="form-control d-none" name="criticalriskreason" id="criticalriskreason" placeholder="Reason">
+              </div>
+              
 
                 <!-- Message Area -->
                 <div class="form-outline my-2 col-md-12">
@@ -189,6 +203,11 @@
              $('#myid').val(data.ticketinfo.id);
              $('.saveupdatebtn').text('Update Ticket Info');
 
+// $("#criticalrisk").change(function(){
+//   if($(this).is(":checked")){
+//     alert()
+//   }
+// })
  $('.saveupdatebtn').click(function(){
      let formmy=document.getElementById("form");
      let formd=new FormData(formmy);
@@ -244,8 +263,10 @@
               let loc=window.location.href;
               var parts = loc.split('/'); // Split the URL based on the "/" separator
 
-console.log(parts[5]); 
-data.append('taskId',parts[5]);
+              if(parts[parts.length-2]=='task'){
+              data.append('taskId',parts[parts.length-1]);
+              }
+
 
               $.ajax({
                               
@@ -261,8 +282,16 @@ data.append('taskId',parts[5]);
                                         $("#result").html('Ticket has been generated successfully!')
         
         //  window.location.reload();
-          window.location="http://localhost:8000/Tickets/Opened/"+response[2];
+// console.log(data.taskId)
+var parts = loc.split('/'); // Split the URL based on the "/" separator
+console.log(parts)
+        if(parts[parts.length-2]=='task'){
+          window.location="{{route('Tickets')}}/task/"+parts[parts.length-1];
 
+              }
+              else{
+          window.location="{{route('Tickets')}}/Opened/"+response[2];
+              }
                                       
                                       }
                                     //  elseif(response[1] == 0)
@@ -328,6 +357,16 @@ this.find('.ff_fileupload_actions button.ff_fileupload_remove_file').val(filenam
     
 }
 });
+$(document).on('change','#criticalrisk',function() {
+        if($(this).is(":checked")){
+            // Code to run if the checkbox is checked
+            $("#criticalriskreason").removeClass('d-none')
+            // alert("Checkbox is checked!");
+        }
+        else{
+          $("#criticalriskreason").addClass('d-none')
+        }
+    });
 $(document).on('click', '.ff_fileupload_remove_file', function () {  
         // console.log($(this).id)
 

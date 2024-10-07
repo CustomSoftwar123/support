@@ -115,31 +115,31 @@ class users extends Controller
         $cl=$user->client;
      if($r==4){
        
-     $data = User::select(
-                            'users.id', 
-                            'users.name', 
-                            'users.email',
-                            'users.zip',
-                            'users.phone', 
-                            'lists.Text as roles', 
-                            'users.country',
-                            'users.status',  
-                            'users.created_at', 
-                            'users.updated_at',
-                            'users.created_by', 
-                            'users.updated_by',
-                            'A.name as created_by',
-                            'B.name as updated_by'
-                            )
-                            ->where('users.client',$cl)
-                            ->leftjoin('lists', 'lists.id', '=', 'users.role')
-                            ->leftjoin('users AS A', 'A.id', '=', 'users.created_by')
-                            ->leftjoin('users AS B', 'B.id', '=', 'users.updated_by');
-                         
+        $data = DB::table('users')
+        ->select([
+            'users.id',
+            'users.name',
+            'users.email',
+            'users.zip',
+            'users.phone',
+            'lists.Text as roles',
+            'users.country',
+            'users.status',
+            'users.created_at',
+            'users.updated_at',
+            'users.created_by',
+            'users.updated_by',
+            'A.name as created_by_name',
+            'B.name as updated_by_name'
+        ])
+        ->where('users.client', $cl)
+        ->leftJoin('lists', 'lists.id', '=', 'users.role')
+        ->leftJoin('users AS A', 'A.id', '=', 'users.created_by')
+        ->leftJoin('users AS B', 'B.id', '=', 'users.updated_by');
      }
      else{
 
-        $data = User::select(
+        $data = DB::table('users')->select(
             'users.id', 
             'users.name', 
             'users.email', 
@@ -280,6 +280,8 @@ class users extends Controller
         $address = $request->input('address');
         $role = $request->input('role');
         $status = $request->input('InUse');
+        $supportfordays = '';
+        // $supportfordays = implode(",", $supportfordays);
 
         $user = auth()->user();
         $client=$user->client;
@@ -305,7 +307,8 @@ class users extends Controller
                  $dif[0]->font,
                  $dif[0]->font_link,
                  $dif[0]->font_weight,
-                 $dif[0]->resolution
+                 $dif[0]->resolution,
+              
 
             ]);      
 
@@ -338,6 +341,8 @@ class users extends Controller
         $address = $request->input('address');
         $role = $request->input('role');
         $status = $request->input('InUse');
+        // $supportfordays = $request->input('supportfordays');
+        // $supportfordays = implode(",", $supportfordays);
 
         $user = auth()->user();
         

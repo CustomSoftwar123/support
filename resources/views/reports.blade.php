@@ -36,14 +36,17 @@
     <input class="form-control" type="date" name='todate' id="todate">
 </div>
 
+
+
 <div class="col-md-2">
 
 <label for="">To</label>
     <input class="form-control" type="date" name="tilldate" id="tilldate" >
 </div>
-<div class="col-md-2">
+<div class="col-md-1">
 
-    
+
+
 <label for="">Status</label>
     <!-- <input  class="form-control" type="text" name="status" id="status"> -->
     <select class="form-control" name="status" id="status" >
@@ -69,6 +72,17 @@
                                                         @endforeach
                                                   </select>      
 </div>
+<div class="form -group col-md-1">
+<label>Client</label>
+                                        <select class="form-select form-control" name="client" id="client">
+                      <option value="" disabled selected>Choose an option</option>
+                      <option value="CAVAN">Cavan</option>
+                      <option value="TULLAMORE">Tullamore</option>
+                      <option value="St.Lukes">St.Lukes</option>
+                      <option value="Portlaoise">Portlaoise</option>
+                      
+                    </select>
+</div>
 <div class="form-group col-md-2">
   <label for="">Assigned By</label>
 
@@ -82,10 +96,48 @@
 <div class="form-group col-md-2 mt-4">
 
 <input type="button" id ="submit" value="Submit" class="btn btn-primary">
+
 </div>
 </div>    
 
- 
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Send Tickets Report To Admins</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group d-flex justify-content-between w-100">
+        <div class="col-md-5">
+      <label for="">From</label>
+    <input class="form-control" type="date" name='todateemail' id="todateEmail">
+</div>
+
+<div class="col-md-5">
+
+<label for="">To</label>
+    <input class="form-control" type="date" name="tilldateemail" id="tilldateEmail" >
+</div>
+          </div>
+          <div class="form-group">
+            <label for="recipient-name" class="col-form-label">Subject:</label>
+            <input type="text" class="form-control" id="email-subject">
+          </div>
+          <div class="form-group">
+            <label for="message-text" class="col-form-label">Message:</label>
+            <textarea class="form-control" id="message-text"></textarea>
+          </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" id='sendEmail'>Send message</button>
+      </div>
+    </div>
+  </div>
+</div>
       <div class="container-fluid">
 
       
@@ -103,21 +155,19 @@
               <th>Subject</th>
 
 
-              <th>Patient</th>
-              <th>Request#</th>
-              <th>Sample#</th>
+             
 
               <th>Status</th>
-              <th>Requested</th>
+              <th>Raised By</th>
               <th>Assigned</th>
               <th>Assigned By</th>
 
         
               <th>Department</th>
               <th>Priority</th>
-              <th>System</th>
               <th>Time</th>
               <th>Timetaken</th>
+              <th>Actions</th>
              
               
 
@@ -206,18 +256,14 @@ $.ajaxSetup({
           'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
     });
-    
-   
 
-
-// let myform=document.getElementById("form");
-// let data=new FormData(myform);
  function loadtable () {
   var todate = $("#todate").val();
   var  tilldate= $("#tilldate").val();
   var status = $("#status").val();
   var assignedto = $("#assignedto").val();
   var assignedby = $("#assignedby").val();
+  var client = $("#client").val();
 
 
  var table = $('#table').DataTable({
@@ -252,18 +298,17 @@ ajax: {
  tilldate:tilldate,
  status:status,
  assignedto:assignedto,
- assignedby:assignedby
+ assignedby:assignedby,
+ client:client
 }
 },
 
 columns: [
   {data: 'id', name: 'id'},
-    {data: 'business', name: 'business'},
+    {data: 'ticket_client', name: 'ticket_client'},
     {data: 'ticketid', name: 'ticketid'},
     {data: 'subject', name: 'subject'},
-   {data: 'patientname', name: 'patientname'},
-   {data: 'requestid', name: 'requestid'},
-    {data: 'sampleid', name: 'sampleid'},
+ 
     {data: 'status', name: 'status'},
     {data: 'username', name: 'username'},
     {data: 'assignedto', name: 'assignedto'},
@@ -271,11 +316,21 @@ columns: [
     // {data: 'resolved', name: 'resolved'},
       {data: 'department', name: 'department'},
         {data: 'priority', name: 'priority'},
-        {data: 'internal', name: 'internal'},
         {data: 'created_at', name: 'created_at'},
 
         {data: 'timetaken', name: 'timetaken'},
-],
+        { 
+            data: null, // Use null for custom column without data source
+            name: 'action', // Name for the column (optional)
+            orderable: false, // Disable ordering on this column
+            searchable: false, // Disable searching on this column
+            render: function (data, type, row) {
+                // Custom render function for the action column
+                var url = "{{ route('TicketView', ['id' => ':id']) }}".replace(':id', row.id);
+                return '<a href="' + url + '" class="btn btn-primary"><i class="fas fa-eye"></i></a>';
+            }
+        }
+      ],
 "order":[[1, 'asc']],
 
 
@@ -285,7 +340,6 @@ columns: [
  }
   
 
-//  loadtable();s
 
 
     $("#submit").click(function(){ 
@@ -293,7 +347,6 @@ columns: [
   var  tilldate= $("#tilldate").val();
       $('#table').DataTable().destroy();
       if(todate!="" && tilldate==""){
-// $('#tilldate').addClass('d-none');
 Lobibox.notify('warning', {
                                 pauseDelayOnHover: true,
                                 continueDelayOnInactiveTab: false,
@@ -319,41 +372,52 @@ else if(todate=="" && tilldate!=""){
 
 
     })
- 
-//     $("#submit").click(function(){
-      
-//       // $('.paused').addClass('d-none');
-      
-//       // $('.paused').removeClass('d-block');
-//       // $('.started').addClass('d-block');
-   
-// let myform=document.getElementById("form");
-// let data=new FormData(myform);
-// $.ajax({
+    $("#sendEmail").click(function(){ 
+      const toDate = $("#todateEmail").val();
+  const  tillDate= $("#tilldateEmail").val();
+  const  emailSubject= $("#email-subject").val();
+  const  messageText= $("#message-text").val();
+console.log(toDate,tillDate,emailSubject,messageText,'Test')
+  $.ajax({
+    method: 'POST',
                 
-//         url: "../reporte",
-//         data: data,    
-//         cache: false,
-//         processData: false,
-//         contentType: false,
-//         type: 'POST',
-//         }).done(function (response) {
-//             console.log("done");
-//                         // if(response > 0) {
+                url: "{{route('SendReportEmail')}}",
+                data: {
+                  toDate,
+                  tillDate,
+                  emailSubject,
+                  messageText
+                },    
+               
+                }).done(function (response) {
+    console.log(response);
 
-//                         //     $("#result").html('Ticket has been completed successfully!')
+    // Display a success message using Lobibox
+  
+}).fail(function (xhr, status, error) {
+    console.error(xhr.responseText);
 
-//                         // //  window.location="../TicketView/"+response;
+    // Display an error message using Lobibox
+    Lobibox.notify('error', {
+                                            pauseDelayOnHover: true,
+                                            continueDelayOnInactiveTab: false,
+                                            position: 'top right',
+                                            msg: response.error,
+                                            icon: 'bx bx-check-circle'
+                                        });
 
-//                         // }
-                   
-                       
-//                 });
-        
+    })
 
-//   });
-
+    Lobibox.notify('success', {
+                                            pauseDelayOnHover: true,
+                                            continueDelayOnInactiveTab: false,
+                                            position: 'top right',
+                                            msg: 'Email will be sent shortly',
+                                            icon: 'bx bx-check-circle'
+                                        });
+$('#exampleModal').modal('hide')
  
+   });
    });
 
 

@@ -14,6 +14,8 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         //
+        Commands\SendTicketNotifications::class,
+        // Commands\CheckTicketExpiry::class,
     ];
 
     /**
@@ -25,6 +27,13 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         // $schedule->command('inspire')->hourly();
+        // $schedule->command('send:ticket-notifications')->twiceDaily(0, 12);
+        $schedule->command('tickets:check-response-expiry')->daily();
+        $schedule->command('send:expiredtasks')->dailyAt('7:30');
+        // $schedule->command('tickets:check')->daily('7:30');
+        // send:expiredtasks
+        // $schedule->command('tickets:check-completion')->daily();
+
     }
 
     /**
