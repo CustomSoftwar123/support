@@ -1811,81 +1811,146 @@ public function addToAgenda(Request $request){
    ]);
 }
 }
-public function tasks(Request $request){
+public function tasks(Request $request)
+{
+    if ($request->ajax()) {
 
-	// return DB::table('tasks')->get();
-	if($request->ajax()){
+        $loggedInUser = auth()->user()->id;
+        $userRole = auth()->user()->role;
+        $role = DB::table('lists')->where('id', $userRole)->pluck('Text')->toArray();
+        $permissions = DB::table('projectpermissions')
+            ->where('userid', $loggedInUser)
+            ->pluck('projectid')
+            ->toArray();
 
-		$loggedInUser=auth()->user()->id;
-		 $userRole=auth()->user()->role;
-		 $role= DB::table('lists')->where('id',$userRole)->pluck('Text')->toArray();
-	 	$permissions = DB::table('projectpermissions')
-		->where('userid', $loggedInUser)
-		->pluck('projectid')
-		->toArray();
-	
+        if ($role[0] !== 'Super Admin') {
+            $data = DB::table('tasks')
+                ->whereIn('id', $permissions);
+        } else {
+            $data = DB::table('tasks');
+        }
 
-		if ($role[0] !== 'Super Admin') {
-			$data = DB::table('tasks')
-				->whereIn('id', $permissions);
-		} else {
-			$data = DB::table('tasks');
-		}
-	
-		return Datatables::of($data)
-		->addColumn('action', function($row){
-      
-            // Assuming you have a variable $user_role that holds the role of the current user
-            $userRole=auth()->user()->role;
-            $userEmail=auth()->user()->email;
-            $userRole=auth()->user()->role;
-            if ($userRole === 1387||$userEmail=='aqeel@ocmsoftware.ie'||$userEmail=='zain@ocmsoftware.ie'||$userEmail='kengregg@ocmsoftware.ie ') {
+        return Datatables::of($data)
+            ->addColumn('action', function($row) {
                 $btn = '
                 <div class="btn-group" role="group" aria-label="Basic example">
-                <button class="btn btn-info edit" id="' . $row->id . '"  >Edit </button>
-                <button class="btn btn-success viewTickets" id="' . $row->id . '"> View </button>
-                <button class="btn btn-dark viewLogs" id="' . $row->id . '"> Timeline </button>
-                </div>
-                ';
-            } else {
-                // If the user is not a super admin, only show the Edit button
-                $btn = '
-                <div class="btn-group" role="group" aria-label="Basic example">
-                <button class="btn btn-success viewTickets" id="' . $row->id . '"> View </button>
-                </div>
-                ';
-            }
-            
-            return $btn;
-        
-            
+                    <button class="btn btn-info edit" id="' . $row->id . '" >Edit</button>
+                    <button class="btn btn-success viewTickets" id="' . $row->id . '"> View </button>
+                    <button class="btn btn-dark viewLogs" id="' . $row->id . '"> Timeline </button>
+                </div>';
+                return $btn;
+            })
+            ->setRowId('id')
+            ->rawColumns(['action'])
+            ->make(true);
+    }
 
-		})
-		
-		->setRowId('id')
-		->rawColumns(['action'])
-		->make(true);
+    // Fetch all users and departments
+    $users = User::all();
+    $departments = DB::table('user_departments')->pluck('department_name');
 
-	}
-
-     $users = User::all();
-
-    return view('tasks')->with('users',$users);
+    return view('tasks')->with([
+        'users' => $users,
+        'departments' => $departments
+    ]);
 }
 
+
+// public function addtask(Request $request){
+
+	
+   
+// 	$validator=$request->validate([
+// 	'subject' => 'required',
+// 	'department' => 'required',
+// 	'description'=> 'required',
+// 	'status' => 'required',
+// 	'assignto' => 'required',
+// 	'timeline' => 'required',
+
+
+// 	]);
+
+   
+
+// 	$subject = $request->subject;
+// 	$department = $request->department;
+// 	$description = $request->description;
+// 	$status = $request->status;
+// 	$timeline = $request->timeline;
+
+
+//     $assignto = $request->assignto;
+//      $assignedToEmails = json_decode($request->assignedToEmails);
+
+//      $user = Auth::user();
+
+
+//     // Get the ID of the authenticated user
+//     $loggedInUserID = $user->id;
+
+//     // Append the ID of the logged-in user to the $assignto array
+//     $assignto[] = $loggedInUserID;
+
+//     // print_r($assignto);
+//     // return count($assignto);
+//         // return $assignedToEmails[0];
+
+// 	// $id=Str::uuid(); 
+// 	$task = Task::create([
+        
+//         'subject' => $subject,
+//         'department' => $department,
+//         'description' => $description,
+//         'status' => $status,
+//         'timeline' => $timeline,
+
+//     ]);
+
+
+// 	if($task){
+
+//         $i=0;
+//         foreach($assignto as $userid){
+//             Projectpermission::create([
+//                 "userid"=>$userid,
+//                 "projectid" => $task->id,
+//             ]);
+//             if($i<count($assignto)-1){
+//              $user['to'] = $assignedToEmails[$i];
+         
+//             $esubject="New Project";
+
+//             $emailData=[
+//                 'to' => $assignedToEmails[$i],
+//                 'esubject'=>'New Project',
+//                 'messages'=>'You have been added to a new project.'
+//             ];
+//             // Mail::to($assignedToEmails[$i])->send(new ProjectAssigned($emailData));
+//             SendProjectAssignedEmail::dispatch($emailData);
+//             $i++;
+//         }
+            
+//         }
+
+// 		return response()->json(["success"=>"Task Added Successfully"]);
+// 	}else{
+// 		return response()->json(["error"=>"Error Adding Task"]);
+
+// 	}
+	
+// }
 
 public function addtask(Request $request){
 
 	
-   
+    // return $request;
 	$validator=$request->validate([
 	'subject' => 'required',
 	'department' => 'required',
 	'description'=> 'required',
 	'status' => 'required',
 	'assignto' => 'required',
-	'timeline' => 'required',
-
 
 	]);
 
@@ -1895,36 +1960,18 @@ public function addtask(Request $request){
 	$department = $request->department;
 	$description = $request->description;
 	$status = $request->status;
-	$timeline = $request->timeline;
-
 
     $assignto = $request->assignto;
      $assignedToEmails = json_decode($request->assignedToEmails);
-
-     $user = Auth::user();
-
-
-    // Get the ID of the authenticated user
-    $loggedInUserID = $user->id;
-
-    // Append the ID of the logged-in user to the $assignto array
-    $assignto[] = $loggedInUserID;
-
-    // print_r($assignto);
-    // return count($assignto);
         // return $assignedToEmails[0];
 
 	// $id=Str::uuid(); 
 	$task = Task::create([
-        
         'subject' => $subject,
-        'department' => $department,
+        'department' => $department,  // This will now be the department name, not the ID
         'description' => $description,
         'status' => $status,
-        'timeline' => $timeline,
-
     ]);
-
 
 	if($task){
 
@@ -1934,10 +1981,16 @@ public function addtask(Request $request){
                 "userid"=>$userid,
                 "projectid" => $task->id,
             ]);
-            if($i<count($assignto)-1){
              $user['to'] = $assignedToEmails[$i];
          
             $esubject="New Project";
+            // Mail::send('projectmail', ['messages' => 'You have been assigned to a new project','esubject'=>"New Project"], function ($message) use ($user,$esubject) {
+            //     return $esubject;
+            //     $message->to($user['to']); // Use $user['to'] instead of $assignedToEmails[$i]
+            //     $message->subject($esubject);
+            // });
+            
+            // Mail::to($assignedToEmails[$i])->send(new \App\Mail\ProjectAssigned($assignedToEmails[$i], ['messages' => 'You have been assigned to a new project', 'esubject' => 'New Project']));
 
             $emailData=[
                 'to' => $assignedToEmails[$i],
@@ -1947,7 +2000,7 @@ public function addtask(Request $request){
             // Mail::to($assignedToEmails[$i])->send(new ProjectAssigned($emailData));
             SendProjectAssignedEmail::dispatch($emailData);
             $i++;
-        }
+            
             
         }
 

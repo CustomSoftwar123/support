@@ -47,10 +47,14 @@
 
     <div class="row mb-2">
             
-            <div class="col-md-4">
-            <label  class="form-label" for="department">Department <span>*</span></label>
-                 <input type="text" class="form-control" id="department" name="department"  />
-             </div> 
+        <div class="col-md-4">
+            <label class="form-label" for="department">Department <span>*</span></label>
+            <select class="form-control" id="department" name="department">
+                @foreach($departments as $department)
+                    <option value="{{ $department }}">{{ $department }}</option>
+                @endforeach
+            </select>
+        </div>
 
              <div class="col-md-4">
             <label class="form-label">Status <span>*</span></label>
@@ -398,7 +402,7 @@ console.log(data)
     $('#myform')[0].reset();
                        $("#assignto").val(null).trigger('change');
                         
-                       window.location.reload()
+                    //    window.location.reload()
     event.preventDefault();
 });
 
